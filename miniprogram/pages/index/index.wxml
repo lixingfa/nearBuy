@@ -1,0 +1,36 @@
+<!--index.wxml-->
+<view >
+    <swiper id="banner" interval="5000" duration="2000" autoplay circular indicator-dots>
+        <swiper-item>
+            <image src="../../images/zhuniankuaile.png" mode="scaleToFill" ></image>
+        </swiper-item>
+        <swiper-item>
+            <image src="../../images/jinzhu.jpg" mode="scaleToFill" ></image>
+        </swiper-item>
+    </swiper>
+<!--早餐、蔬菜、土特产，前面是最热卖的类型，后面三个是最新出现的类型-->
+    <!--内容区-->
+    <block wx:for="{{typeList}}" wx:key="id">
+        <view class='goodlist'>
+            <view class='good-head'>
+                <text>{{item.name}}</text>
+                <text class='right more' bindtap="navigateToShop" data-id="{{item.id}}"> 1 </text>
+            </view>
+            <view class='good-body'>
+                <block wx:for="{{item.goods}}" wx:key="id" wx:for-item="good">
+                    <view class='good-item' bindtap="navigateToGood" data-id="{{good.id}}">
+                        <view class='good-pic'>
+                            <image src="{{good.pic}}" mode="aspectFill"></image>
+                        </view>
+                        <view class='good-desc'>
+                            <view class='good-title'>{{good.title}}</view>
+                            <view class='good-inAWord'>{{good.inAWord}}</view>
+                            <text class='good-price'>{{good.price}}元</text><text>{{good.unit}}{{good.total}}{{good.surplus}}{{good.promulgator}}{{good.distance}}</text>
+                        </view>
+                    </view>
+                </block>
+            </view>
+        </view>
+    </block>
+
+</view>
