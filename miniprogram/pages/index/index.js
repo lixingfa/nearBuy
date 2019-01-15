@@ -53,7 +53,7 @@ Page({
             title: "农家土鸡蛋",
             inAWord: "自家走地鸡产的鸡蛋，朱村黄麻鸡，位于鸭埔村三巷5号，可送到中铁与西福蓝湾路口",//对订单的群体通知功能
             pic: "../../image/tujidan.jpg",
-            price: 20,
+            price: 1,
             unit: "个",
             total: 78,
             surplus: 56,
