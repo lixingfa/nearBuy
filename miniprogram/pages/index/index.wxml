@@ -1,4 +1,10 @@
 <!--index.wxml-->
+<view id='search'>
+        <form bindsubmit="searchGood">
+            <input name='keyword' placeholder="请输入搜索关键字" type="text" maxlength="50" placeholder-style="color:red" />
+            <button form-type="submit" size="mini" >搜索</button>
+        </form>
+    </view>
 <swiper id="banner" interval="5000" duration="2000" autoplay circular indicator-dots>
         <swiper-item>
             <image src="../../images/zhuniankuaile.png" mode="scaleToFill" ></image>
