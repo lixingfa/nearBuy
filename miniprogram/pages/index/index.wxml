@@ -1,10 +1,11 @@
 <!--index.wxml-->
 <view id='search'>
         <form bindsubmit="searchGood">
-            <input name='keyword' placeholder="请输入搜索关键字" type="text" maxlength="50" placeholder-style="color:red" />
+            <input name='keyword' placeholder="输入商品信息" type="text" maxlength="50"/>
             <button form-type="submit" size="mini" >搜索</button>
         </form>
     </view>
+
 <swiper id="banner" interval="5000" duration="2000" autoplay circular indicator-dots>
         <swiper-item>
             <image src="../../images/zhuniankuaile.png" mode="scaleToFill" ></image>
@@ -30,12 +31,20 @@
                         </view>
                         <view class='good-desc'>
                             <view class='good-inAWord'>{{good.inAWord}}</view>
-                            <view class='buy'>
-                            <text class='good-price'>{{good.price}}</text><text>元/{{good.unit}}</text>
+
+<text class='good-price'>{{good.price}}</text><text>元/{{good.unit}}</text>
                             <text class='right'>{{good.unit}}</text>
-                            <input class='buy-input right' type="number" />
-                            <text class='right'>预订</text>
+
+<view class="stepper">
+    <!-- 减号 --> 
+    <text class="{{minusStatus}}" bindtap="bindMinus">-</text>  
+    <!-- 数值 -->  
+    <input type="number" bindchange="bindManual" value="{{num}}" />  
+    <!-- 加号 -->  
+    <text class="normal" bindtap="bindPlus">+</text>  
 </view>
+<text class='right'>预订</text>
+
                             <view class='other-info'>共{{good.total}}{{good.unit}}，剩余{{good.surplus}}{{good.unit}}，
                             {{good.promulgator}}发布，距您{{good.distance}}</view>
                         </view>
