@@ -1,21 +1,23 @@
 {
   "pages": [
     "pages/index/index",
-    "pages/index2/index",
-    "pages/userConsole/userConsole",
-    "pages/storageConsole/storageConsole",
-    "pages/databaseGuide/databaseGuide",
-    "pages/addFunction/addFunction",
-    "pages/deployFunctions/deployFunctions",
-    "pages/chooseLib/chooseLib",
-    "pages/index/good/detail/detail",
-    "pages/index/good/good",
+    "pages/success/success",
+    "pages/payment/payment",
+    "pages/order/order",
+    "pages/cake/cake",
+    "pages/goodDetail/goodDetail",
+    "pages/buy/buy",
+    "pages/phone/phone",
     "pages/cart/cart",
-    "pages/user/order/order",
-    "pages/user/order/detail/detail",
-    "pages/addr/edit/edit",
     "pages/user/user",
-    "pages/addr/addr"
+    "pages/login/login",
+    "pages/logs/logs",
+    "pages/user/myorder/myorder",
+    "pages/user/myjzb/myjzb",
+    "pages/user/myorderdetals/myorderdetals",
+    "pages/user/myaddress/myaddress",
+    "pages/user/mycoupons/mycoupons",
+    "pages/user/editaddress/editaddress"
   ],
   "window": {
     "backgroundColor": "#F6F6F6",
@@ -29,21 +31,35 @@
       {
         "pagePath": "pages/index/index",
         "text": "首页",
-        "iconPath": "image/icon_all.png",
-        "selectedIconPath": "image/icon_all_se.png"
+        "iconPath": "icon/home-1.png",
+        "selectedIconPath": "icon/home-2.png"
+      },
+      {
+        "pagePath": "pages/cake/cake",
+        "text": "蛋糕馆",
+        "iconPath": "icon/cake-1.png",
+        "selectedIconPath": "icon/cake-2.png"
       },
       {
         "pagePath": "pages/cart/cart",
         "text": "购物车",
-        "iconPath": "image/cart.png",
-        "selectedIconPath": "image/cart_se.png"
+        "iconPath": "icon/cart-1.png",
+        "selectedIconPath": "icon/cart-2.png"
       },
       {
         "pagePath": "pages/user/user",
-        "text": "个人中心",
-        "iconPath": "image/account.png",
-        "selectedIconPath": "image/account_se.png"
+        "text": "我的",
+        "iconPath": "icon/my-1.png",
+        "selectedIconPath": "icon/my-2.png"
       }
-    ]
+    ],
+    "backgroundColor": "#f3f3f3",
+    "color": "#999",
+    "selectedColor": "#576b95"
+  },
+  "networkTimeout": {
+    "request": 10000,
+    "downloadFile": 10000,
+    "uploadFile": 10000
   }
 }

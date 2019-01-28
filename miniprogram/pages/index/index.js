@@ -1,12 +1,14 @@
 //index.js
 //获取应用实例
-var app = getApp()
+var base = getApp();
 Page({
   data: {
-    // input默认是0  
-    num: 0,
-    // 使用data数据对象设置样式名  
-    minusStatus: 'disabled' ,
+    path:base.path.res+"smallexe/index/",
+    motto: '你好、贝思客1！',
+    userInfo: {},
+    array: ['上海', '北京', '杭州', '宁波'],
+    index: 0,
+
 
     typeList: [
       {
@@ -18,7 +20,7 @@ Page({
             id: "1",
             title: "手工红薯粉",
             inAWord: "堂哥自种红薯手工制作，无添加纯红薯粉，保证健康",
-            pic: "../../image/hongshufen.jpg",
+            pic: "../../image/goods/hongshufen.jpg",
             price: 16,
             unit: "斤",
             total: 200,
@@ -31,7 +33,7 @@ Page({
             id: "2",
             title: "包点拼团，奶黄、紫薯、粗粮、麦香包15元/20个",
             inAWord: "番禺大石朋友新开的食品厂，外贸品质，有兴趣的邻居一起拼团",
-            pic: "../../image/zishu.jpg",
+            pic: "../../image/goods/zishu.jpg",
             price: 15,
             unit: "份",
             total: 100,
@@ -44,7 +46,7 @@ Page({
             id: "3",
             title: "包点拼团，馒头、奶油、花卷10元/20个",
             inAWord: "番禺大石朋友新开的食品厂，外贸品质，有兴趣的邻居一起拼团",
-            pic: "../../image/mantou.jpg",
+            pic: "../../image/goods/mantou.jpg",
             price: 10,
             unit: "份",
             total: 100,
@@ -57,7 +59,7 @@ Page({
             id: "5",
             title: "农家土鸡蛋",
             inAWord: "自家走地鸡产的鸡蛋，朱村黄麻鸡，位于鸭埔村三巷5号，可送到中铁与西福蓝湾路口",//对订单的群体通知功能
-            pic: "../../image/tujidan.jpg",
+            pic: "../../image/goods/tujidan.jpg",
             price: 1,
             unit: "个",
             total: 78,
@@ -77,7 +79,7 @@ Page({
             id: "4",
             title: "招牌鱼头粉",
             inAWord: "祖传底料，新鲜活鱼、现摘葱花和香菜15分钟特色炉火熬制而成，请到店品尝。",
-            pic: "../../image/yutoufen.jpg",
+            pic: "../../image/goods/yutoufen.jpg",
             price: 20,
             unit: "份",
             total: -1,//页面的处理应尽量简单
@@ -92,65 +94,59 @@ Page({
 
     ]
   },
+  goCake: function (e) {
+    var brand = e.currentTarget.dataset.brand;
+    if(brand&&brand==1){
+      base.cake.tab=1;
+    }
+    wx.switchTab({ url: '../cake/cake' });
+  },
+  goDetail: function (e) {
+    var nm = e.currentTarget.dataset.pname;
+    var b = e.currentTarget.dataset.brand;
+    wx.navigateTo({
+      url: '../goodDetail/goodDetail?pname=' + nm+"&brand="+(b||0)
+    })
+  },
+  bindPickerChange: function (e) {
+    this.setData({
+      index: e.detail.value
+    })
+  },
+  //事件处理函数
+  bindViewTap: function () {
+    wx.showActionSheet({
+      itemList: ['A', 'B', 'C'],
+      success: function (res) {
+        if (!res.cancel) {
+          console.log(res.tapIndex)
+        }
+      }
+    })
+
+    //wx.navigateTo({
+    //url: '../socket/socket'
+    //})
+  },
   onLoad: function () {
-    console.log('onLoad')
+    var that = this
+    //调用应用实例的方法获取全局数据
+    //app.getUserInfo(function (userInfo) {
+    //更新数据
+    //that.setData({
+    //userInfo: userInfo
+    //})
+    //})
 
   },
-  onShareAppMessage: function (e) {
+  onPullDownRefresh: function () {
+    wx.stopPullDownRefresh()
+  },
+  onShareAppMessage: function () {
     return {
-      title: "邻里小卖",
-      desc: "专注您身边触手可及的市场"
+      title: '贝思客（体验版）',
+      desc: '',
+      path: '/pages/index/index?id=123'
     }
-  },
-  navigateToShop: function (e) {
-    /*var id = e.currentTarget.dataset.id;
-    console.log("navigateToShop--> ID:", id)
-    wx.navigateTo({
-      url: './good/good?typeId=' + id
-    })*/
-  },
-  navigateToGood: function (e) {
-    /*var id = e.currentTarget.dataset.id;
-    console.log("navigateToGood--> ID:", id)
-    wx.navigateTo({
-      //url: './good/detail/detail?id=' + id
-    })*/
-  },
-
-  /* 点击减号 */
-  bindMinus: function () {
-    var num = this.data.num;
-    // 如果大于0时，才可以减  
-    if (num > 0) {
-      num--;
-    }
-    // 只有大于一件的时候，才能normal状态，否则disable状态  
-    var minusStatus = num <= 0 ? 'disabled' : 'normal';
-    // 将数值与状态写回  
-    this.setData({
-      num: num,
-      minusStatus: minusStatus
-    });
-  },
-  /* 点击加号 */
-  bindPlus: function () {
-    var num = this.data.num;
-    // 不作过多考虑自增1  
-    num++;
-    // 只有大于一件的时候，才能normal状态，否则disable状态  
-    var minusStatus = num < 1 ? 'disabled' : 'normal';
-    // 将数值与状态写回  
-    this.setData({
-      num: num,
-      minusStatus: minusStatus
-    });
-  },
-  /* 输入框事件 */
-  bindManual: function (e) {
-    var num = e.detail.value;
-    // 将数值与状态写回  
-    this.setData({
-      num: num
-    });
   }
 })

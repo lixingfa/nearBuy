@@ -1,572 +1,250 @@
-// pages/cart/cart.js
+var base = getApp();
+var preview=require('../../utils/preview.js');
 Page({
-  data: {
-    cartlist: [
-      {
-        id: 1,
-        good: {
-          title: "雷柏v500 RGB机械游戏键盘 机械键盘 黑轴 青轴 游戏键盘 有线背光",
-          pic: "",
-          tc: 1,
-          tcs: [
-            "官方标配",
-            "套餐一",
-            "套餐二",
-            "套餐三"
-          ],
-          tcprices: [
-            169,
-            200,
-            300,
-            400
-          ],
-          price: 169,
-          prevprice: 599,
-          store: 4,
-          "type": {
-            id: 1,
-            name: "键盘外设"
-          }
-        },
-        num: 1,
-        mode: 0,
-        checked: false,
-      },
-      {
-        id: 2,
-        good: {
-          title: "雷柏v500 RGB机械游戏键盘 机械键盘 黑轴 青轴 游戏键盘 有线背光",
-          pic: "",
-          tc: 1,
-          tcs: [
-            "官方标配",
-            "套餐一",
-            "套餐二",
-            "套餐三"
-          ],
-          tcprices: [
-            169,
-            200,
-            300,
-            400
-          ],
-          price: 169,
-          prevprice: 599,
-          store: 14,
-          "type": {
-            id: 1,
-            name: "键盘外设"
-          }
-        },
-        num: 1,
-        mode: 0,
-        checked: false,
-      },
-      {
-        id: 3,
-        good: {
-          title: "雷柏v500 RGB机械游戏键盘 机械键盘 黑轴 青轴 游戏键盘 有线背光",
-          pic: "",
-          tc: 1,
-          tcs: [
-            "官方标配",
-            "套餐一",
-            "套餐二",
-            "套餐三"
-          ],
-          tcprices: [
-            169,
-            200,
-            300,
-            400
-          ],
-          price: 169,
-          prevprice: 599,
-          store: 14,
-          "type": {
-            id: 1,
-            name: "键盘外设"
-          }
-        },
-        num: 1,
-        mode: 0,
-        checked: false,
-      },
-      {
-        id: 4,
-        good: {
-          title: "雷柏v500 RGB机械游戏键盘 机械键盘 黑轴 青轴 游戏键盘 有线背光",
-          pic: "",
-          tc: 1,
-          tcs: [
-            "官方标配",
-            "套餐一",
-            "套餐二",
-            "套餐三"
-          ],
-          tcprices: [
-            169,
-            200,
-            300,
-            400
-          ],
-          price: 169,
-          prevprice: 599,
-          store: 14,
-          "type": {
-            id: 1,
-            name: "键盘外设"
-          }
-        },
-        num: 1,
-        mode: 0,
-        checked: false,
-      },
-      {
-        id: 5,
-        good: {
-          title: "雷柏v500 RGB机械游戏键盘 机械键盘 黑轴 青轴 游戏键盘 有线背光",
-          pic: "",
-          tc: 1,
-          tcs: [
-            "官方标配",
-            "套餐一",
-            "套餐二",
-            "套餐三"
-          ],
-          tcprices: [
-            169,
-            200,
-            300,
-            400
-          ],
-          price: 169,
-          prevprice: 599,
-          store: 14,
-          "type": {
-            id: 1,
-            name: "键盘外设"
-          }
-        },
-        num: 1,
-        mode: 0,
-        checked: false,
-      }
-    ],
-    totalPrice: 0,
-    totalCount: 0,
-    isAll: false
-  },
-  onLoad: function (options) {
-    // 页面初始化 options为页面跳转所带来的参数
-  },
-  onReady: function () {
-    // 页面渲染完成
-  },
-  onShow: function () {
-    // 页面显示
-    this.updateData();
-  },
-  onHide: function () {
-    // 页面隐藏
-  },
-  onUnload: function () {
-    // 页面关闭
-  },
-  onPullDownRefresh: function (e) {
-    this.updateData();
-    setTimeout(function () {
-      console.log("stopPull")
-      wx.stopPullDownRefresh();
-    }, 2000)
-  },
-  updateData: function () {
-    wx.showToast({
-      title: "Loading...",
-      icon: "loading",
-      duration: 300000
-    })
-    var that = this;
-    wx.request({
-      url: 'http://localhost:8080/Wxmini/cart_getlist.do',
-      // data: {},
-      method: 'GET', // OPTIONS, GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT
-      // header: {}, // 设置请求的 header
-      success: function (res) {
-        console.log(res.data)
-        that.setData({
-          cartlist: res.data
-        })
-        that.checkIsAll()
-      },
-      fail: function () {
-        setTimeout(function () {
-          wx.showToast({
-            title: "加载失败"
-          })
-        }, 100)
-      },
-      complete: function () {
-        wx.hideToast()
-      }
-    })
-  },
-  changeMode: function (e) {
-    var id = e.target.dataset.id;
-    var cartlist = this.data.cartlist;
-    console.log(id)
-    for (var i = 0; i < cartlist.length; i++) {
-      if (cartlist[i].id == id) {
-        cartlist[i].mode = cartlist[i].mode == 0 ? 1 : 0;
-        break;
-      }
-    }
-    console.log("over", cartlist);
-    this.setData({
-      cartlist: cartlist
-    })
-  }
-  ,
-  checkItem: function (e) {
-    var id = e.target.dataset.id;
-    var checked = e.detail.value;
-    console.log(id)
-    var cartlist = this.data.cartlist;
-    for (var i = 0; i < cartlist.length; i++) {
-      if (cartlist[i].id == id) {
-        cartlist[i].checked = checked;
-        console.log(cartlist[i])
-        break;
-      }
-    }
-    this.setData({
-      cartlist: cartlist
-    })
-    this.calcateTotal()
-    this.checkIsAll()
-  },
-  checkAll: function (e) {
-    var checked = e.detail.value;
-    var cartlist = this.data.cartlist;
-    for (var i = 0; i < cartlist.length; i++) {
-      cartlist[i].checked = checked;
-    }
-    this.setData({
-      cartlist: cartlist
-    })
-    this.calcateTotal()
-  },
-  calcateTotal: function () {
-    var cartlist = this.data.cartlist;
-    var totalPrice = 0;
-    for (var i = 0; i < cartlist.length; i++) {
-      if (cartlist[i].checked) {
-        totalPrice += cartlist[i].good.tcprices[cartlist[i].good.tc] * cartlist[i].num;
-      }
-    }
-    console.log(totalPrice)
-    this.setData({
-      totalPrice: totalPrice
-    })
-  },
-  checkIsAll: function () {
-    var cartlist = this.data.cartlist;
-    var isAll = cartlist.length!=0?true:false;
-    for (var i = 0; i < cartlist.length; i++) {
-      if (cartlist[i].checked == false) {
-        isAll = false;
-        break;
-      }
-    }
-    this.setData({
-      isAll: isAll
-    })
-  },
-  updateNum: function (id, num) {
-    wx.showToast({
-      title: "Loading...",
-      icon: "loading",
-      duration: 300000
-    })
-    var that = this;
-    wx.request({
-      url: 'http://localhost:8080/Wxmini/cart_changeNum.do?id=' + id + '&num=' + num,
-      // data: {},
-      method: 'GET', // OPTIONS, GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT
-      // header: {}, // 设置请求的 header
-      success: function (res) {
-        console.log(res.data)
-        if (res.data.flag) {
-          setTimeout(function () {
-            wx.showToast({
-              title: "成功",
-              duration: 1500
-            })
-          }, 100)
-        }
-      },
-      fail: function () {
-        setTimeout(function () {
-          wx.showToast({
-            title: "操作失败"
-          })
-        }, 100)
-      },
-      complete: function () {
-        wx.hideToast()
-      }
-    })
-    this.calcateTotal()
-  },
-  updateTc: function (id, tc) {
-    wx.showToast({
-      title: "Loading...",
-      icon: "loading",
-      duration: 300000
-    })
-    var that = this;
-    wx.request({
-      url: 'http://localhost:8080/Wxmini/cart_changeTc.do?id=' + id + '&tc=' + tc,
-      // data: {},
-      method: 'GET', // OPTIONS, GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT
-      // header: {}, // 设置请求的 header
-      success: function (res) {
-        console.log(res.data)
-        if (res.data.flag) {
-          setTimeout(function () {
-            wx.showToast({
-              title: "成功",
-              duration: 1500
-            })
-          }, 100)
-        }
-      },
-      fail: function () {
-        setTimeout(function () {
-          wx.showToast({
-            title: "操作失败"
-          })
-        }, 100)
-      },
-      complete: function () {
-        wx.hideToast()
-      }
-    })
-    this.calcateTotal()
-  },
-  changeTc: function (e) {
-    var id = e.target.dataset.id;
-    var cartlist = this.data.cartlist;
-    var tc = e.detail.value;
-    console.log(id)
-    for (var i = 0; i < cartlist.length; i++) {
-      if (cartlist[i].id == id) {
-        cartlist[i].good.tc = tc;
-        this.updateTc(id, tc);
-        break;
-      }
-    }
-    console.log("over", cartlist);
-    this.setData({
-      cartlist: cartlist
-    })
-  },
-  addNum: function (e) {
-    var id = e.target.dataset.id;
-    var cartlist = this.data.cartlist;
-    var tc = e.detail.value;
-    console.log(id)
-    for (var i = 0; i < cartlist.length; i++) {
-      if (cartlist[i].id == id) {
-        if (cartlist[i].num < cartlist[i].good.store) {
-          cartlist[i].num = cartlist[i].num + 1;
-          this.updateNum(id, cartlist[i].num);
-        } else {
-          wx.showToast({
-            title: "不能再加了"
-          })
-        }
-        cartlist[i].num - 1;
-        break;
-      }
-    }
-    console.log("over", cartlist);
-    this.setData({
-      cartlist: cartlist
-    })
-  },
-  delNum: function (e) {
-    var id = e.target.dataset.id;
-    var cartlist = this.data.cartlist;
-    var tc = e.detail.value;
-    console.log(id)
-    for (var i = 0; i < cartlist.length; i++) {
-      if (cartlist[i].id == id) {
-        if (cartlist[i].num > 1) {
-          cartlist[i].num = cartlist[i].num - 1;
-          this.updateNum(id, cartlist[i].num);
-        } else {
-          wx.showToast({
-            title: "不能再减了"
-          })
-        }
-        cartlist[i].num - 1;
-        break;
-      }
-    }
-    console.log("over", cartlist);
-    this.setData({
-      cartlist: cartlist
-    })
-  },
-  delItem: function (e) {
-    var that = this;
-    wx.showModal({
-      title: "警告",
-      content: "是否从购物车中移除此宝贝?",
-      success: function (res) {
-        if (res.confirm) {
-          var id = e.target.dataset.id;
-          var cartlist = that.data.cartlist;
-          var tc = e.detail.value;
-          console.log(id)
-          for (var i = 0; i < cartlist.length; i++) {
-            if (cartlist[i].id == id) {
-              that.delCart(id);
-              cartlist.splice(i, 1);
-              break;
-            }
-          }
-          console.log("over", cartlist);
-          that.setData({
-            cartlist: cartlist
-          })
-        }
-      }
-    })
-  },
-  submitCart: function (e) {
-    var that = this;
-    var cartlist = that.data.cartlist;
-    for (var i = 0; i < cartlist.length; i++) {
-      if (cartlist[i].checked) {
-        that.updateCheck(cartlist[i].id);
-      }
-    }
-    var that = this;
-    setTimeout(function () {
-      if (that.isAllOk) {
-        wx.showToast({
-          title: "Loading...",
-          icon: "loading",
-          duration: 300000
-        })
-        wx.request({
-          url: 'http://localhost:8080/Wxmini/cart_submit.do',
-          // data: {},
-          method: 'GET', // OPTIONS, GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT
-          // header: {}, // 设置请求的 header
-          success: function (res) {
-            console.log(res.data)
-            if (res.data.flag) {
-              setTimeout(function () {
-                wx.showToast({
-                  title: "结算成功",
-                  duration: 1500
-                })
-                setTimeout(function () {
-                  that.updateData();
-                  that.calcateTotal()
-                }, 1500)
-              }, 100)
-            }
-          },
-          fail: function () {
-            setTimeout(function () {
-              wx.showToast({
-                title: "操作失败"
-              })
-            }, 100)
-          },
-          complete: function () {
-            wx.hideToast()
-          }
-        })
-      }
-    }, 300)
+    data: {
+        plist: [],
+        total: 0,
+        his: ""
+    },
+    onLoad: function (e) {
 
-  },
-  isAllOk: true,
-  updateCheck: function (id) {
-    var that = this;
-    wx.request({
-      url: 'http://localhost:8080/Wxmini/cart_check.do?id=' + id,
-      // data: {},
-      method: 'GET', // OPTIONS, GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT
-      // header: {}, // 设置请求的 header
-      success: function (res) {
-        if (res.data.flag) {
+    },
+    onShow: function (e) {
+        if (base.cart.ref) {
+            this.setData({ his: base.cart.ref });
+            base.cart.ref = "";
+        }
+        var l = base.cart.getList();
+        for (var i = 0; i < l.length; i++) {
+            l[i].img = base.path.res + 'images/ksk/item/w_127/' + l[i].name + '.jpg';
+            l[i].index = i;
+        }
+        this.setData({ plist: l });
+        this.changeTotal();
+    },
+    goBack: function () {
+        var _this = this;
+        wx.navigateTo({
+            url: _this.data.his
+        })
+    },
+    previewImg: function (e) {
+        preview.show(e.currentTarget.dataset.name,e.currentTarget.dataset.brand,e.currentTarget.dataset.index)
+    },
+    changeTotal: function () {
+        var l = this.data.plist;
+        var t = 0;
+        for (var i = 0; i < l.length; i++) {
+            if (!l[i].del) {//排除删除选项
+                t += l[i].price * l[i].num;
+            }
+        }
+        this.setData({ total: t });
+    },
+    changeNum: function (e) {
+        var t = e.currentTarget.dataset.type;
+        var index = e.currentTarget.dataset.index;
+        var re = this.data.plist[index].num + parseInt(t);
+        if (re < 100 && re > 0) {
+            var key = "plist[" + index + "].num";
+            var obj = {}; obj[key] = re;
+            this.setData(obj);
+            this.changeTotal();
+            base.cart.num(this.data.plist[index].supplyno, obj[key]);
+        }
+    },
+    del: function (e) {
+        var index = e.currentTarget.dataset.index;
+        var sno = this.data.plist[index].supplyno;
+        //var l = this.data.plist;
+        // var _l = [];
+        //var obj = { total: 0 };
+        // for (var i = 0; i < l.length; i++) {
+        //     if (i != index) {
+        //         // _l.push(l[i]);
+        //         obj.total += l[i].price * l[i].num;
+        //     }
+        // }
 
-        } else {
-          that.isAllOk = false;
-        }
-      },
-      fail: function () {
-        that.isAllOk = false;
-      },
-      complete: function () {
-        wx.hideToast()
-      }
-    })
-  },
-  delCart: function (id) {
-    wx.showToast({
-      title: "Loading...",
-      icon: "loading",
-      duration: 300000
-    })
-    var that = this;
-    wx.request({
-      url: 'http://localhost:8080/Wxmini/cart_del.do?id=' + id,
-      // data: {},
-      method: 'GET', // OPTIONS, GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT
-      // header: {}, // 设置请求的 header
-      success: function (res) {
-        console.log(res.data)
-        if (res.data.flag) {
-          setTimeout(function () {
-            wx.showToast({
-              title: "成功",
-              duration: 1500
+        var key1 = "plist[" + index + "].del";
+        var obj = {};
+        obj[key1] = true;
+
+
+
+        // var ani = wx.createAnimation({
+        //     duration: 300,
+        //     timingFunction:"ease"
+        // })
+        // ani.height(0).step();
+        // var key = "plist[" + index + "]._ani";
+        // obj[key] = ani.export();
+
+        this.setData(obj);
+
+
+
+        this.changeTotal();
+        base.cart.remove(sno);
+    },
+
+    clearCart: function () {
+        var _this = this;
+        if (this.data.total > 0) {
+            base.modal({
+                title: "确认清空所有商品？", confirmText: "清空", success: function (res) {
+                    if (res.confirm) {
+                        _this.setData({ plist: [], total: 0 });
+                        base.cart.clear();
+                    }
+                }
             })
-            that.calcateTotal()
-          }, 100)
         }
-      },
-      fail: function () {
-        setTimeout(function () {
-          wx.showToast({
-            title: "操作失败"
-          })
-        }, 100)
-      },
-      complete: function () {
-        wx.hideToast()
-      }
-    })
-  },
-  navigateToShopView :function(e){
-    var typeId=e.currentTarget.dataset.id;
-    console.log("NavigateToShopView--> typeId:",typeId)
-    wx.navigateTo({
-      url: '../index/good/good?typeId='+typeId
-    })
-  },
-  navigateToGoodView :function(e){
-    var id=e.currentTarget.dataset.id;
-    console.log("NavigateToGoodView--> id:",id)
-    wx.navigateTo({
-      url: '../index/good/detail/detail?id='+id
-    })
-  }
-})
+    },
+    goOrder: function () {
+     //   this.ing();
+        if (this.data.plist.length > 0 && this.data.total > 0) {
+            wx.navigateTo({
+                url: '../order/order?from=cart'
+            })
+        } else {
+            base.modal({
+                title: '购物车无商品',
+                showCancel: false
+            })
+        }
+    },
+    tips: ["尽请期待!", "不用点了、暂时下不了单！", "真de、不骗你！", "不信再试试？！", "没错吧？！", "您可以去其它地方转转了！", "嘿、还挺执着！", "就喜欢你这股子劲！", "但没有任何niao用！", "你已经陷入无限轮回..."],
+    //,"......", ".........", "好吧、你赢了！", "你即将获得一份随机奖励！", "just for your 执着！", "不过先声明、我们真的还未开放下单！"],
+    tipsN: 0,
+    ing: function () {
+        if (this.tipsN >= this.tips.length) {
+            this.tipsN = 0;
+        }
+
+        base.modal({
+            title: this.tips[this.tipsN],
+            showCancel: false
+        });
+        this.tipsN += 1;
+
+
+
+        // if (this.tipsN < this.tips.length) {
+        //     base.modal({
+        //         title: this.tips[this.tipsN],
+        //         showCancel: false
+        //     });
+        //     this.tipsN += 1;
+        // }
+        // else {
+        //     base.modal({
+        //         title: "恭喜",
+        //         content: "您已免费获得价值88元经典系列蛋糕优惠券,限领一次",
+        //         cancelText: "放弃机会",
+        //         confirmText: "立即领取",
+        //         showCancel: true,
+        //         success: function (res) {
+        //             if (res.confirm) {
+        //                 wx.navigateTo({
+        //                     url: "../buy/buy?type=0&price=88&&pay=free"
+        //                 })
+        //             } else {
+
+        //             }
+        //         }
+        //     })
+        // }
+
+    },
+    p: {
+        currentIndex: -1,
+        eventOk: true,
+        eventStartOk: true,
+        aniOk: true,
+        len: 0,//当前位置
+        ani: wx.createAnimation(),
+        // _ani: wx.createAnimation({
+        //     duration: 200,
+        //     timingFunction: 'ease-out'//
+        // }),
+        max: 80,
+        size: 40
+    },
+    moveTo: function (index, x) {
+        this.p.eventOk = false;//停止事件
+        if (x == 0) {
+            this.p.currentIndex = -1;
+            if (this.p.len > 0 - this.p.max / 2) {
+                if (this.p.len > 0) {
+                    this.p.ani.translateX(this.p.size).step({
+                        duration: 100,
+                        timingFunction: 'ease-out'
+                    });
+
+                }
+                this.p.ani.translateX(0 - this.p.size).step({
+                    duration: 200,
+                    timingFunction: 'ease'
+                });
+            }
+        }
+        if (x == 0 - this.p.max) {
+            this.p.currentIndex = index;
+            this.p.ani.translateX(x - this.p.size).step({
+                duration: 200,
+                timingFunction: 'ease'
+            });
+        }
+        this.p.ani.translateX(x).step({
+            duration: 200,
+            timingFunction: 'ease-out'
+        });
+        var obj = {};
+        var key = "plist[" + index + "].ani";
+        obj[key] = this.p.ani.export();
+        this.setData(obj);
+    },
+    ptouchsatrt: function (e) {
+
+        var index = e.currentTarget.dataset.index;
+        if (this.p.currentIndex >= 0) {
+            this.moveTo(this.p.currentIndex, 0);
+            return;
+        }
+        if (this.p.eventStartOk) {
+            this.p.eventOk = true;
+            this.p.len = 0;
+            var pt = e.changedTouches[0];
+            pt.aaaaaaa = 11111;
+            this.p.x = pt.pageX;
+            this.p.y = pt.pageY;
+            console.log("start")
+        }
+    },
+    ptouchend: function (e) {
+        if (this.p.eventOk) {
+            var pt = e.changedTouches[0];
+            var len = pt.pageX - this.p.x;//预计目标位置
+            var ht = pt.pageY - this.p.y;
+            if (len != 0 && Math.abs(ht) / Math.abs(len) < 0.3) {//滑动倾斜度限制
+                this.p.len = len;
+                var index = e.currentTarget.dataset.index;
+                if (len > 0 - this.p.max / 2) {
+                    this.moveTo(index, 0);
+                } else {
+                    this.moveTo(index, 0 - this.p.max);
+                }
+            }
+        }
+        this.p.eventOk = false;
+        this.p.eventStartOk = false;
+        var _this = this;
+        if (this.p.tm) {
+            clearTimeout(this.p.tm);
+        }
+        this.p.tm = setTimeout(function () {
+            _this.p.eventStartOk = true;
+        }, 300);
+    }
+});

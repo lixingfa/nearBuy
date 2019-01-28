@@ -72,7 +72,7 @@
   color: #aaa;
 }
 
-/*主容器*/  
+/*加减号主容器*/ 
 .stepper {  
     width: 80px;  
     height: 26px;  

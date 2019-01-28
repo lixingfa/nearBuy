@@ -1,5 +1,5 @@
 {
-    "navigationBarTitleText": "购物车",
-    "enablePullDownRefresh": true,
-    "backgroundColor": "#eeeeee"
+    "navigationBarTitleText": "购物车（体验版）",
+    "backgroundColor": "#f3f3f3",
+    "enablePullDownRefresh":false
 }
