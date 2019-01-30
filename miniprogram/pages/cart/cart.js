@@ -16,7 +16,7 @@ Page({
         }
         var l = base.cart.getList();
         for (var i = 0; i < l.length; i++) {
-            l[i].img = base.path.res + 'images/ksk/item/w_127/' + l[i].name + '.jpg';
+            //l[i].img = base.path.res + 'images/ksk/item/w_127/' + l[i].name + '.jpg';
             l[i].index = i;
         }
         this.setData({ plist: l });

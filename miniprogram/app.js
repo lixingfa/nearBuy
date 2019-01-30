@@ -104,7 +104,7 @@ App({
             var list = [];
             var dic = wx.getStorageSync(this.key);
             for (var p in dic) {
-                list.push({ supplyno: p, name: dic[p].name, price: dic[p].price, size: dic[p].size, num: dic[p].num, brand: dic[p].brand });
+                list.push(dic[p]);
             }
             return list;
         },
