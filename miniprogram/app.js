@@ -2,7 +2,7 @@
 App({
     version: {
         key: "version",
-        current: "1.0.2",
+        current: "1.0.0",
         getValue: function () {
             return wx.getStorageSync(this.key);
         }
@@ -52,12 +52,14 @@ App({
         ref: "",
         add: function (p) {
             var re = false;
-            if (p.supplyno && p.price && p.size && p.name && p.num) {
+            if (p.id && p.price) {
                 var dic = wx.getStorageSync(this.key) || {};
-                if (p.supplyno in dic) {
-                    dic[p.supplyno].num += p.num;
+                if (p.id in dic) {
+                    dic[p.id].num += 1;
                 } else {
-                    dic[p.supplyno] = { name: p.name, price: p.price, size: p.size, num: p.num, brand: p.brand }
+                    //dic[p.supplyno] = { name: p.name, price: p.price, size: p.size, num: p.num, brand: p.brand }
+                    dic[p.id] = p;
+                    dic[p.id].num = 1;//初始化，否则会出问题
                 }
                 wx.setStorageSync(this.key, dic);
                 re = true;

@@ -6,6 +6,7 @@ Page({
         brand: 0,
         loaded: false,
         cartNum: 0,
+        good:null
     },
     onLoad: function (e) {
         var brand = e && e.brand ? e.brand : 0;
@@ -14,8 +15,24 @@ Page({
         if (brand == 0) {//经典系列
             var key = e.pname || "极地牛乳";//名字
             var obj = base.cake.getByName(key);
+            //
+          obj = {
+            id: "1",
+            title: "手工红薯粉",
+            inAWord: "堂哥自种红薯手工制作，无添加纯红薯粉，保证健康",
+            pic: "../../image/goods/hongshufen.jpg",
+            price: 16,
+            unit: "斤",
+            total: 200,
+            surplus: 0,
+            lineOrder: true,//广告用户可以看到访问者清单
+            promulgator: "利利",//大家熟知的称呼，如发哥、二嫂
+            promulgatorId: "lili",//
+            distance: "498米"//点击可以看发布者填写的地址
+          }
+            //
             if (obj) {
-                _this.setData({ loaded: true });
+                _this.setData({ loaded: true,good:obj });
                 this.initCake(obj);
             } else {
                 base.get({ c: "Product", m: "GetCakeByName", City: "上海", ProName: key }, function (d) {
@@ -33,7 +50,7 @@ Page({
         }
     },
     initCake: function (d) {
-        var _this = this;
+        /*var _this = this;
         wx.setNavigationBarTitle({ title: d.Name });
         this.setData({
             imgMinList: (function () {
@@ -59,7 +76,7 @@ Page({
                 des: d.CakeType[0].PackingList
             },
             CakeType: d.CakeType
-        });
+        });*/
     },
     onShow: function (e) {
         this.setData({ cartNum: base.cart.getNum() });
@@ -76,13 +93,17 @@ Page({
         }
     },
     addCart: function () {
+        //直接整个对象放进去
+        base.cart.add(this.data.good);
+        this.setData({ cartNum: base.cart.getNum() });
+        /*
         var _this = this;
         if (base.cart.add({
-            supplyno: this.data.current.supplyno,
-            name: this.data.name,
-            size: this.data.current.size,
-            price: this.data.current.price,
-            num: this.data.num,
+            supplyno: this.data.current.supplyno,//
+            name: this.data.name,//名称
+            size: this.data.current.size,//尺寸
+            price: this.data.current.price,//价格
+            num: this.data.num,//数量
             brand:this.data.brand
         })) {
             this.setData({ cartNum: base.cart.getNum() })
@@ -103,7 +124,7 @@ Page({
             //     icon: 'success',
             //     duration: 1500
             // })
-        }
+        }*/
     },
     goCart: function () {
         if (!base.cart.exist(this.data.current.supplyno)) {
