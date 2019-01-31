@@ -24,3 +24,9 @@
 </view>
 
 <view class="sub {{phoneOk&&codeOk?'sub-ok':'sub-dis'}}" bindtap="login">登 录</view>
+<view class="btn" >
+<navigator url="/pages/index/index"
+    open-type="switchTab"
+    hover-class="other-navigator-hover"
+>首页</navigator>
+</view>

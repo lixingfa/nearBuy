@@ -29,6 +29,7 @@ Page({
   preLoad: function () {
     var _this = this;
     if (_this.data.mode == "edit") {
+
       base.get({ c: "UserCenter", m: "getAddressById", id: _this.data.id }, function (d) {
         var dt = d.data;
         if (dt.Status == "ok") {
@@ -48,8 +49,10 @@ Page({
           _this.getAreaByCity(_this.data.arrayCity[_this.data.indexCity], _this.preAreaByEdit);
         }
       })
+
     }
-    else {
+    else {//新增
+    
       _this.getAreaByCity(_this.data.arrayCity[0]);
       _this.setData({
         loaded: true
@@ -66,7 +69,9 @@ Page({
     }
   },
   getCity: function (call) {//获取所有城市
-    var _this = this;
+    //换成从地图获取
+
+    /*var _this = this;
     base.get({ c: "CityCenter", m: "GetCitys" }, function (d) {
       var dt = d.data;
       if (dt.Status == "ok") {
@@ -82,7 +87,7 @@ Page({
         })
         if (call) call();
       }
-    })
+    })*/
   },
   getAreaByCity: function (city, call) {
     var _this = this;

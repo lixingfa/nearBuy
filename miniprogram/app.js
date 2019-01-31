@@ -1,5 +1,6 @@
 //app.js
 App({
+    distan:3000,//与默认地址距离多少米就认为是新的地址
     version: {
         key: "version",
         current: "1.0.0",
@@ -11,6 +12,10 @@ App({
         res: "https://res.bestcake.com/",
         //www: "https://mcstj.bestcake.com/"
         www:"http://localhost:9419/"
+    },
+    location: {
+      latitude: 0,//经度
+      longitude: 0//维度
     },
     user: {
         userid: 0,//用户ID
@@ -135,20 +140,36 @@ App({
     onLaunch: function () {
         //调用API从本地缓存中获取数据     
         var _this = this;
-        var obj = _this.user.getCache("userkey");
-        if (obj != null) {
-            _this.user.userid = obj.userid;
-            _this.user.sessionid = obj.sessionid;
-            _this.user.jzb = obj.jzb;
-            _this.user.exp = obj.exp;
-            _this.user.phone = obj.phone;
-            _this.user.levels = obj.levels;
-            _this.user.headimg = obj.headimg;
-
-        }    
-    },
-    onLoad: function () {
-
+        //用户
+        var user = _this.user.getCache("userkey");
+        if (user != null) {
+          _this.user.userid = user.userid;
+          _this.user.sessionid = user.sessionid;
+          _this.user.jzb = user.jzb;
+          _this.user.exp = user.exp;
+          _this.user.phone = user.phone;
+          _this.user.levels = user.levels;
+          _this.user.headimg = user.headimg;
+        }
+        //位置，每次打开都获取
+        var location = _this.user.getCache("location");
+        wx.getLocation({
+          type: 'wgs84',//wgs84 返回 gps 坐标，gcj02 返回可用于 wx.openLocation 的坐标
+          altitude: 'true',//返回高度信息，需要较高精确度，会减慢接口返回速度
+          success(res) {
+            //const 用于声明常量，也具有块级作用域，即局部的 const PI=3.14;
+            const latitude = res.latitude;//纬度，范围为 -90~90，负数表示南纬
+            const longitude = res.longitude;//经度，范围为 -180~180，负数表示西经
+            const speed = res.speed;//速度，单位 m/s
+            const accuracy = res.accuracy//位置精度
+            const altitude = res.altitude;//高度
+            const verticalAccuracy = res.verticalAccuracy;//垂直精度，安卓直接返回0
+            const horizontalAccuracy = res.horizontalAccuracy;//水平精度
+            
+            _this.location.latitude = latitude;
+            _this.location.longitude = longitude;
+          }
+        })
     },
     onShow: function () {
         var rrr = 1;

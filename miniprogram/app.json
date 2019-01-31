@@ -23,7 +23,7 @@
     "backgroundColor": "#F6F6F6",
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#F6F6F6",
-    "navigationBarTitleText": "邻里小卖",
+    "navigationBarTitleText": "周边三公里，简单粗暴，但容易引起美团等的警觉",
     "navigationBarTextStyle": "black"
   },
   "tabBar": {
@@ -56,6 +56,11 @@
     "backgroundColor": "#f3f3f3",
     "color": "#999",
     "selectedColor": "#576b95"
+  },
+  "permission": {
+    "scope.userLocation": {
+      "desc": "根据您的位置展示周边商家"
+    }
   },
   "networkTimeout": {
     "request": 10000,

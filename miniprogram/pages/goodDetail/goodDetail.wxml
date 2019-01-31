@@ -44,6 +44,9 @@
   </view>
   <view class="tool">
     <view class="tbtn add" catchtap="addCart">加入购物车(<text class="cart-num">{{cartNum}}</text>)</view>
-    <view class="tbtn buy" catchtap="_go">购买等额优惠券</view>
+    <navigator url="/pages/cart/cart"
+    open-type="switchTab"
+    hover-class="other-navigator-hover"
+>前往购物车</navigator>
   </view>
 </view>

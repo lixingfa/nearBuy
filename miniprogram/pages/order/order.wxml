@@ -25,6 +25,7 @@
     <text class="ptprice">{{p.price*p.num}}</text>
   </view>
 </view>
+<!--
 <view class="date tab">
   <view class="tit">配件</view>
 </view>
@@ -40,7 +41,7 @@
       <view class="content"></view>
     </view>
   </view>
-</view>
+</view>-->
 <view class="date tab" style="height:100px;">
   <view class="tit">备注</view>
   <textarea bindblur="bindTextAreaBlur" auto-height placeholder="" value="{{oinfo.Remarks}}" />
@@ -55,6 +56,7 @@
     <view class="addr_head_cancel" bindtap="myaddrCancel">取消</view>
     <view class="addr_head_title">我的地址</view>
   </view>
+<!--
   <scroll-view scroll-y="true" scroll-top="{{scrollTop}}" style="height: 250px;">
     <view class="addr_body" data-aid="{{a.id}}" wx:for="{{addresslist}}" wx:key="id" wx:for-index="i" wx:for-item="a">
       <view class="addr_body_edit"> <navigator url="{{'../user/editaddress/editaddress?mod=edit&id='+a.id}}" open-type="navigate" hover-class="navigator-hover">修改</navigator></view>
@@ -68,6 +70,8 @@
     </view>
   </scroll-view>
   <view class="addr_box_add"><navigator url="../user/editaddress/editaddress?mod=add" open-type="navigate" hover-class="navigator-hover"><label class="addr_lbl_add">+</label>新增收货地址</navigator></view>
+-->
+
 </view>
 <!--遮罩层-->
 <view class="hiddenbox" wx:if="{{addrShow}}" bindtap="closeaddr"></view>
