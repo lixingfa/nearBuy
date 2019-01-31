@@ -1,6 +1,9 @@
 //app.js
 App({
     distan:3000,//与默认地址距离多少米就认为是新的地址
+    address:{
+
+    },
     version: {
         key: "version",
         current: "1.0.0",

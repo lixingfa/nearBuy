@@ -84,11 +84,12 @@ Page({
       if(distan >= base.distan){
         wx.showModal({
           title: '地址变更提示',
-          content: '检测到您本次的位置距离上次相距' + distan + '米，是否切换本次位置为收货地址？',
+          content: '检测到您当前的位置与上次相距' + distan + '米，是否切换当前位置为收货地址？',
           success: function (res) {
             console.log(res)
             if (res.confirm) {
               console.log('用户点击了确定')
+
             } else {
               console.log('用户点击了取消')
             }
