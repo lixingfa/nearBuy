@@ -1,5 +1,10 @@
 var base = getApp();
 var common=require('../../utils/common.js');
+
+// 引入SDK核心类
+var QQMapWX = require('../../libs/qqmap-wx-jssdk.js');
+var qqmapsdk;
+
 Page({
     data: {
         arrTime: ['选择配送时间', '10:00-11:00', '11:00-12:00', '12:00-13:00', '13:00-14:00', '14:00-15:00', '15:00-16:00', '16:00-17:00', '17:00-18:00'],
@@ -78,6 +83,12 @@ Page({
         }
     },
     onLoad: function (e) {
+      // 实例化API核心类
+      qqmapsdk = new QQMapWX({
+        key: 'YCWBZ-64T6K-TJAJU-AM4GX-LZSMQ-GFF4N'
+      });
+
+
       //判断本次登录的坐标和地址的坐标是否相近，得到米数，经度、维度
       var distan = this.getDistance(base.location.latitude,base.location.longitude, 1, 1);
       //超过上次地址多远，则认为是新地址，比如从家到了公司，也考虑地址切换的情况
@@ -88,8 +99,41 @@ Page({
           success: function (res) {
             console.log(res)
             if (res.confirm) {
-              console.log('用户点击了确定')
-
+              console.log('用户点击了确定');
+              //地图显示
+              wx.openLocation({
+                latitude: base.location.latitude,
+                longitude: base.location.longitude,
+                success:function(res){//成功打开地图
+                  console.log('打开地图成功');
+                  wx.chooseLocation({
+                    success: function(res) {
+                      consoe.log(res);
+                      wx.showModal({
+                        title: '地址',
+                        content: res,
+                      })
+                    },
+                  })
+                }
+              });
+              //2、根据坐标获取当前位置名称，显示在顶部:腾讯地图逆地址解析
+              qqmapsdk.reverseGeocoder({
+                location: {
+                  latitude: base.location.latitude,
+                  longitude: base.location.longitude
+                },
+                success: function (addressRes) {
+                  var address = addressRes.result.formatted_addresses.recommend;
+                  wx.showModal({
+                    title: '地址',
+                    content: address,
+                  })
+                },
+                fail: function (res) {
+                  console.log(res);
+                }
+              })
             } else {
               console.log('用户点击了取消')
             }
