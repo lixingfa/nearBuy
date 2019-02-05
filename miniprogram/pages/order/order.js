@@ -90,6 +90,7 @@ Page({
 
 
       //判断本次登录的坐标和地址的坐标是否相近，得到米数，经度、维度
+      var _this = this;//函数是一个闭包，在内部this的意思发生改变
       var distan = this.getDistance(base.location.latitude,base.location.longitude, 1, 1);
       //超过上次地址多远，则认为是新地址，比如从家到了公司，也考虑地址切换的情况
       if(distan >= base.distan){
@@ -101,11 +102,10 @@ Page({
             if (res.confirm) {
               console.log('用户点击了确定');
               //地图显示
-              wx.openLocation({
+              /*wx.openLocation({
                 latitude: base.location.latitude,
                 longitude: base.location.longitude,
                 success:function(res){//成功打开地图
-                  console.log('打开地图成功');
                   wx.chooseLocation({
                     success: function(res) {
                       consoe.log(res);
@@ -116,7 +116,7 @@ Page({
                     },
                   })
                 }
-              });
+              });*/
               //2、根据坐标获取当前位置名称，显示在顶部:腾讯地图逆地址解析
               qqmapsdk.reverseGeocoder({
                 location: {
@@ -125,10 +125,15 @@ Page({
                 },
                 success: function (addressRes) {
                   var address = addressRes.result.formatted_addresses.recommend;
+                  _this.setData({
+                    "addr": address,
+                    //"oinfo.Consignee": address,
+                  });
+                  /*
                   wx.showModal({
                     title: '地址',
                     content: address,
-                  })
+                  })*/
                 },
                 fail: function (res) {
                   console.log(res);
@@ -271,6 +276,11 @@ Page({
         return true;
     },
     submit: function () {
+      base.cart.clear();
+      wx.redirectTo({
+        url: "../user/myorder"
+      })
+      /*
         var _this = this;
         if (_this.valid()) {
             _this.getTotalPrice();
@@ -278,7 +288,7 @@ Page({
             obj.UserName = base.user.phone;
             obj.UserPhone = base.user.phone;
             obj.OrderSource = _this.data.oinfo.OrderSource;
-            obj.Consignee = _this.data.oinfo.Consignee;
+            obj.Consignee = _this.data.oinfo.Consignee;//地址
             obj.Cellphone = _this.data.oinfo.Cellphone;
             obj.City = _this.data.oinfo.City;
             obj.District = _this.data.oinfo.District;
@@ -306,6 +316,6 @@ Page({
 
             })
 
-        }
+        }*/
     }
 })

@@ -19,10 +19,10 @@ Page({
   onLoad: function (options) {
     // 页面初始化 options为页面跳转所带来的参数
     var _this = this;
-    _this.setData({
+    /*_this.setData({
       "oid": options.oid,
       jzb: base.user.jzb
-    });
+    });*/
 
     wx.setNavigationBarTitle({
       title: '支付方式'
@@ -43,7 +43,7 @@ Page({
   },
   initData: function () {
     var _this = this;
-    base.get({ c: "UserCenter", m: "GetOrderInfoByOrderId", orderId: _this.data.oid }, function (d) {
+    /*base.get({ c: "UserCenter", m: "GetOrderInfoByOrderId", orderId: _this.data.oid }, function (d) {
       if (d.data.Status == "ok") {
         var dat = d.data.Tag;
         var arr = [];
@@ -73,7 +73,7 @@ Page({
           "selid": n
         });
       }
-    })
+    })*/
   },
   paymentselected: function (e) {
     var id = e.currentTarget.dataset.aid;

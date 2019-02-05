@@ -1,20 +1,21 @@
 var base = getApp();
-var jzData = require('../../utils/jzData.js');
 var preview=require('../../utils/preview.js');
 Page({
     data: {
-        brand: 0,
+        id: 0,
         loaded: false,
         cartNum: 0,
         good:null
     },
     onLoad: function (e) {
-        var brand = e && e.brand ? e.brand : 0;
-        this.setData({ brand: brand });
-        var _this = this;
+        var id = e && e.id ? e.id : 0;
+        var obj = base.getGoodById(id);
+        this.initCake(obj);
+        this.setData({ id: id,loaded:true,good:obj});
+        /*
         if (brand == 0) {//经典系列
             var key = e.pname || "极地牛乳";//名字
-            var obj = base.cake.getByName(key);
+            var obj = base.good.getByName(id);
             //
           obj = {
             id: "1",
@@ -47,7 +48,7 @@ Page({
             var obj = jzData.data[e.pname];
             this.initCake(obj);
             _this.setData({ loaded: true });
-        }
+        }*/
     },
     initCake: function (d) {
         /*var _this = this;

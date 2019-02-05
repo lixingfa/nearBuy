@@ -1,6 +1,6 @@
 <view class="tit">
   <view class="tit-back" catchtap="goBack" wx:if="{{his}}">返回</view>
-  <text class="tit-text">详情(滑动可移除)</text>
+  <text class="tit-text">详情(向左滑动可移除)</text>
   <view class="tit-tool" catchtap="clearCart">清空</view>
 </view>
 
@@ -10,8 +10,8 @@
       <image src="{{p.pic}}" mode="aspectFill"></image>
     </view>
     <view class="pname">
-      <view class="name">{{p.title}}</view>
-      <text class="des">{{p.inAWord}}</text>
+      <view class="name">{{p.title}}-{{p.promulgator}}</view>
+      <!--<text class="des">{{p.inAWord}}</text>-->
     </view>
     <view class="ptprice">￥{{p.price*p.num}}</view>
     <view class="pnum">
