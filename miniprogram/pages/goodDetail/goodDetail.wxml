@@ -17,12 +17,13 @@
 <view wx:if="{{loaded}}" class="c">
   <view class="tool">
 
-    <view wx:if="{{loaded}}" class="tbtn add" catchtap="addCart">加入购物车(<text class="cart-num">{{cartNum}}</text>)</view>
+    <view wx:if="{{good.surplus > 0}}" class="tbtn add" catchtap="addCart">加入购物车(<text class="cart-num">{{cartNum}}</text>)</view>
+    <!--<view wx:if="{{surplus == 0}}" class="tbtn add" catchtap="addCart">预订(<text class="cart-num">{{cartNum}}</text>)</view>增加复杂度-->
 
-
-    <navigator url="/pages/cart/cart"
+<view class="gobuy" bindtap="goOrder"><navigator url="/pages/cart/cart"
     open-type="switchTab"
     hover-class="other-navigator-hover"
->前往购物车</navigator>
+>前往购物车</navigator></view>
+
   </view>
 </view>

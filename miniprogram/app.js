@@ -18,7 +18,7 @@ App({
           price: 16,
           unit: "斤",
           total: 200,
-          surplus: 0,//没有了也显示，继续预订
+          surplus: 1,//没有了也显示，继续预订?
           lineOrder: true,//广告用户可以看到访问者清单
           promulgator: "利利",//大家熟知的称呼，如发哥、二嫂
           promulgatorId: "lili",//
@@ -233,6 +233,11 @@ App({
             }
             return p;
         },
+    changeGoodNum:function(id,num){
+      var good = this.getGoodById(id);
+      good.surplus = good.surplus + num;
+      this.setGoodCache(good);
+    },
     onLaunch: function () {
         //调用API从本地缓存中获取数据     
         var _this = this;

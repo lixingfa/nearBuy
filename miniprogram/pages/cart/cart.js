@@ -65,13 +65,9 @@ Page({
         //         obj.total += l[i].price * l[i].num;
         //     }
         // }
-
         var key1 = "plist[" + index + "].del";
         var obj = {};
         obj[key1] = true;
-
-
-
         // var ani = wx.createAnimation({
         //     duration: 300,
         //     timingFunction:"ease"
@@ -79,13 +75,11 @@ Page({
         // ani.height(0).step();
         // var key = "plist[" + index + "]._ani";
         // obj[key] = ani.export();
-
         this.setData(obj);
-
-
-
         this.changeTotal();
         base.cart.remove(sno);
+        //恢复商品数量
+        //base.changeGoodNum(this.data.id, -1);
     },
 
     clearCart: function () {
