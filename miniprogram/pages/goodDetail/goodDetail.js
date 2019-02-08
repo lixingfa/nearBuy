@@ -12,8 +12,8 @@ Page({
       var good = base.getGoodById(id);
       this.setData({ id: id, loaded: true, good: good});
     },
-    onShow: function (e) {
-        this.setData({ cartNum: base.cart.getNum() });
+    onShow: function () {
+      this.setData({ cartNum: base.cart.getNum(this.data.id)});
     },
     addCart: function () {
         //直接整个对象放进去
@@ -21,7 +21,7 @@ Page({
         //数量减一
         base.changeGoodNum(this.data.id,-1);
         //更新数据
-        this.setData({ cartNum: base.cart.getNum(), good: base.getGoodById(this.data.id)});
+        this.setData({ cartNum: base.cart.getNum(this.data.id), good: base.getGoodById(this.data.id)});
         /*
         var _this = this;
         if (base.cart.add({

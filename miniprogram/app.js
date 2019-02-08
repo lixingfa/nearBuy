@@ -172,11 +172,19 @@ App({
                 wx.setStorageSync(this.key, dic);
             }
         },
-        getNum: function () {
+        getNum: function (id) {
             var n = 0;
             var dic = wx.getStorageSync(this.key) || {}
-            for (var i in dic) {
-                n += dic[i].num;
+            if(id != 0){
+              if(id in dic){
+                n = dic[id].num;
+              }else{
+                n = 0;
+              }
+            }else{
+              for (var i in dic) {
+                  n += dic[i].num;
+              }
             }
             return n;
         },
