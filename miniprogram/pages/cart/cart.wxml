@@ -20,7 +20,7 @@
       <view class="num num-b" data-type="1" data-index="{{p.index}}" catchtouchstart="changeNum"><text>+</text></view>
     </view>
   </view>
-  <view class="del" data-index="{{p.index}}" catchtap="del">
+  <view class="del" data-id="{{p.id}}" data-index="{{p.index}}" catchtap="del">
     <text>删除</text>
   </view>
 </view>

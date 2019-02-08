@@ -157,18 +157,18 @@ App({
             }
             return re;
         },
-        exist: function (sno) {
+        exist: function (id) {
             var re = false;
             var dic = wx.getStorageSync(this.key) || {};
-            if (sno in dic) {
+            if (id in dic) {
                 re = true;
             }
             return re;
         },
-        remove: function (sno) {
+        remove: function (id) {
             var dic = wx.getStorageSync(this.key) || {};
-            if (sno in dic) {
-                delete dic[sno];
+            if (id in dic) {
+                delete dic[id];
                 wx.setStorageSync(this.key, dic);
             }
         },
@@ -180,13 +180,13 @@ App({
             }
             return n;
         },
-        num: function (sno, n) {
+        num: function (id, n) {
             var dic = wx.getStorageSync(this.key) || {};
-            if (sno in dic) {
+            if (id in dic) {
                 if (n > 0) {
-                    dic[sno].num = n;
+                    dic[id].num = n;
                 } else {
-                    delete dic[sno];
+                    delete dic[id];
                 }
                 wx.setStorageSync(this.key, dic);
             }

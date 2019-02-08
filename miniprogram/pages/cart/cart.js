@@ -55,29 +55,13 @@ Page({
     },
     del: function (e) {
         var index = e.currentTarget.dataset.index;
-        var sno = this.data.plist[index].supplyno;
-        //var l = this.data.plist;
-        // var _l = [];
-        //var obj = { total: 0 };
-        // for (var i = 0; i < l.length; i++) {
-        //     if (i != index) {
-        //         // _l.push(l[i]);
-        //         obj.total += l[i].price * l[i].num;
-        //     }
-        // }
+        var id = this.data.plist[index].id;
         var key1 = "plist[" + index + "].del";
         var obj = {};
         obj[key1] = true;
-        // var ani = wx.createAnimation({
-        //     duration: 300,
-        //     timingFunction:"ease"
-        // })
-        // ani.height(0).step();
-        // var key = "plist[" + index + "]._ani";
-        // obj[key] = ani.export();
         this.setData(obj);
         this.changeTotal();
-        base.cart.remove(sno);
+        base.cart.remove(id);
         //恢复商品数量
         //base.changeGoodNum(this.data.id, -1);
     },
