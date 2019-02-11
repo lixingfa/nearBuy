@@ -1,9 +1,7 @@
 //app.js
 App({
     distan:3000,//与默认地址距离多少米就认为是新的地址
-    address:{
-
-    },
+  address: '广州市增城区朱村大道西145号中国铁建国际花园4栋',//地址
   typeList: [
     {
       id: "1",
@@ -100,31 +98,26 @@ App({
         www:"http://localhost:9419/"
     },
     location: {
-      latitude: 0,//经度
-      longitude: 0//维度
+      latitude: 23.26093,//经度，中铁，电脑上获取的坐标
+      longitude: 113.8109//维度
     },
     user: {
-        userid: 0,//用户ID
-        sessionid: "",//秘钥
-        jzb: 0,
-        exp: 0,
-        phone: "",
-        levels: 0,
-        headimg: "",
+        key: "userkey",
+        openId:'',//微信号
+        nickName: '',//昵称
+        avatarUrl: '',//头像地址
+        address: '广州市增城区朱村大道西145号中国铁建国际花园4栋',//地址
         islogin: function (tp) {
             var re = false;
-            if (this.userid > 0) {
+            if (this.openId != null) {
                 re = true;
             } else {
-                if (tp == true) {
-                    wx.navigateTo({
-                        url: '../phone/phone'
-                    })
-                }
+                wx.navigateTo({
+                    url: '../phone/phone'
+                })
             }
             return re;
         },
-        key: "userkey",
         setCache: function (obj) {
             wx.setStorageSync(this.key, obj);
         },
@@ -134,9 +127,6 @@ App({
         clear: function () {
             wx.removeStorageSync(this.key);
         }
-    },
-    city: {
-
     },
     cart: {
         key: "cart",
@@ -252,13 +242,26 @@ App({
         //用户
         var user = _this.user.getCache("userkey");
         if (user != null) {
-          _this.user.userid = user.userid;
-          _this.user.sessionid = user.sessionid;
-          _this.user.jzb = user.jzb;
-          _this.user.exp = user.exp;
-          _this.user.phone = user.phone;
-          _this.user.levels = user.levels;
-          _this.user.headimg = user.headimg;
+          _this.user.openId = user.openId,//微信号
+          _this.user.nickName = user.nickName,//昵称
+          _this.user.avatarUrl = user.avatarUrl,//头像地址
+          _this.user.address = user.address
+        }else{
+            //个人信息
+          wx.getUserInfo({
+            success(res) {
+              var user = {};
+              var userInfo = res.userInfo
+              user.nickName = userInfo.nickName
+              user.avatarUrl = userInfo.avatarUrl
+              //user.gender = userInfo.gender // 性别 0：未知、1：男、2：女
+              //user.province = userInfo.province
+              //user.city = userInfo.city
+              //user.country = userInfo.country
+              //encryptedData openId//即微信号需要另外处理
+              _this.user.setCache(user);
+            }
+          });
         }
         //位置，每次打开都获取
         var location = _this.user.getCache("location");
@@ -278,7 +281,7 @@ App({
             _this.location.latitude = latitude;
             _this.location.longitude = longitude;
           }
-        })
+        });
     },
     onShow: function () {
         var rrr = 1;

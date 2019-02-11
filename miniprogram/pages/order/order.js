@@ -91,7 +91,7 @@ Page({
 
       //判断本次登录的坐标和地址的坐标是否相近，得到米数，经度、维度
       var _this = this;//函数是一个闭包，在内部this的意思发生改变
-      var distan = this.getDistance(base.location.latitude,base.location.longitude, 1, 1);
+      var distan = this.getDistance(base.location.latitude, base.location.longitude, 23.26093, 113.8109);//默认中铁4栋的坐标
       //超过上次地址多远，则认为是新地址，比如从家到了公司，也考虑地址切换的情况
       if(distan >= base.distan){
         wx.showModal({
@@ -144,6 +144,11 @@ Page({
             }
           }
         })
+      } else {
+        _this.setData({
+          "addr": base.address,
+          //"oinfo.Consignee": address,
+        });
       }
       /*
         var _this = this;
