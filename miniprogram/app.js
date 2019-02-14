@@ -1,90 +1,6 @@
 //app.js
 App({
     distan:3000,//与默认地址距离多少米就认为是新的地址
-  address: '广州市增城区朱村大道西145号中国铁建国际花园4栋',//地址
-  typeList: [
-    {
-      id: "1",
-      pic: "",
-      name: "附近热卖",//指短时间内很多人买的
-      goods: [
-        {
-          id: "1",
-          title: "手工红薯粉",
-          inAWord: "堂哥自种红薯手工制作，无添加纯红薯粉，保证健康",
-          pic: "../../image/goods/hongshufen.jpg",
-          price: 16,
-          unit: "斤",
-          total: 200,
-          surplus: 1,//没有了也显示，继续预订?
-          lineOrder: true,//广告用户可以看到访问者清单
-          promulgator: "利利",//大家熟知的称呼，如发哥、二嫂
-          promulgatorId: "lili",//
-          distance: "498米"//点击可以看发布者填写的地址
-        }, {
-          id: "2",
-          title: "包点拼团，奶黄、紫薯、粗粮、麦香包15元/20个",
-          inAWord: "番禺大石朋友新开的食品厂，外贸品质，有兴趣的邻居一起拼团",
-          pic: "../../image/goods/zishu.jpg",
-          price: 15,
-          unit: "份",
-          total: 100,
-          surplus: 36,
-          lineOrder: true,//线上下单/预订
-          promulgator: "小青",
-          promulgatorId: "xiaoqing",//
-          distance: "123米"
-        }, {
-          id: "3",
-          title: "包点拼团，馒头、奶油、花卷10元/20个",
-          inAWord: "番禺大石朋友新开的食品厂，外贸品质，有兴趣的邻居一起拼团",
-          pic: "../../image/goods/mantou.jpg",
-          price: 10,
-          unit: "份",
-          total: 100,
-          surplus: 48,
-          lineOrder: true,
-          promulgator: "小青",
-          promulgatorId: "xiaoqing",//
-          distance: "123米"
-        }, {
-          id: "5",
-          title: "农家土鸡蛋",
-          inAWord: "自家走地鸡产的鸡蛋，朱村黄麻鸡，位于鸭埔村三巷5号，可送到中铁与西福蓝湾路口",//对订单的群体通知功能
-          pic: "../../image/goods/tujidan.jpg",
-          price: 1,
-          unit: "个",
-          total: 78,
-          surplus: 56,
-          lineOrder: false,
-          promulgator: "张二嫂",
-          promulgatorId: "zhangersao",//
-          distance: "475米"
-        }
-      ]
-    }, {//最新发布
-      id: "2",
-      pic: "",
-      name: "最新发布",
-      goods: [
-        {
-          id: "4",
-          title: "招牌鱼头粉",
-          inAWord: "祖传底料，新鲜活鱼、现摘葱花和香菜15分钟特色炉火熬制而成，请到店品尝。",
-          pic: "../../image/goods/yutoufen.jpg",
-          price: 20,
-          unit: "份",
-          total: -1,//页面的处理应尽量简单
-          surplus: -1,
-          lineOrder: false,
-          promulgator: "招牌鱼头粉",
-          promulgatorId: "yutoufen",//雇佣关系的店最好用非个人微信
-          distance: "243米"
-        },
-      ]
-    }
-
-  ],
     version: {
         key: "version",
         current: "1.0.0",
@@ -99,14 +15,14 @@ App({
     },
     location: {
       latitude: 23.26093,//经度，中铁，电脑上获取的坐标
-      longitude: 113.8109//维度
+      longitude: 113.8109,//维度
+      address: '广州市增城区朱村大道西145号中国铁建国际花园4栋',//地址
     },
-    user: {
+    user: {//用户信息，主要用于下单时显示
         key: "userkey",
         openId:'',//微信号
         nickName: '',//昵称
         avatarUrl: '',//头像地址
-        address: '广州市增城区朱村大道西145号中国铁建国际花园4栋',//地址
         islogin: function (tp) {
             var re = false;
             if (this.openId != null) {
@@ -240,8 +156,8 @@ App({
         //调用API从本地缓存中获取数据     
         var _this = this;
         //用户
-        var user = _this.user.getCache("userkey");
-        if (user != null) {
+        var user = _this.user.getCache();
+        if (user != null && user != "") {
           _this.user.openId = user.openId,//微信号
           _this.user.nickName = user.nickName,//昵称
           _this.user.avatarUrl = user.avatarUrl,//头像地址
@@ -263,8 +179,9 @@ App({
             }
           });
         }
-        //位置，每次打开都获取
-        var location = _this.user.getCache("location");
+        //位置
+        var nowAddress;
+        //每次打开都获取当前位置
         wx.getLocation({
           type: 'wgs84',//wgs84 返回 gps 坐标，gcj02 返回可用于 wx.openLocation 的坐标
           //altitude: 'true',//返回高度信息，需要较高精确度，会减慢接口返回速度
@@ -282,6 +199,41 @@ App({
             _this.location.longitude = longitude;
           }
         });
+        var locationTEMP = wx.getStorageSync("location");
+        if (locationTEMP != ""){//缓存了上次的地址坐标
+          var distan = _this.getDistance(_this.location.latitude, _this.location.longitude, locationTEMP.location.latitude, locationTEMP.location.longitude);
+          if (distan >= _this.distan) {//与上次的距离超过设定的距离
+            //与已有地址进行比较
+            nowAddress = _this.getAddressByGPS(_this.location.latitude, _this.location.longitude);
+            if(nowAddress != null){//与现有地址接近
+              wx.showModal({
+                title: '地址变更提示',
+                //口不再显示
+                content: '您当前位于'+ nowAddress.address +'附近，是否切换到当前位置？切换位置将显示附近三公里的信息，不切换则继续显示'+ locationTEMP.address +'周边的信息，您可以点击顶部的地址来进行切换。',
+                success: function (res) {
+                  if (res.confirm) {
+                    _this.location = nowAddress;//有问题就分别赋值
+                  } else {
+                    _this.location = locationTEMP;
+                  }
+                }
+              });
+            } else {//没有距离当前最近的地址
+              _this.location = _this.getNewAddressByGPS(_this.location.latitude, _this.location.longitude);
+            }
+          } else {//与上次的距离在设定的距离之内
+            _this.location = locationTEMP;
+          }
+        }else{//没获取到缓存的地址
+          nowAddress = _this.getAddressByGPS(_this.location.latitude, _this.location.longitude);
+          if(nowAddress != null){
+            _this.location = nowAddress;//以距离当前最近的地址为准
+          }else{//没有距离当前最近的地址
+            _this.location = _this.getNewAddressByGPS(_this.location.latitude, _this.location.longitude);
+          }
+        }
+        //地址放入缓存
+      wx.setStorageSync("location", _this.location);
     },
     onShow: function () {
         var rrr = 1;
@@ -320,7 +272,7 @@ App({
             data: {
             },
         };
-        var base = { "onLoad": function () { }, "onReady": function () { }, "onShow": function () { }, "onHide": function () { }, "onUnload": function () { } };
+        var base = {"onLoad":function(){},"onReady":function(){},"onShow":function(){},"onHide":function(){},"onUnload":function(){}};
         for (var i in base) {
             _obj[i] = (function (etype) {
                 var _etype = "_" + etype;
@@ -437,5 +389,161 @@ App({
             str.push(encodeURIComponent(p) + "=" + encodeURIComponent(json[p]));
         }
         return str.join("&");
+    },
+    //获取两个GPS坐标间的距离，单位米
+    getDistance: function (lat1, lng1, lat2, lng2) {
+      lat1 = lat1 || 0;
+      lng1 = lng1 || 0;
+      lat2 = lat2 || 0;
+      lng2 = lng2 || 0;
+      //可以优化
+      var rad1 = lat1 * Math.PI / 180.0;
+      var rad2 = lat2 * Math.PI / 180.0;
+      var a = rad1 - rad2;
+      var b = lng1 * Math.PI / 180.0 - lng2 * Math.PI / 180.0;
+      var r = 6378137;
+      return (r * 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(a / 2), 2) + Math.cos(rad1) * Math.cos(rad2) * Math.pow(Math.sin(b / 2), 2)))).toFixed(0)
+    },
+    //根据坐标，获取最接近，并且小于规定范围的已有地址
+    getAddressByGPS: function (latitude, longitude){
+    var min = 1000000;
+    var addr = null;
+    for (var a in myAddress){
+      var la = myAddress[a].latitude - latitude;
+      var lo = myAddress[a].longitude - longitude;
+      la = la + lo;
+      if(la < min){
+        min = la;
+        addr = myAddress[a];
+      }
     }
+    if (addr != null && getDistance(latitude, longitude,addr.latitude,addr.longitude) > this.distan){
+      return null;//最近的地址也超出了业务范围
+    }
+    return addr;
+  },
+  //获取新地址
+  getNewAddressByGPS: function (latitude, longitude) {
+
+  },
+  //商品数据
+  typeList: [
+    {
+      id: "1",
+      pic: "",
+      name: "附近热卖",//指短时间内很多人买的
+      goods: [
+        {
+          id: "1",
+          title: "手工红薯粉",
+          inAWord: "堂哥自种红薯手工制作，无添加纯红薯粉，保证健康",
+          pic: "../../image/goods/hongshufen.jpg",
+          price: 16,
+          unit: "斤",
+          total: 200,
+          surplus: 1,//没有了也显示，继续预订?
+          lineOrder: true,//广告用户可以看到访问者清单
+          promulgator: "利利",//大家熟知的称呼，如发哥、二嫂
+          promulgatorId: "lili",//
+          distance: "498米",//点击可以看发布者填写的地址
+          latitude: 23.26090,//经度
+          longitude: 113.8108,//维度
+        }, {
+          id: "2",
+          title: "包点拼团，奶黄、紫薯、粗粮、麦香包15元/20个",
+          inAWord: "番禺大石朋友新开的食品厂，外贸品质，有兴趣的邻居一起拼团",
+          pic: "../../image/goods/zishu.jpg",
+          price: 15,
+          unit: "份",
+          total: 100,
+          surplus: 36,
+          lineOrder: true,//线上下单/预订
+          promulgator: "小青",
+          promulgatorId: "xiaoqing",//
+          distance: "123米",
+          latitude: 23.26091,//经度
+          longitude: 113.8108,//维度
+        }, {
+          id: "3",
+          title: "包点拼团，馒头、奶油、花卷10元/20个",
+          inAWord: "番禺大石朋友新开的食品厂，外贸品质，有兴趣的邻居一起拼团",
+          pic: "../../image/goods/mantou.jpg",
+          price: 10,
+          unit: "份",
+          total: 100,
+          surplus: 48,
+          lineOrder: true,
+          promulgator: "小青",
+          promulgatorId: "xiaoqing",//
+          distance: "123米",
+          latitude: 23.26091,//经度
+          longitude: 113.8108,//维度
+        }, {
+          id: "5",
+          title: "农家土鸡蛋",
+          inAWord: "自家走地鸡产的鸡蛋，朱村黄麻鸡，位于鸭埔村三巷5号，可送到中铁与西福蓝湾路口",//对订单的群体通知功能
+          pic: "../../image/goods/tujidan.jpg",
+          price: 1,
+          unit: "个",
+          total: 78,
+          surplus: 56,
+          lineOrder: false,
+          promulgator: "张二嫂",
+          promulgatorId: "zhangersao",//
+          distance: "475米",
+          latitude: 23.26092,//经度
+          longitude: 113.8107,//维度
+        }, {
+          id: "6",
+          title: "农家土鸡蛋(距离测试）",
+          inAWord: "自家走地鸡产的鸡蛋，朱村黄麻鸡，位于鸭埔村三巷5号，可送到中铁与西福蓝湾路口",//对订单的群体通知功能
+          pic: "../../image/goods/tujidan.jpg",
+          price: 1,
+          unit: "个",
+          total: 78,
+          surplus: 56,
+          lineOrder: false,
+          promulgator: "张二嫂",
+          promulgatorId: "zhangersao",//
+          distance: "475米",
+          latitude: 23.12463,//长湴经度
+          longitude: 113.36199,//长湴纬度
+        }
+      ]
+    }, {//最新发布
+      id: "2",
+      pic: "",
+      name: "最新发布",
+      goods: [
+        {
+          id: "4",
+          title: "招牌鱼头粉",
+          inAWord: "祖传底料，新鲜活鱼、现摘葱花和香菜15分钟特色炉火熬制而成，请到店品尝。",
+          pic: "../../image/goods/yutoufen.jpg",
+          price: 20,
+          unit: "份",
+          total: -1,//页面的处理应尽量简单
+          surplus: -1,
+          lineOrder: false,
+          promulgator: "招牌鱼头粉",
+          promulgatorId: "yutoufen",//雇佣关系的店最好用非个人微信
+          distance: "243米"
+        },
+      ]
+    }
+  ],
+  //地址数据
+  myAddress:[
+    {
+      id:"1",
+      latitude: 23.26093,//经度，中铁，电脑上获取的坐标
+      longitude: 113.8109,//维度
+      address: '广州市增城区朱村大道西145号中国铁建国际花园4栋',
+    },{
+      id: "2",
+      latitude: 23.12463,
+      longitude: 113.36199,
+      address: '广州市天河区天源路白沙水路89号明动软件',
+    }
+  ]
 });

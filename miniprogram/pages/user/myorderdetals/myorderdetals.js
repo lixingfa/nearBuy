@@ -55,3 +55,38 @@ Page({
   }
 
 })
+
+
+//地图显示
+                    /*wx.openLocation({
+                      latitude: base.location.latitude,
+                      longitude: base.location.longitude,
+                      success:function(res){//成功打开地图
+                        wx.chooseLocation({
+                          success: function(res) {
+                            consoe.log(res);
+                            wx.showModal({
+                              title: '地址',
+                              content: res,
+                            })
+                          },
+                        })
+                      }
+                    });
+                    //2、根据坐标获取当前位置名称，显示在顶部:腾讯地图逆地址解析
+                    qqmapsdk.reverseGeocoder({
+                      location: {
+                        latitude: base.location.latitude,
+                        longitude: base.location.longitude
+                      },
+                      success: function (addressRes) {
+                        var address = addressRes.result.formatted_addresses.recommend;
+                        _this.setData({
+                          "addr": address,
+                          //"oinfo.Consignee": address,
+                        });
+                      },
+                      fail: function (res) {
+                        console.log(res);
+                      }
+                    })*/
