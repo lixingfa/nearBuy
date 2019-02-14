@@ -1,4 +1,7 @@
 //app.js
+// 引入SDK核心类
+var QQMapWX = require('/libs/qqmap-wx-jssdk.js');
+var qqmapsdk;
 App({
     distan:3000,//与默认地址距离多少米就认为是新的地址
     version: {
@@ -155,32 +158,8 @@ App({
     onLaunch: function () {
         //调用API从本地缓存中获取数据     
         var _this = this;
-        //用户
-        var user = _this.user.getCache();
-        if (user != null && user != "") {
-          _this.user.openId = user.openId,//微信号
-          _this.user.nickName = user.nickName,//昵称
-          _this.user.avatarUrl = user.avatarUrl,//头像地址
-          _this.user.address = user.address
-        }else{
-            //个人信息
-          wx.getUserInfo({
-            success(res) {
-              var user = {};
-              var userInfo = res.userInfo
-              user.nickName = userInfo.nickName
-              user.avatarUrl = userInfo.avatarUrl
-              //user.gender = userInfo.gender // 性别 0：未知、1：男、2：女
-              //user.province = userInfo.province
-              //user.city = userInfo.city
-              //user.country = userInfo.country
-              //encryptedData openId//即微信号需要另外处理
-              _this.user.setCache(user);
-            }
-          });
-        }
         //位置
-        var nowAddress;
+        var nowAddress = null;
         //每次打开都获取当前位置
         wx.getLocation({
           type: 'wgs84',//wgs84 返回 gps 坐标，gcj02 返回可用于 wx.openLocation 的坐标
@@ -197,43 +176,9 @@ App({
             
             _this.location.latitude = latitude;
             _this.location.longitude = longitude;
+            _this.updataLocation();
           }
         });
-        var locationTEMP = wx.getStorageSync("location");
-        if (locationTEMP != ""){//缓存了上次的地址坐标
-          var distan = _this.getDistance(_this.location.latitude, _this.location.longitude, locationTEMP.location.latitude, locationTEMP.location.longitude);
-          if (distan >= _this.distan) {//与上次的距离超过设定的距离
-            //与已有地址进行比较
-            nowAddress = _this.getAddressByGPS(_this.location.latitude, _this.location.longitude);
-            if(nowAddress != null){//与现有地址接近
-              wx.showModal({
-                title: '地址变更提示',
-                //口不再显示
-                content: '您当前位于'+ nowAddress.address +'附近，是否切换到当前位置？切换位置将显示附近三公里的信息，不切换则继续显示'+ locationTEMP.address +'周边的信息，您可以点击顶部的地址来进行切换。',
-                success: function (res) {
-                  if (res.confirm) {
-                    _this.location = nowAddress;//有问题就分别赋值
-                  } else {
-                    _this.location = locationTEMP;
-                  }
-                }
-              });
-            } else {//没有距离当前最近的地址
-              _this.location = _this.getNewAddressByGPS(_this.location.latitude, _this.location.longitude);
-            }
-          } else {//与上次的距离在设定的距离之内
-            _this.location = locationTEMP;
-          }
-        }else{//没获取到缓存的地址
-          nowAddress = _this.getAddressByGPS(_this.location.latitude, _this.location.longitude);
-          if(nowAddress != null){
-            _this.location = nowAddress;//以距离当前最近的地址为准
-          }else{//没有距离当前最近的地址
-            _this.location = _this.getNewAddressByGPS(_this.location.latitude, _this.location.longitude);
-          }
-        }
-        //地址放入缓存
-      wx.setStorageSync("location", _this.location);
     },
     onShow: function () {
         var rrr = 1;
@@ -406,25 +351,85 @@ App({
     },
     //根据坐标，获取最接近，并且小于规定范围的已有地址
     getAddressByGPS: function (latitude, longitude){
-    var min = 1000000;
-    var addr = null;
-    for (var a in myAddress){
-      var la = myAddress[a].latitude - latitude;
-      var lo = myAddress[a].longitude - longitude;
-      la = la + lo;
-      if(la < min){
-        min = la;
-        addr = myAddress[a];
+      var min = 1000000;
+      var addr = null;
+      for (var a in this.myAddress){
+        var la = this.myAddress[a].latitude - latitude;
+        var lo = this.myAddress[a].longitude - longitude;
+        la = Math.abs(la + lo);
+        if(la < min){
+          min = la;
+          addr = this.myAddress[a];
+        }
       }
-    }
-    if (addr != null && getDistance(latitude, longitude,addr.latitude,addr.longitude) > this.distan){
-      return null;//最近的地址也超出了业务范围
-    }
-    return addr;
+      var distance = this.getDistance(latitude, longitude, addr.latitude, addr.longitude);
+      if (addr != null && distance > this.distan){
+        return null;//最近的地址也超出了业务范围
+      }
+      return addr;
   },
   //获取新地址
   getNewAddressByGPS: function (latitude, longitude) {
-
+    var _this = this;
+    // 实例化API核心类
+    qqmapsdk = new QQMapWX({
+      key: 'YCWBZ-64T6K-TJAJU-AM4GX-LZSMQ-GFF4N'
+    });
+    //根据坐标获取当前位置名称，显示在顶部: 腾讯地图逆地址解析
+    qqmapsdk.reverseGeocoder({
+      location: {
+        latitude: _this.location.latitude,
+        longitude: _this.location.longitude
+      },
+      success: function (addressRes) {
+        var address = addressRes.result.formatted_addresses.recommend;
+        _this.location.address = address;
+        //地址放入缓存，补刀，否则地址都没更新，外面就已经放入缓存了
+        wx.setStorageSync("location", _this.location);
+      },
+      fail: function (res) {
+        console.log(res);
+      }
+    });
+  },
+  //更新位置信息
+  updataLocation:function(){
+    var _this = this;
+    var locationTEMP = wx.getStorageSync("location");
+    if (locationTEMP != "") {//缓存了上次的地址坐标
+      var distan = _this.getDistance(_this.location.latitude, _this.location.longitude, locationTEMP.latitude, locationTEMP.longitude);
+      if (distan >= _this.distan) {//与上次的距离超过设定的距离
+        //与已有地址进行比较
+        var nowAddress = _this.getAddressByGPS(_this.location.latitude, _this.location.longitude);
+        if (nowAddress != null) {//与现有地址接近
+          wx.showModal({
+            title: '地址变更提示',
+            //口不再显示
+            content: '您当前位于' + nowAddress.address + '附近，是否切换到当前位置？切换位置将显示附近三公里的信息，不切换则继续显示' + locationTEMP.address + '周边的信息，您可以点击顶部的地址来进行切换。',
+            success: function (res) {
+              if (res.confirm) {
+                _this.location = nowAddress;//有问题就分别赋值
+              } else {
+                _this.location = locationTEMP;
+              }
+            }
+          });
+        } else {//没有距离当前最近的地址
+          _this.getNewAddressByGPS(_this.location.latitude, _this.location.longitude);
+        }
+      } else {//与上次的距离在设定的距离之内
+        _this.location = locationTEMP;
+      }
+    } else {//没获取到缓存的地址
+      var nowAddress = _this.getAddressByGPS(_this.location.latitude, _this.location.longitude);
+      if (nowAddress != null) {
+        _this.location = nowAddress;//以距离当前最近的地址为准
+      } else {//没有距离当前最近的地址
+        _this.getNewAddressByGPS(_this.location.latitude, _this.location.longitude);
+      }
+    }
+    //地址放入缓存
+    wx.setStorageSync("location", _this.location);
   },
   //商品数据
   typeList: [

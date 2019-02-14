@@ -1,9 +1,7 @@
 var base = getApp();
 var common=require('../../utils/common.js');
 
-// 引入SDK核心类
-var QQMapWX = require('../../libs/qqmap-wx-jssdk.js');
-var qqmapsdk;
+
 
 Page({
     data: {
@@ -83,17 +81,49 @@ Page({
         }
     },
     onLoad: function (e) {
-      // 实例化API核心类
-      qqmapsdk = new QQMapWX({
-        key: 'YCWBZ-64T6K-TJAJU-AM4GX-LZSMQ-GFF4N'
-      });
+      
 
 
       //判断本次登录的坐标和地址的坐标是否相近，得到米数，经度、维度
       var _this = this;//函数是一个闭包，在内部this的意思发生改变
-      var distan = base.getDistance(base.location.latitude, base.location.longitude, 23.26093, 113.8109);//默认中铁4栋的坐标
+      var distan = this.getDistance(base.location.latitude, base.location.longitude, 23.26093, 113.8109);//默认中铁4栋的坐标
       //超过上次地址多远，则认为是新地址，比如从家到了公司，也考虑地址切换的情况
-      
+      if(distan >= base.distan){
+        wx.showModal({
+          title: '地址变更提示',
+          content: '检测到您当前的位置与上次相距' + distan + '米，是否切换当前位置为收货地址？',
+          success: function (res) {
+            console.log(res)
+            if (res.confirm) {
+              console.log('用户点击了确定');
+              //地图显示
+              /*wx.openLocation({
+                latitude: base.location.latitude,
+                longitude: base.location.longitude,
+                success:function(res){//成功打开地图
+                  wx.chooseLocation({
+                    success: function(res) {
+                      consoe.log(res);
+                      wx.showModal({
+                        title: '地址',
+                        content: res,
+                      })
+                    },
+                  })
+                }
+              });*/
+              //2、
+            } else {
+              console.log('用户点击了取消')
+            }
+          }
+        })
+      } else {
+        _this.setData({
+          "addr": base.address,//为啥换成user.就不行，因为对象未初始化？
+          //"oinfo.Consignee": address,
+        });
+      }
       /*
         var _this = this;
         var now=new Date();
@@ -178,6 +208,20 @@ Page({
         }
         return arr_pro;
     },
+    getDistance: function (lat1, lng1, lat2, lng2) {
+      lat1 = lat1 || 0;
+      lng1 = lng1 || 0;
+      lat2 = lat2 || 0;
+      lng2 = lng2 || 0;
+      //可以优化
+
+      var rad1 = lat1 * Math.PI / 180.0;
+      var rad2 = lat2 * Math.PI / 180.0;
+      var a = rad1 - rad2;
+      var b = lng1 * Math.PI / 180.0 - lng2 * Math.PI / 180.0;
+      var r = 6378137;
+      return (r * 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(a / 2), 2) + Math.cos(rad1) * Math.cos(rad2) * Math.pow(Math.sin(b / 2), 2)))).toFixed(0)
+    },
     valid: function () {
         var _this = this;
         var err = "";
@@ -254,3 +298,30 @@ Page({
         }*/
     }
 })
+
+/*
+//用户
+        var user = _this.user.getCache();
+        if (user != null && user != "") {
+          _this.user.openId = user.openId,//微信号
+          _this.user.nickName = user.nickName,//昵称
+          _this.user.avatarUrl = user.avatarUrl,//头像地址
+          _this.user.address = user.address
+        }else{
+            //个人信息
+          wx.getUserInfo({
+            success(res) {
+              var user = {};
+              var userInfo = res.userInfo
+              user.nickName = userInfo.nickName
+              user.avatarUrl = userInfo.avatarUrl
+              //user.gender = userInfo.gender // 性别 0：未知、1：男、2：女
+              //user.province = userInfo.province
+              //user.city = userInfo.city
+              //user.country = userInfo.country
+              //encryptedData openId//即微信号需要另外处理
+              _this.user.setCache(user);
+            }
+          });
+        }
+        */

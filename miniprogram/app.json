@@ -52,7 +52,7 @@
   },
   "permission": {
     "scope.userLocation": {
-      "desc": "根据您的位置展示周边商家"
+      "desc": "根据您的位置展示周边三公里的信息"
     }
   },
   "networkTimeout": {
