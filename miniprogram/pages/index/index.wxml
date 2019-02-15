@@ -49,8 +49,3 @@
             </view>
         </view>
     </block>
-<!--<picker bindchange="bindPickerChange" value="{{index}}" range="{{array}}">
-  <view class="cityselect">
-    {{array[index]}}
-  </view>
-</picker>-->

@@ -120,23 +120,19 @@ App({
             wx.removeStorageSync(this.key);
         }
     },
-        setGoodCache: function (obj) {
-            wx.setStorageSync('good', obj);
-            var vs = getApp().version;
-            wx.setStorageSync(vs.key, vs.current);//设置当前版本号
+        setGoodCache: function (good) {
+            wx.setStorageSync('good'+ good.id, good);
+            //var vs = this.version;
+            //wx.setStorageSync(vs.key, vs.current);//设置当前版本号
         },
-        getGoodCache: function () {
-            return wx.getStorageSync('good');
+        getGoodCache: function (id) {
+            return wx.getStorageSync('good' + id);
         },
         getGoodById: function (id) {
-            var p = null;
             //从缓存找，可以减轻通讯，加快小程序的速度
-            var dic = wx.getStorageSync('good') || {};//注意this的指代
-            if (id in dic) {
-                p = dic[id];
-            }
+            var p = wx.getStorageSync('good' + id);//注意this的指代
             //获取不到再请求
-            if(p == null){
+            if(p == ""){
               for (var type in this.typeList){//再包一层this就指本对象的了
                 var goods = this.typeList[type].goods;
                 for (var g in goods){
@@ -179,12 +175,6 @@ App({
             _this.updataLocation();
           }
         });
-    },
-    onShow: function () {
-        var rrr = 1;
-    },
-    onHide: function () {
-        var rrr = 1;
     },
     getUserInfo: function (cb) {
         var that = this

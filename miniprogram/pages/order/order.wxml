@@ -25,23 +25,6 @@
     <text class="ptprice">{{p.price*p.num}}</text>
   </view>
 </view>
-<!--
-<view class="date tab">
-  <view class="tit">配件</view>
-</view>
-<view class="date tab">
-  <view class="tit">优惠方式</view>
-  <view class="yh">
-    <view class="item arrow">
-      <view class="lable">代金卡</view>
-      <view class="content"></view>
-    </view>
-    <view class="item arrow">
-      <view class="lable">优惠券</view>
-      <view class="content"></view>
-    </view>
-  </view>
-</view>-->
 <view class="date tab" style="height:100px;">
   <view class="tit">备注</view>
   <textarea bindblur="bindTextAreaBlur" auto-height placeholder="" value="{{oinfo.Remarks}}" />
