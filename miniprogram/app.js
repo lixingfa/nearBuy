@@ -19,7 +19,7 @@ App({
     location: {
       latitude: 23.26093,//经度，中铁，电脑上获取的坐标
       longitude: 113.8109,//维度
-      address: '广州市增城区朱村大道西145号中国铁建国际花园4栋',//地址
+      address: '',//地址
     },
     user: {//用户信息，主要用于下单时显示
         key: "userkey",
@@ -343,7 +343,7 @@ App({
     getAddressByGPS: function (latitude, longitude){
       var min = 1000000;
       var addr = null;
-      for (var a in this.myAddress){
+      for (var a in this.myAddress){//地址可能为空
         var la = this.myAddress[a].latitude - latitude;
         var lo = this.myAddress[a].longitude - longitude;
         la = Math.abs(la + lo);
@@ -352,9 +352,11 @@ App({
           addr = this.myAddress[a];
         }
       }
-      var distance = this.getDistance(latitude, longitude, addr.latitude, addr.longitude);
-      if (addr != null && distance > this.distan){
-        return null;//最近的地址也超出了业务范围
+      if(addr != null){
+        var distance = this.getDistance(latitude, longitude, addr.latitude, addr.longitude);
+        if (addr != null && distance > this.distan){
+          return null;//最近的地址也超出了业务范围
+        }
       }
       return addr;
   },

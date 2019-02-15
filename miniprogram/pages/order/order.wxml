@@ -1,8 +1,8 @@
 <view class="addr tab">
-  <view class="tit">收货人信息</view>
-  <view class="con arrow" bindtap="myaddrChange">
-     <view class="addr_sel_m">{{oinfo.Consignee}}  {{oinfo.Cellphone}}</view>
-    <view class="addr_sel_a"> {{addr?addr:'选择收货人信息'}}</view>
+  <view class="tit">收货人地址</view>
+  <!--地址永远都会有值的，只是可能不准确，点击对这个地址进行管理-->
+  <view class="con arrow" bindtap="addrEdit">
+    {{addr}}
   </view>
 </view>
 <view class="date tab">

@@ -1,8 +1,5 @@
 var base = getApp();
 var common=require('../../utils/common.js');
-
-
-
 Page({
     data: {
         arrTime: ['选择配送时间', '10:00-11:00', '11:00-12:00', '12:00-13:00', '13:00-14:00', '14:00-15:00', '15:00-16:00', '16:00-17:00', '17:00-18:00'],
@@ -52,7 +49,7 @@ Page({
             "oinfo.DeliveryDate": e.detail.value
         })
     },
-    myaddrChange: function () {//触摸选择地址
+    addrEdit: function () {//触摸管理这个地址
         this.setData({ addrShow: true });
     },
     myaddrCancel: function () {//点击地址簿中取消按钮
@@ -81,69 +78,7 @@ Page({
         }
     },
     onLoad: function (e) {
-      
-
-
-      //判断本次登录的坐标和地址的坐标是否相近，得到米数，经度、维度
-      var _this = this;//函数是一个闭包，在内部this的意思发生改变
-      var distan = this.getDistance(base.location.latitude, base.location.longitude, 23.26093, 113.8109);//默认中铁4栋的坐标
-      //超过上次地址多远，则认为是新地址，比如从家到了公司，也考虑地址切换的情况
-      if(distan >= base.distan){
-        wx.showModal({
-          title: '地址变更提示',
-          content: '检测到您当前的位置与上次相距' + distan + '米，是否切换当前位置为收货地址？',
-          success: function (res) {
-            console.log(res)
-            if (res.confirm) {
-              console.log('用户点击了确定');
-              //地图显示
-              /*wx.openLocation({
-                latitude: base.location.latitude,
-                longitude: base.location.longitude,
-                success:function(res){//成功打开地图
-                  wx.chooseLocation({
-                    success: function(res) {
-                      consoe.log(res);
-                      wx.showModal({
-                        title: '地址',
-                        content: res,
-                      })
-                    },
-                  })
-                }
-              });*/
-              //2、
-            } else {
-              console.log('用户点击了取消')
-            }
-          }
-        })
-      } else {
-        _this.setData({
-          "addr": base.address,//为啥换成user.就不行，因为对象未初始化？
-          //"oinfo.Consignee": address,
-        });
-      }
-      /*
-        var _this = this;
-        var now=new Date();
-        if (base.user.islogin()) {
-            if (e.from && e.from == "cart") {
-                var l = base.cart.getList();
-                for (var i = 0; i < l.length; i++) {
-                    l[i].img = base.path.res + 'images/ksk/item/w_127/' + l[i].name + '.jpg'
-
-                }
-                _this.setData({
-                    plist: l,
-                    dateStart: common.addDate(now,1),
-                    dateEnd: common.addDate(now,90)
-                });
-            }
-        }
-        this.getAddressList();
-        console.log(this.data.plist);
-        */
+      this.setData({ addr: base.location.address});
     },
     getAddressList: function () {
         var _this = this;
@@ -325,3 +260,18 @@ Page({
           });
         }
         */
+        /*wx.openLocation({
+                latitude: base.location.latitude,
+                longitude: base.location.longitude,
+                success:function(res){//成功打开地图
+                  wx.chooseLocation({
+                    success: function(res) {
+                      consoe.log(res);
+                      wx.showModal({
+                        title: '地址',
+                        content: res,
+                      })
+                    },
+                  })
+                }
+              });*/
