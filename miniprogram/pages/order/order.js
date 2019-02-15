@@ -58,31 +58,11 @@ Page({
     closeaddr:function(){//触摸遮罩层关闭地址选项
           this.setData({ addrShow: false });
     },
-    toSelect: function (e) {//选中地址
-        var _this = this;
-        var id = e.currentTarget.dataset.aid;
-        _this.setData({ selectedID: id });
-        for (var i = 0; i < _this.data.addresslist.length; i++) {
-            if (_this.data.addresslist[i].id == id) {
-                _this.setData({
-                    "oinfo.City": _this.data.addresslist[i].city,
-                    "oinfo.District": _this.data.addresslist[i].area,
-                    "oinfo.Consignee": _this.data.addresslist[i].name,
-                    "oinfo.Cellphone": _this.data.addresslist[i].phone,
-                    "oinfo.Address": _this.data.addresslist[i].address,
-                    addr: _this.data.addresslist[i].city + ' ' + _this.data.addresslist[i].area + ' ' + _this.data.addresslist[i].address,
-                    addrShow: false
-                });
-                break;
-            }
-        }
-    },
     onLoad: function (e) {
       this.setData({ addr: base.location.address});
     },
     getAddressList: function () {
         var _this = this;
-
         base.get({ c: "UserCenter", m: "GetAllAddress" }, function (d) {
             var dt = d.data;
             if (dt.Status == "ok") {
@@ -105,7 +85,6 @@ Page({
     onShow: function (e) {
 
     },
-
     getTotalPrice: function () {//应付金额
         var _this = this;
         var pl = _this.data.plist;//name: p.name, price: p.price, size: p.size, num: p.num, brand: p.brand,supplyno
@@ -142,20 +121,6 @@ Page({
             });
         }
         return arr_pro;
-    },
-    getDistance: function (lat1, lng1, lat2, lng2) {
-      lat1 = lat1 || 0;
-      lng1 = lng1 || 0;
-      lat2 = lat2 || 0;
-      lng2 = lng2 || 0;
-      //可以优化
-
-      var rad1 = lat1 * Math.PI / 180.0;
-      var rad2 = lat2 * Math.PI / 180.0;
-      var a = rad1 - rad2;
-      var b = lng1 * Math.PI / 180.0 - lng2 * Math.PI / 180.0;
-      var r = 6378137;
-      return (r * 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(a / 2), 2) + Math.cos(rad1) * Math.cos(rad2) * Math.pow(Math.sin(b / 2), 2)))).toFixed(0)
     },
     valid: function () {
         var _this = this;
