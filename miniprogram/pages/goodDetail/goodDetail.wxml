@@ -5,9 +5,15 @@
                         </view>
                         <view class='good-desc'>
                             <view class='good-inAWord'>{{good.inAWord}}</view>
-
+<!--有分类和无分类得分开-->
+<view wx:if="{{good.subTypes.length == 0}}">
 <text class='good-price'>{{good.price}}</text><text>元/{{good.unit}}</text>
-                            <view class='other-info'>共{{good.total}}{{good.unit}}，剩余{{good.surplus}}{{good.unit}}，
+                            <view class='other-info'>共{{good.total}}{{good.unit}}，剩余{{good.surplus}}{{good.unit}}</view>
+</view>
+<view wx:if="{{good.subTypes.length > 0}}" wx:for="{{good.subTypes}}" wx:for-item="t" wx:key="id">
+{{t.name}}{{t.total}}{{t.surplus}}{{t.price}}
+</view>
+<view>
                             {{good.promulgator}}发布，距您{{good.distance}}</view>
                         </view>
                     </view>

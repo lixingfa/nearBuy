@@ -445,30 +445,56 @@ App({
           price: 16,
           unit: "斤",
           total: 200,
-          surplus: 1,//没有了也显示，继续预订?
-          lineOrder: true,//广告用户可以看到访问者清单
+          surplus: 1,//没有了也显示，继续预订?待议
+          lineOrder: true,//在线下单，即支付。广告用户可以看到访问者清单
           promulgator: "利利",//大家熟知的称呼，如发哥、二嫂
           promulgatorId: "lili",//
           distance: "498米",//点击可以看发布者填写的地址
           latitude: 23.26090,//经度
           longitude: 113.8108,//维度
-          indate: "2019-05-01 18:30"
+          indate: "2019-05-01 18:30",
+          subTypes: []
         }, {
           id: "2",
           title: "包点拼团，奶黄、紫薯、粗粮、麦香包15元/20个",
           inAWord: "番禺大石朋友新开的食品厂，外贸品质，有兴趣的邻居一起拼团",
           pic: "../../image/goods/zishu.jpg",
-          price: 15,
+          price: 15,//显示最便宜的那个，后台录数据的时候获取，避免前台做过多操作
           unit: "份",
-          total: 100,
-          surplus: 36,
+          total: 2997,//子类的总和
+          surplus: 36,//子类的总和
           lineOrder: true,//线上下单/预订
           promulgator: "小青",
           promulgatorId: "xiaoqing",
           distance: "123米",
           latitude: 23.26091,
           longitude: 113.8108,
-          indate: "2019-05-01 18:30"
+          indate: "2019-05-01 18:30",
+          subTypes: [{
+            id: "2-1",
+            name: "奶黄",
+            total: 39996,
+            surplus: 3116,
+            price: 15
+          }, {
+            id: "2-2",
+            name: "紫薯",
+            total: 999,
+            surplus: 732,
+            price: 16
+          }, {
+            id: "2-3",
+            name: "粗粮",
+            total: 999,
+            surplus: 786,
+            price: 18
+            }, {
+              id: "2-4",
+              name: "麦香",
+              total: 999,
+              surplus: 786,
+              price: 10
+            }]
         }, {
           id: "3",
           title: "包点拼团，馒头、奶油、花卷10元/20个",
@@ -476,15 +502,34 @@ App({
           pic: "../../image/goods/mantou.jpg",
           price: 10,
           unit: "份",
-          total: 100,
-          surplus: 48,
+          total: 2997,
+          surplus: 2330,
           lineOrder: true,
           promulgator: "小青",
           promulgatorId: "xiaoqing",
           distance: "123米",
           latitude: 23.26091,
           longitude: 113.8108,
-          indate: "2019-05-01 18:30"
+          indate: "2019-05-01 18:30",
+          subTypes: [{
+            id: "3-1",
+            name: "馒头",
+            total: 999,
+            surplus: 812,
+            price: 10
+          }, {
+              id: "3-2",
+              name: "奶油",
+              total: 999,
+              surplus: 732,
+              price: 10
+            }, {
+              id: "3-3",
+              name: "花卷",
+              total: 999,
+              surplus: 786,
+              price: 10
+            }]
         }, {
           id: "5",
           title: "农家土鸡蛋",
@@ -500,23 +545,8 @@ App({
           distance: "475米",
           latitude: 23.26092,
           longitude: 113.8107,
-          indate: "2019-05-01 18:30"
-        }, {
-          id: "6",
-          title: "农家土鸡蛋(距离测试）",
-          inAWord: "自家走地鸡产的鸡蛋，朱村黄麻鸡，位于鸭埔村三巷5号，可送到中铁与西福蓝湾路口",//对订单的群体通知功能
-          pic: "../../image/goods/tujidan.jpg",
-          price: 1,
-          unit: "个",
-          total: 78,
-          surplus: 56,
-          lineOrder: false,
-          promulgator: "张二嫂",
-          promulgatorId: "zhangersao",
-          distance: "475米",
-          latitude: 23.12463,
-          longitude: 113.36199,
-          indate: "2019-05-01 18:30"
+          indate: "2019-05-01 18:30",
+          subTypes: []
         }
       ]
     }, {//最新发布
@@ -537,7 +567,8 @@ App({
           promulgator: "招牌鱼头粉",
           promulgatorId: "yutoufen",//雇佣关系的店最好用非个人微信
           distance: "243米",
-          indate: "0000-00-00 18:30"
+          indate: "0000-00-00 00:00",//长期有效
+          subTypes: []
         },
       ]
     }, {//生活服务
@@ -552,13 +583,29 @@ App({
           pic: "../../image/goods/shunfengcar.jpg",
           price: 15,
           unit: "位",
-          total: 4,
-          surplus: 4,
-          lineOrder: false,
+          total: 8,
+          surplus: 5,
+          lineOrder: true,
           promulgator: "顺风车-程",
           promulgatorId: "shunfengcar",
           distance: "361米",
-          indate: "0000-00-00 18:30"//有效期，过了之后就会看不到，0000-00-00表示每天循环，如当天不提供服务，则需手动下架。系统自动判断节假日有点麻烦
+          indate: "",
+          subTypes:[
+            {
+              id:"7-1",
+              name:"早上7：30金城路美宜佳",
+              total: 4,
+              surplus: 3,
+              price: 15
+            }, {
+              id: "7-2",
+              name: "下午6：30黄陂B口",
+              total: 4,
+              surplus: 2,
+              price: 15
+            }
+          ]
+          //每天18:30之前有效。有效期，过了之后就会看不到，0000-00-00表示每天循环，如当天不提供服务，则需手动下架。系统自动判断节假日有点麻烦
         },
       ]
     }

@@ -6,7 +6,7 @@
   </view>
 </view>
 <view class="date tab">
-  <view class="tit">配送日期/时间</view>
+  <view class="tit">为提配送的商品选择配送日期/时间</view>
   <view class="dt">
     <picker mode="date" value="{{deliveryDate}}" class="dt-item pos" start="{{dateStart}}" end="{{dateEnd}}" bindchange="bindDateChange">
       {{oinfo.DeliveryDate?oinfo.DeliveryDate:'选择配送日期'}}
@@ -17,7 +17,7 @@
   </view>
 </view>
 <view class="date tab">
-  <view class="tit">商品详情</view>
+  <view class="tit">商品详情 - 每件商品都可以留言？</view>
   <view class="pro" wx:for="{{plist}}" wx:for-item="p" wx:key="name">
     <image src="{{p.img}}" class="pimg"></image>
     <text class="pname">{{p.name}}</text>
