@@ -14,7 +14,7 @@ Page({
             this.setData({ his: base.cart.ref });
             base.cart.ref = "";
         }
-        var l = base.cart.getList();
+        var l = base.cart.getList();//获取购物车列表里的
         for (var i = 0; i < l.length; i++) {
             //l[i].img = base.path.res + 'images/ksk/item/w_127/' + l[i].name + '.jpg';
             l[i].index = i;
@@ -42,15 +42,25 @@ Page({
         this.setData({ total: t });
     },
     changeNum: function (e) {
-        var t = e.currentTarget.dataset.type;
         var index = e.currentTarget.dataset.index;
-        var re = this.data.plist[index].num + parseInt(t);
-        if (re < 100 && re > 0) {
+        var t = e.currentTarget.dataset.type;//这次的数值
+        var surplus = this.data.plist[index].surplus;//剩余
+        t = parseInt(t);
+        var re = this.data.plist[index].num + t;
+
+        if ((surplus > 0 && t == 1) || (t == -1 && re >= 0)) {
+            var id = this.data.plist[index].id;
             var key = "plist[" + index + "].num";
-            var obj = {}; obj[key] = re;
+            var obj = {}; obj[key] = re;  
+            base.cart.surplus(id, -t);//改变购物车中的数量
+            base.cart.num(id, obj[key]);//id,num
+            base.changeGoodNum(id, -t);//改变缓存商品数量
             this.setData(obj);
             this.changeTotal();
-            base.cart.num(this.data.plist[index].supplyno, obj[key]);
+            //局部更新就用这个？
+            key = "plist[" + index + "].surplus";
+            obj[key] = this.data.plist[index].surplus + -t;
+            this.setData(obj);
         }
     },
     del: function (e) {
@@ -63,16 +73,19 @@ Page({
         this.changeTotal();
         base.cart.remove(id);
         //恢复商品数量
-        //base.changeGoodNum(this.data.id, -1);
+        base.changeGoodNum(id, this.data.plist[index].num);
     },
-
     clearCart: function () {
         var _this = this;
         if (this.data.total > 0) {
             base.modal({
                 title: "确认清空所有商品？", confirmText: "清空", success: function (res) {
                     if (res.confirm) {
-                        _this.setData({ plist: [], total: 0 });
+                        for (var index in _this.data.plist){
+                          //恢复商品数量
+                          base.changeGoodNum(_this.data.plist[index].id, _this.data.plist[index].num);
+                        }
+                        _this.setData({plist:[], total:0});
                         base.cart.clear();
                     }
                 }
@@ -91,49 +104,6 @@ Page({
                 showCancel: false
             })
         }
-    },
-    tips: ["尽请期待!", "不用点了、暂时下不了单！", "真de、不骗你！", "不信再试试？！", "没错吧？！", "您可以去其它地方转转了！", "嘿、还挺执着！", "就喜欢你这股子劲！", "但没有任何niao用！", "你已经陷入无限轮回..."],
-    //,"......", ".........", "好吧、你赢了！", "你即将获得一份随机奖励！", "just for your 执着！", "不过先声明、我们真的还未开放下单！"],
-    tipsN: 0,
-    ing: function () {
-        if (this.tipsN >= this.tips.length) {
-            this.tipsN = 0;
-        }
-
-        base.modal({
-            title: this.tips[this.tipsN],
-            showCancel: false
-        });
-        this.tipsN += 1;
-
-
-
-        // if (this.tipsN < this.tips.length) {
-        //     base.modal({
-        //         title: this.tips[this.tipsN],
-        //         showCancel: false
-        //     });
-        //     this.tipsN += 1;
-        // }
-        // else {
-        //     base.modal({
-        //         title: "恭喜",
-        //         content: "您已免费获得价值88元经典系列蛋糕优惠券,限领一次",
-        //         cancelText: "放弃机会",
-        //         confirmText: "立即领取",
-        //         showCancel: true,
-        //         success: function (res) {
-        //             if (res.confirm) {
-        //                 wx.navigateTo({
-        //                     url: "../buy/buy?type=0&price=88&&pay=free"
-        //                 })
-        //             } else {
-
-        //             }
-        //         }
-        //     })
-        // }
-
     },
     p: {
         currentIndex: -1,

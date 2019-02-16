@@ -4,8 +4,8 @@
   <view class="tit-tool" catchtap="clearCart">清空</view>
 </view>
 
-<view class="pro" animation="{{p._ani}}" wx:if="{{!p.del}}" wx:for="{{plist}}" wx:for-item="p" wx:key="id">
-  <view class="pro-con" animation="{{p.ani}}" bindtouchstart="ptouchsatrt" data-index="{{p.index}}" bindtouchend="ptouchend">
+<view class="pro" animation="{{p._ani}}" wx:if="{{!p.del}}" wx:for="{{plist}}" wx:for-item="p" wx:key="id"><!--animation动画相关的属性-->
+  <view class="pro-con" animation="{{p.ani}}" bindtouchstart="ptouchsatrt" data-index="{{p.index}}" bindtouchend="ptouchend"><!--bindtouchs触控事件-->
     <view class="pimg" data-index="{{p.index}}" data-name="{{p.title}}" data-brand="{{p.brand}}" catchtap="previewImg" >
       <image src="{{p.pic}}" mode="aspectFill"></image>
     </view>
@@ -15,9 +15,9 @@
     </view>
     <view class="ptprice">￥{{p.price*p.num}}</view>
     <view class="pnum">
-      <view class="num num-a" data-type="-1" data-index="{{p.index}}" catchtouchstart="changeNum"><text>-</text></view>
+      <view wx:if="{{p.num > 0}}" class="num num-a" data-type="-1" data-index="{{p.index}}" catchtouchstart="changeNum"><text>-</text></view>
       <text class="num-text">{{p.num}}</text>
-      <view class="num num-b" data-type="1" data-index="{{p.index}}" catchtouchstart="changeNum"><text>+</text></view>
+      <view wx:if="{{p.surplus > 0}}" class="num num-b" data-type="1" data-index="{{p.index}}" catchtouchstart="changeNum"><text>+</text></view>
     </view>
   </view>
   <view class="del" data-id="{{p.id}}" data-index="{{p.index}}" catchtap="del">
@@ -25,7 +25,7 @@
   </view>
 </view>
 
-<view wx:if="{{plist.length==0||total==0}}" class="null">暂无商品</view>
+<view wx:if="{{plist.length==0}}" class="null">暂无商品</view>
 
 <view class="tool">
   <view class="total">总金额：

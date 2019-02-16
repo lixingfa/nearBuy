@@ -1,5 +1,4 @@
 var base = getApp();
-var preview=require('../../utils/preview.js');
 Page({
     data: {
         id: 0,
@@ -16,65 +15,15 @@ Page({
       this.setData({ cartNum: base.cart.getNum(this.data.id)});
     },
     addCart: function () {
+        //商品缓存数量减一
+        base.changeGoodNum(this.data.id,-1);
+        //购物车数量减一，有可能是从购物车减到0又跳出来的
+        base.cart.surplus(this.data.id, -1);//改变购物车中的数量
+        //先改变数量，因为购物车那个列表是取购物车的，要保持购物车、缓存数据一致
+        var good = base.getGoodById(this.data.id);
+        //更新数据
+        this.setData({cartNum: base.cart.getNum(this.data.id), good: good});
         //直接整个对象放进去
         base.cart.add(this.data.good);
-        //数量减一
-        base.changeGoodNum(this.data.id,-1);
-        //更新数据
-        this.setData({ cartNum: base.cart.getNum(this.data.id), good: base.getGoodById(this.data.id)});
-        /*
-        var _this = this;
-        if (base.cart.add({
-            supplyno: this.data.current.supplyno,//
-            name: this.data.name,//名称
-            size: this.data.current.size,//尺寸
-            price: this.data.current.price,//价格
-            num: this.data.num,//数量
-            brand:this.data.brand
-        })) {
-            this.setData({ cartNum: base.cart.getNum() })
-            base.modal({
-                title: '加入成功！',
-                content: "跳转到购物车或留在当前页",
-                showCancel: true,
-                cancelText: "留在此页",
-                confirmText: "去购物车",
-                success: function (res) {
-                    if (res.confirm) {
-                        _this.goc();
-                    }
-                }
-            })
-            // base.toast({
-            //     title: '加入成功',
-            //     icon: 'success',
-            //     duration: 1500
-            // })
-        }*/
-    },
-    goCart: function () {
-        if (!base.cart.exist(this.data.current.supplyno)) {
-            base.cart.add({
-                supplyno: this.data.current.supplyno,
-                name: this.data.name,
-                size: this.data.current.size,
-                price: this.data.current.price,
-                num: this.data.num
-            })
-        }
-        this.goc();
-    },
-    goc: function () {
-        var _this = this;
-        base.cart.ref = "../cakeDetail/cakeDetail?pname=" + _this.data.name + "&brand=" + _this.data.brand;
-        wx.switchTab({
-            url: "../cart/cart"
-        })
-    },
-    _go: function () {
-        var _this = this;
-        wx.navigateTo({
-            url: "../buy/buy?type="+_this.data.brand+"&price=" + _this.data.current.price
-        })
     }
 });

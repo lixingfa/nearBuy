@@ -50,14 +50,13 @@ App({
     cart: {
         key: "cart",
         ref: "",
-        add: function (p) {
+        add: function (p) {//加入购物车
             var re = false;
             if (p.id && p.price) {
                 var dic = wx.getStorageSync(this.key) || {};
                 if (p.id in dic) {
                     dic[p.id].num += 1;
                 } else {
-                    //dic[p.supplyno] = { name: p.name, price: p.price, size: p.size, num: p.num, brand: p.brand }
                     dic[p.id] = p;
                     dic[p.id].num = 1;//初始化，否则会出问题
                 }
@@ -66,7 +65,7 @@ App({
             }
             return re;
         },
-        exist: function (id) {
+        exist: function (id) {//是否存在
             var re = false;
             var dic = wx.getStorageSync(this.key) || {};
             if (id in dic) {
@@ -74,14 +73,14 @@ App({
             }
             return re;
         },
-        remove: function (id) {
+        remove: function (id) {//从购物车移除
             var dic = wx.getStorageSync(this.key) || {};
             if (id in dic) {
                 delete dic[id];
                 wx.setStorageSync(this.key, dic);
             }
         },
-        getNum: function (id) {
+        getNum: function (id) {//获取购物车中的数量
             var n = 0;
             var dic = wx.getStorageSync(this.key) || {}
             if(id != 0){
@@ -97,29 +96,37 @@ App({
             }
             return n;
         },
-        num: function (id, n) {
+        num: function (id, n) {//改变购物车中的数量
             var dic = wx.getStorageSync(this.key) || {};
             if (id in dic) {
-                if (n > 0) {
-                    dic[id].num = n;
-                } else {
-                    delete dic[id];
-                }
+                dic[id].num = n;
+                //delete dic[id];//n=0就删掉是不合适的，因为可能在购物车减到0了，又想加回来
                 wx.setStorageSync(this.key, dic);
             }
         },
-        getList: function () {
+        getList: function () {//获取购物车中的商品列表
             var list = [];
             var dic = wx.getStorageSync(this.key);
             for (var p in dic) {
-                list.push(dic[p]);
+                if (dic[p].num != 0){//过滤掉在购物车里弄成0，又出去的，否则感觉上会很奇怪
+                  list.push(dic[p]);
+                }else{
+                  delete dic[p];
+                }
             }
             return list;
         },
-        clear: function () {
+        clear: function () {//清除购物车
             wx.removeStorageSync(this.key);
+        },
+        surplus:function(id,change){//改变购物车中商品的剩余量
+          var dic = wx.getStorageSync(this.key) || {};
+          if (id in dic) {
+            dic[id].surplus = dic[id].surplus + change;
+            wx.setStorageSync(this.key, dic);
+          }
         }
-    },
+    },//应注意参考购物车的写法
         setGoodCache: function (good) {
             wx.setStorageSync('good'+ good.id, good);
             //var vs = this.version;
@@ -445,6 +452,7 @@ App({
           distance: "498米",//点击可以看发布者填写的地址
           latitude: 23.26090,//经度
           longitude: 113.8108,//维度
+          indate: "2019-05-01 18:30"
         }, {
           id: "2",
           title: "包点拼团，奶黄、紫薯、粗粮、麦香包15元/20个",
@@ -456,10 +464,11 @@ App({
           surplus: 36,
           lineOrder: true,//线上下单/预订
           promulgator: "小青",
-          promulgatorId: "xiaoqing",//
+          promulgatorId: "xiaoqing",
           distance: "123米",
-          latitude: 23.26091,//经度
-          longitude: 113.8108,//维度
+          latitude: 23.26091,
+          longitude: 113.8108,
+          indate: "2019-05-01 18:30"
         }, {
           id: "3",
           title: "包点拼团，馒头、奶油、花卷10元/20个",
@@ -471,10 +480,11 @@ App({
           surplus: 48,
           lineOrder: true,
           promulgator: "小青",
-          promulgatorId: "xiaoqing",//
+          promulgatorId: "xiaoqing",
           distance: "123米",
-          latitude: 23.26091,//经度
-          longitude: 113.8108,//维度
+          latitude: 23.26091,
+          longitude: 113.8108,
+          indate: "2019-05-01 18:30"
         }, {
           id: "5",
           title: "农家土鸡蛋",
@@ -486,10 +496,11 @@ App({
           surplus: 56,
           lineOrder: false,
           promulgator: "张二嫂",
-          promulgatorId: "zhangersao",//
+          promulgatorId: "zhangersao",
           distance: "475米",
-          latitude: 23.26092,//经度
-          longitude: 113.8107,//维度
+          latitude: 23.26092,
+          longitude: 113.8107,
+          indate: "2019-05-01 18:30"
         }, {
           id: "6",
           title: "农家土鸡蛋(距离测试）",
@@ -501,10 +512,11 @@ App({
           surplus: 56,
           lineOrder: false,
           promulgator: "张二嫂",
-          promulgatorId: "zhangersao",//
+          promulgatorId: "zhangersao",
           distance: "475米",
-          latitude: 23.12463,//长湴经度
-          longitude: 113.36199,//长湴纬度
+          latitude: 23.12463,
+          longitude: 113.36199,
+          indate: "2019-05-01 18:30"
         }
       ]
     }, {//最新发布
@@ -524,7 +536,29 @@ App({
           lineOrder: false,
           promulgator: "招牌鱼头粉",
           promulgatorId: "yutoufen",//雇佣关系的店最好用非个人微信
-          distance: "243米"
+          distance: "243米",
+          indate: "0000-00-00 18:30"
+        },
+      ]
+    }, {//生活服务
+      id: "3",
+      pic: "",
+      name: "生活服务",
+      goods: [
+        {
+          id: "7",
+          title: "顺风车接送（中铁-黄陂）",
+          inAWord: "早上7：30金城路美宜佳，下午6：30黄陂B口。车牌粤AC5564，程师傅13558888888。下单前请先咨询，以免耽误行程。",
+          pic: "../../image/goods/shunfengcar.jpg",
+          price: 15,
+          unit: "位",
+          total: 4,
+          surplus: 4,
+          lineOrder: false,
+          promulgator: "顺风车-程",
+          promulgatorId: "shunfengcar",
+          distance: "361米",
+          indate: "0000-00-00 18:30"//有效期，过了之后就会看不到，0000-00-00表示每天循环，如当天不提供服务，则需手动下架。系统自动判断节假日有点麻烦
         },
       ]
     }
