@@ -24,7 +24,7 @@
     </picker>
   </view>
 </view>
-<view class="date tab" style="height:100px;"  wx:if="{{good.lineOrder || good.takeOut}}">
+<view class="date tab" style="height:200px;"  wx:if="{{good.lineOrder || good.takeOut}}">
   <view class="tit">留言</view>
   <textarea bindblur="bindTextAreaBlur" auto-height placeholder="" value="{{oinfo.Remarks}}" />
 </view>

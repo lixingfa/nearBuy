@@ -6,7 +6,7 @@
   </view>
 </view>
 <view class="date tab">
-  <view class="tit">商品详情 - 每件商品都可以留言？</view>
+  <view class="tit">商品详情</view>
   <view class="pro" wx:for="{{plist}}" wx:for-item="p" wx:key="name">
     <image src="{{p.img}}" class="pimg"></image>
     <text class="pname">{{p.name}}</text>
