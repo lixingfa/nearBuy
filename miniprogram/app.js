@@ -3,369 +3,369 @@
 var QQMapWX = require('/libs/qqmap-wx-jssdk.js');
 var qqmapsdk;
 App({
-    distan:3000,//与默认地址距离多少米就认为是新的地址
-    version: {
-        key: "version",
-        current: "1.0.0",
-        getValue: function () {
-            return wx.getStorageSync(this.key);
-        }
+  distan: 3000,//与默认地址距离多少米就认为是新的地址
+  version: {
+    key: "version",
+    current: "1.0.0",
+    getValue: function () {
+      return wx.getStorageSync(this.key);
+    }
+  },
+  path: {
+    res: "https://res.bestcake.com/",
+    //www: "https://mcstj.bestcake.com/"
+    www: "http://localhost:9419/"
+  },
+  location: {
+    latitude: 23.26093,//经度，中铁，电脑上获取的坐标
+    longitude: 113.8109,//维度
+    address: '',//地址
+  },
+  user: {//用户信息，主要用于下单时显示
+    key: "userkey",
+    openId: '',//微信号
+    nickName: '',//昵称
+    avatarUrl: '',//头像地址
+    islogin: function (tp) {
+      var re = false;
+      if (this.openId != null) {
+        re = true;
+      } else {
+        wx.navigateTo({
+          url: '../phone/phone'
+        })
+      }
+      return re;
     },
-    path: {
-        res: "https://res.bestcake.com/",
-        //www: "https://mcstj.bestcake.com/"
-        www:"http://localhost:9419/"
+    setCache: function (obj) {
+      wx.setStorageSync(this.key, obj);
     },
-    location: {
-      latitude: 23.26093,//经度，中铁，电脑上获取的坐标
-      longitude: 113.8109,//维度
-      address: '',//地址
+    getCache: function () {
+      return wx.getStorageSync(this.key);
     },
-    user: {//用户信息，主要用于下单时显示
-        key: "userkey",
-        openId:'',//微信号
-        nickName: '',//昵称
-        avatarUrl: '',//头像地址
-        islogin: function (tp) {
-            var re = false;
-            if (this.openId != null) {
-                re = true;
-            } else {
-                wx.navigateTo({
-                    url: '../phone/phone'
-                })
-            }
-            return re;
-        },
-        setCache: function (obj) {
-            wx.setStorageSync(this.key, obj);
-        },
-        getCache: function () {
-            return wx.getStorageSync(this.key);
-        },        
-        clear: function () {
-            wx.removeStorageSync(this.key);
-        }
-    },
-    cart: {
-        key: "cart",
-        ref: "",
-        add: function (p) {//加入购物车
-            var re = false;
-            if (p.id && p.price) {
-                var dic = wx.getStorageSync(this.key) || {};
-                if (p.id in dic) {
-                    dic[p.id].num += 1;
-                } else {
-                    dic[p.id] = p;
-                    dic[p.id].num = 1;//初始化，否则会出问题
-                }
-                wx.setStorageSync(this.key, dic);
-                re = true;
-            }
-            return re;
-        },
-        exist: function (id) {//是否存在
-            var re = false;
-            var dic = wx.getStorageSync(this.key) || {};
-            if (id in dic) {
-                re = true;
-            }
-            return re;
-        },
-        remove: function (id) {//从购物车移除
-            var dic = wx.getStorageSync(this.key) || {};
-            if (id in dic) {
-                delete dic[id];
-                wx.setStorageSync(this.key, dic);
-            }
-        },
-        getNum: function (id) {//获取购物车中的数量
-            var n = 0;
-            var dic = wx.getStorageSync(this.key) || {}
-            if(id != 0){
-              if(id in dic){
-                n = dic[id].num;
-              }else{
-                n = 0;
-              }
-            }else{
-              for (var i in dic) {
-                  n += dic[i].num;
-              }
-            }
-            return n;
-        },
-        num: function (id, n) {//改变购物车中的数量
-            var dic = wx.getStorageSync(this.key) || {};
-            if (id in dic) {
-                dic[id].num = n;
-                //delete dic[id];//n=0就删掉是不合适的，因为可能在购物车减到0了，又想加回来
-                wx.setStorageSync(this.key, dic);
-            }
-        },
-        getList: function () {//获取购物车中的商品列表
-            var list = [];
-            var dic = wx.getStorageSync(this.key);
-            for (var p in dic) {
-                if (dic[p].num != 0){//过滤掉在购物车里弄成0，又出去的，否则感觉上会很奇怪
-                  list.push(dic[p]);
-                }else{
-                  delete dic[p];
-                }
-            }
-            return list;
-        },
-        clear: function () {//清除购物车
-            wx.removeStorageSync(this.key);
-        },
-        surplus:function(id,change){//改变购物车中商品的剩余量
-          var dic = wx.getStorageSync(this.key) || {};
-          if (id in dic) {
-            dic[id].surplus = dic[id].surplus + change;
-            wx.setStorageSync(this.key, dic);
-          }
-        }
-    },//应注意参考购物车的写法
-        setGoodCache: function (good) {
-            wx.setStorageSync('good'+ good.id, good);
-            //var vs = this.version;
-            //wx.setStorageSync(vs.key, vs.current);//设置当前版本号
-        },
-        getGoodCache: function (id) {
-            return wx.getStorageSync('good' + id);
-        },
-        getGoodById: function (id) {
-            //从缓存找，可以减轻通讯，加快小程序的速度
-            var p = wx.getStorageSync('good' + id);//注意this的指代
-            //获取不到再请求
-            if(p == ""){
-              for (var type in this.typeList){//再包一层this就指本对象的了
-                var goods = this.typeList[type].goods;
-                for (var g in goods){
-                  g = goods[g];
-                  if (g.id == id){
-                    this.setGoodCache(g);
-                    return g;
-                  }
-                }
-              }
-            }
-            return p;
-        },
-    changeGoodNum:function(id,num){
-      var good = this.getGoodById(id);
-      good.surplus = good.surplus + num;
-      this.setGoodCache(good);
-    },
-    onLaunch: function () {
-        //调用API从本地缓存中获取数据     
-        var _this = this;
-        //位置
-        var nowAddress = null;
-        //每次打开都获取当前位置
-        wx.getLocation({
-          type: 'wgs84',//wgs84 返回 gps 坐标，gcj02 返回可用于 wx.openLocation 的坐标
-          //altitude: 'true',//返回高度信息，需要较高精确度，会减慢接口返回速度
-          success(res) {
-            //const 用于声明常量，也具有块级作用域，即局部的 const PI=3.14;
-            const latitude = res.latitude;//纬度，范围为 -90~90，负数表示南纬
-            const longitude = res.longitude;//经度，范围为 -180~180，负数表示西经
-            const speed = res.speed;//速度，单位 m/s
-            const accuracy = res.accuracy//位置精度
-            const altitude = res.altitude;//高度
-            const verticalAccuracy = res.verticalAccuracy;//垂直精度，安卓直接返回0
-            const horizontalAccuracy = res.horizontalAccuracy;//水平精度
-            
-            _this.location.latitude = latitude;
-            _this.location.longitude = longitude;
-            _this.updataLocation();
-          }
-        });
-    },
-    getUserInfo: function (cb) {
-        var that = this
-        if (this.globalData.userInfo) {
-            typeof cb == "function" && cb(this.globalData.userInfo)
+    clear: function () {
+      wx.removeStorageSync(this.key);
+    }
+  },
+  cart: {
+    key: "cart",
+    ref: "",
+    add: function (p) {//加入购物车
+      var re = false;
+      if (p.id && p.price) {
+        var dic = wx.getStorageSync(this.key) || {};
+        if (p.id in dic) {
+          dic[p.id].num += 1;
         } else {
-            //调用登录接口
-            wx.login({
-                success: function () {
-                    wx.getUserInfo({
-                        success: function (res) {
-                            that.globalData.userInfo = res.userInfo
-                            typeof cb == "function" && cb(that.globalData.userInfo)
-                        }
-                    })
-                }
-            })
+          dic[p.id] = p;
+          dic[p.id].num = 1;//初始化，否则会出问题
         }
+        wx.setStorageSync(this.key, dic);
+        re = true;
+      }
+      return re;
     },
-    globalData: {
-        userInfo: null
+    exist: function (id) {//是否存在
+      var re = false;
+      var dic = wx.getStorageSync(this.key) || {};
+      if (id in dic) {
+        re = true;
+      }
+      return re;
     },
-    current: function () {
-        var list = getCurrentPages();
-        return list[list.length - 1];
+    remove: function (id) {//从购物车移除
+      var dic = wx.getStorageSync(this.key) || {};
+      if (id in dic) {
+        delete dic[id];
+        wx.setStorageSync(this.key, dic);
+      }
     },
-    load: function (p) {
+    getNum: function (id) {//获取购物车中的数量
+      var n = 0;
+      var dic = wx.getStorageSync(this.key) || {}
+      if (id != 0) {
+        if (id in dic) {
+          n = dic[id].num;
+        } else {
+          n = 0;
+        }
+      } else {
+        for (var i in dic) {
+          n += dic[i].num;
+        }
+      }
+      return n;
+    },
+    num: function (id, n) {//改变购物车中的数量
+      var dic = wx.getStorageSync(this.key) || {};
+      if (id in dic) {
+        dic[id].num = n;
+        //delete dic[id];//n=0就删掉是不合适的，因为可能在购物车减到0了，又想加回来
+        wx.setStorageSync(this.key, dic);
+      }
+    },
+    getList: function () {//获取购物车中的商品列表
+      var list = [];
+      var dic = wx.getStorageSync(this.key);
+      for (var p in dic) {
+        if (dic[p].num != 0) {//过滤掉在购物车里弄成0，又出去的，否则感觉上会很奇怪
+          list.push(dic[p]);
+        } else {
+          delete dic[p];
+        }
+      }
+      return list;
+    },
+    clear: function () {//清除购物车
+      wx.removeStorageSync(this.key);
+    },
+    surplus: function (id, change) {//改变购物车中商品的剩余量
+      var dic = wx.getStorageSync(this.key) || {};
+      if (id in dic) {
+        dic[id].surplus = dic[id].surplus + change;
+        wx.setStorageSync(this.key, dic);
+      }
+    }
+  },//应注意参考购物车的写法
+  setGoodCache: function (good) {
+    wx.setStorageSync('good' + good.id, good);
+    //var vs = this.version;
+    //wx.setStorageSync(vs.key, vs.current);//设置当前版本号
+  },
+  getGoodCache: function (id) {
+    return wx.getStorageSync('good' + id);
+  },
+  getGoodById: function (id) {
+    //从缓存找，可以减轻通讯，加快小程序的速度
+    var p = wx.getStorageSync('good' + id);//注意this的指代
+    //获取不到再请求
+    if (p == "") {
+      for (var type in this.typeList) {//再包一层this就指本对象的了
+        var goods = this.typeList[type].goods;
+        for (var g in goods) {
+          g = goods[g];
+          if (g.id == id) {
+            this.setGoodCache(g);
+            return g;
+          }
+        }
+      }
+    }
+    return p;
+  },
+  changeGoodNum: function (id, num) {
+    var good = this.getGoodById(id);
+    good.surplus = good.surplus + num;
+    this.setGoodCache(good);
+  },
+  onLaunch: function () {
+    //调用API从本地缓存中获取数据     
+    var _this = this;
+    //位置
+    var nowAddress = null;
+    //每次打开都获取当前位置
+    wx.getLocation({
+      type: 'wgs84',//wgs84 返回 gps 坐标，gcj02 返回可用于 wx.openLocation 的坐标
+      //altitude: 'true',//返回高度信息，需要较高精确度，会减慢接口返回速度
+      success(res) {
+        //const 用于声明常量，也具有块级作用域，即局部的 const PI=3.14;
+        const latitude = res.latitude;//纬度，范围为 -90~90，负数表示南纬
+        const longitude = res.longitude;//经度，范围为 -180~180，负数表示西经
+        const speed = res.speed;//速度，单位 m/s
+        const accuracy = res.accuracy//位置精度
+        const altitude = res.altitude;//高度
+        const verticalAccuracy = res.verticalAccuracy;//垂直精度，安卓直接返回0
+        const horizontalAccuracy = res.horizontalAccuracy;//水平精度
+
+        _this.location.latitude = latitude;
+        _this.location.longitude = longitude;
+        _this.updataLocation();
+      }
+    });
+  },
+  getUserInfo: function (cb) {
+    var that = this
+    if (this.globalData.userInfo) {
+      typeof cb == "function" && cb(this.globalData.userInfo)
+    } else {
+      //调用登录接口
+      wx.login({
+        success: function () {
+          wx.getUserInfo({
+            success: function (res) {
+              that.globalData.userInfo = res.userInfo
+              typeof cb == "function" && cb(that.globalData.userInfo)
+            }
+          })
+        }
+      })
+    }
+  },
+  globalData: {
+    userInfo: null
+  },
+  current: function () {
+    var list = getCurrentPages();
+    return list[list.length - 1];
+  },
+  load: function (p) {
+    p = p ? p : {};
+    var _obj = {//标准化
+      data: {
+      },
+    };
+    var base = { "onLoad": function () { }, "onReady": function () { }, "onShow": function () { }, "onHide": function () { }, "onUnload": function () { } };
+    for (var i in base) {
+      _obj[i] = (function (etype) {
+        var _etype = "_" + etype;
+        if (etype in p) {
+          _obj[_etype] = p[i];//重写局部定义
+        };
+        return function (e) {
+          base[etype]();//执行 global
+          _obj[_etype] && _obj[_etype](e);
+        }
+      })(i)
+    };
+    for (var o in p) {
+      if (!(o in base)) {
+        if (o == "data") {
+          for (var d in p[o]) {
+            _obj.data[d] = p[o][d];
+          }
+        } else {
+          _obj[o] = p[o];
+        }
+      }
+    };
+    Page(_obj);
+  },
+  modal: function (p) {
+    wx.showModal(p);
+  },
+  toast: function (p) {
+    wx.showToast(p);
+  },
+  loading: (function () {
+    return {
+      show: function (p) {
         p = p ? p : {};
-        var _obj = {//标准化
-            data: {
-            },
-        };
-        var base = {"onLoad":function(){},"onReady":function(){},"onShow":function(){},"onHide":function(){},"onUnload":function(){}};
-        for (var i in base) {
-            _obj[i] = (function (etype) {
-                var _etype = "_" + etype;
-                if (etype in p) {
-                    _obj[_etype] = p[i];//重写局部定义
-                };
-                return function (e) {
-                    base[etype]();//执行 global
-                    _obj[_etype] && _obj[_etype](e);
-                }
-            })(i)
-        };
-        for (var o in p) {
-            if (!(o in base)) {
-                if (o == "data") {
-                    for (var d in p[o]) {
-                        _obj.data[d] = p[o][d];
-                    }
-                } else {
-                    _obj[o] = p[o];
-                }
-            }
-        };
-        Page(_obj);
-    },
-    modal: function (p) {
-        wx.showModal(p);
-    },
-    toast: function (p) {
-        wx.showToast(p);
-    },
-    loading: (function () {
-        return {
-            show: function (p) {
-                p = p ? p : {};
-                wx.showToast({
-                    title: p.title || '加载中',
-                    icon: 'loading',
-                    duration: p.duration || 10000
-                })
-            },
-            hide: function () {
-                wx.hideToast();
-            }
-        }
-    })(),
-    get: function (p, suc, tit) {
-        var _this = this;
-        //var loaded = false;//请求状态
-        _this.loading.show({ title: tit });
-        // setTimeout(function () {
-        //     if (!loaded) {
-        //         _this.loading.show();
-        //     }
-        // }, 500);
-        if (_this.user.islogin()) {
-            p.userid = _this.user.userid;
-            p.sessionid = _this.user.sessionid;
-        }
-        wx.request({
-            url: this.path.www + 'client.ashx?v=' + Math.random(),
-            data: p,
-            header: {
-                'Content-Type': 'application/json'
-            },
-            method: "GET",
-            success: function (res) {
-                suc(res);
-            },
-            fail: function (e) {
-                _this.toast({ title: "请求出错！" })
-            },
-            complete: function () {
-                //loaded = true;//完成
-                _this.loading.hide();
-            }
+        wx.showToast({
+          title: p.title || '加载中',
+          icon: 'loading',
+          duration: p.duration || 10000
         })
-    },
-    post: function (p, suc) {
-        var _this = this;
-        var loaded = false;//请求状态
-        setTimeout(function () {
-            if (!loaded) {
-                _this.loading.show();
-            }
-        }, 500);
-        if (_this.user.islogin()) {
-            p.userid = _this.user.userid;
-            p.sessionid = _this.user.sessionid;
-        }
-        wx.request({
-            url: this.path.www + 'client.ashx',
-            data: _this.json2Form(p),
-            header: {
-                // 'Content-Type': 'application/json'
-                "Content-Type": "application/x-www-form-urlencoded"
-            },
-            method: "POST",
-            success: function (res) {
-                suc(res);
-            },
-            fail: function (e) {
-                _this.toast({ title: "请求出错！" })
-            },
-            complete: function () {
-                loaded = true;//完成
-                _this.loading.hide();
-            }
-        })
-    },
-    json2Form: function (json) {
-        var str = [];
-        for (var p in json) {
-            str.push(encodeURIComponent(p) + "=" + encodeURIComponent(json[p]));
-        }
-        return str.join("&");
-    },
-    //获取两个GPS坐标间的距离，单位米
-    getDistance: function (lat1, lng1, lat2, lng2) {
-      lat1 = lat1 || 0;
-      lng1 = lng1 || 0;
-      lat2 = lat2 || 0;
-      lng2 = lng2 || 0;
-      //可以优化
-      var rad1 = lat1 * Math.PI / 180.0;
-      var rad2 = lat2 * Math.PI / 180.0;
-      var a = rad1 - rad2;
-      var b = lng1 * Math.PI / 180.0 - lng2 * Math.PI / 180.0;
-      var r = 6378137;
-      return (r * 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(a / 2), 2) + Math.cos(rad1) * Math.cos(rad2) * Math.pow(Math.sin(b / 2), 2)))).toFixed(0)
-    },
-    //根据坐标，获取最接近，并且小于规定范围的已有地址
-    getAddressByGPS: function (latitude, longitude){
-      var min = 1000000;
-      var addr = null;
-      for (var a in this.myAddress){//地址可能为空
-        var la = this.myAddress[a].latitude - latitude;
-        var lo = this.myAddress[a].longitude - longitude;
-        la = Math.abs(la + lo);
-        if(la < min){
-          min = la;
-          addr = this.myAddress[a];
-        }
+      },
+      hide: function () {
+        wx.hideToast();
       }
-      if(addr != null){
-        var distance = this.getDistance(latitude, longitude, addr.latitude, addr.longitude);
-        if (addr != null && distance > this.distan){
-          return null;//最近的地址也超出了业务范围
-        }
+    }
+  })(),
+  get: function (p, suc, tit) {
+    var _this = this;
+    //var loaded = false;//请求状态
+    _this.loading.show({ title: tit });
+    // setTimeout(function () {
+    //     if (!loaded) {
+    //         _this.loading.show();
+    //     }
+    // }, 500);
+    if (_this.user.islogin()) {
+      p.userid = _this.user.userid;
+      p.sessionid = _this.user.sessionid;
+    }
+    wx.request({
+      url: this.path.www + 'client.ashx?v=' + Math.random(),
+      data: p,
+      header: {
+        'Content-Type': 'application/json'
+      },
+      method: "GET",
+      success: function (res) {
+        suc(res);
+      },
+      fail: function (e) {
+        _this.toast({ title: "请求出错！" })
+      },
+      complete: function () {
+        //loaded = true;//完成
+        _this.loading.hide();
       }
-      return addr;
+    })
+  },
+  post: function (p, suc) {
+    var _this = this;
+    var loaded = false;//请求状态
+    setTimeout(function () {
+      if (!loaded) {
+        _this.loading.show();
+      }
+    }, 500);
+    if (_this.user.islogin()) {
+      p.userid = _this.user.userid;
+      p.sessionid = _this.user.sessionid;
+    }
+    wx.request({
+      url: this.path.www + 'client.ashx',
+      data: _this.json2Form(p),
+      header: {
+        // 'Content-Type': 'application/json'
+        "Content-Type": "application/x-www-form-urlencoded"
+      },
+      method: "POST",
+      success: function (res) {
+        suc(res);
+      },
+      fail: function (e) {
+        _this.toast({ title: "请求出错！" })
+      },
+      complete: function () {
+        loaded = true;//完成
+        _this.loading.hide();
+      }
+    })
+  },
+  json2Form: function (json) {
+    var str = [];
+    for (var p in json) {
+      str.push(encodeURIComponent(p) + "=" + encodeURIComponent(json[p]));
+    }
+    return str.join("&");
+  },
+  //获取两个GPS坐标间的距离，单位米
+  getDistance: function (lat1, lng1, lat2, lng2) {
+    lat1 = lat1 || 0;
+    lng1 = lng1 || 0;
+    lat2 = lat2 || 0;
+    lng2 = lng2 || 0;
+    //可以优化
+    var rad1 = lat1 * Math.PI / 180.0;
+    var rad2 = lat2 * Math.PI / 180.0;
+    var a = rad1 - rad2;
+    var b = lng1 * Math.PI / 180.0 - lng2 * Math.PI / 180.0;
+    var r = 6378137;
+    return (r * 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(a / 2), 2) + Math.cos(rad1) * Math.cos(rad2) * Math.pow(Math.sin(b / 2), 2)))).toFixed(0)
+  },
+  //根据坐标，获取最接近，并且小于规定范围的已有地址
+  getAddressByGPS: function (latitude, longitude) {
+    var min = 1000000;
+    var addr = null;
+    for (var a in this.myAddress) {//地址可能为空
+      var la = this.myAddress[a].latitude - latitude;
+      var lo = this.myAddress[a].longitude - longitude;
+      la = Math.abs(la + lo);
+      if (la < min) {
+        min = la;
+        addr = this.myAddress[a];
+      }
+    }
+    if (addr != null) {
+      var distance = this.getDistance(latitude, longitude, addr.latitude, addr.longitude);
+      if (addr != null && distance > this.distan) {
+        return null;//最近的地址也超出了业务范围
+      }
+    }
+    return addr;
   },
   //获取新地址
   getNewAddressByGPS: function (latitude, longitude) {
@@ -392,7 +392,7 @@ App({
     });
   },
   //更新位置信息
-  updataLocation:function(){
+  updataLocation: function () {
     var _this = this;
     var locationTEMP = wx.getStorageSync("location");
     if (locationTEMP != "") {//缓存了上次的地址坐标
@@ -445,56 +445,32 @@ App({
           price: 16,
           unit: "斤",
           total: 200,
-          surplus: 1,//没有了也显示，继续预订?待议
-          lineOrder: true,//在线下单，即支付。广告用户可以看到访问者清单
+          surplus: 1,//没有了也显示，继续预订?
+          lineOrder: true,//广告用户可以看到访问者清单
+          takeOut: true,
           promulgator: "利利",//大家熟知的称呼，如发哥、二嫂
           promulgatorId: "lili",//
           distance: "498米",//点击可以看发布者填写的地址
           latitude: 23.26090,//经度
           longitude: 113.8108,//维度
-          indate: "2019-05-01 18:30",
-          subTypes: []
+          indate: "2019-05-01 18:30"
         }, {
           id: "2",
           title: "包点拼团，奶黄、紫薯、粗粮、麦香包15元/20个",
           inAWord: "番禺大石朋友新开的食品厂，外贸品质，有兴趣的邻居一起拼团",
           pic: "../../image/goods/zishu.jpg",
-          price: 15,//显示最便宜的那个，后台录数据的时候获取，避免前台做过多操作
+          price: 15,
           unit: "份",
-          total: 2997,//子类的总和
-          surplus: 36,//子类的总和
+          total: 100,
+          surplus: 36,
           lineOrder: true,//线上下单/预订
+          takeOut: true,//外送
           promulgator: "小青",
           promulgatorId: "xiaoqing",
           distance: "123米",
           latitude: 23.26091,
           longitude: 113.8108,
-          indate: "2019-05-01 18:30",
-          subTypes: [{
-            id: "2-1",
-            name: "奶黄",
-            total: 39996,
-            surplus: 3116,
-            price: 15
-          }, {
-            id: "2-2",
-            name: "紫薯",
-            total: 999,
-            surplus: 732,
-            price: 16
-          }, {
-            id: "2-3",
-            name: "粗粮",
-            total: 999,
-            surplus: 786,
-            price: 18
-            }, {
-              id: "2-4",
-              name: "麦香",
-              total: 999,
-              surplus: 786,
-              price: 10
-            }]
+          indate: "2019-05-01 18:30"
         }, {
           id: "3",
           title: "包点拼团，馒头、奶油、花卷10元/20个",
@@ -502,51 +478,33 @@ App({
           pic: "../../image/goods/mantou.jpg",
           price: 10,
           unit: "份",
-          total: 2997,
-          surplus: 2330,
+          total: 100,
+          surplus: 48,
           lineOrder: true,
+          takeOut: true,
           promulgator: "小青",
           promulgatorId: "xiaoqing",
           distance: "123米",
           latitude: 23.26091,
           longitude: 113.8108,
-          indate: "2019-05-01 18:30",
-          subTypes: [{
-            id: "3-1",
-            name: "馒头",
-            total: 999,
-            surplus: 812,
-            price: 10
-          }, {
-              id: "3-2",
-              name: "奶油",
-              total: 999,
-              surplus: 732,
-              price: 10
-            }, {
-              id: "3-3",
-              name: "花卷",
-              total: 999,
-              surplus: 786,
-              price: 10
-            }]
+          indate: "2019-05-01 18:30"
         }, {
           id: "5",
           title: "农家土鸡蛋",
-          inAWord: "自家走地鸡产的鸡蛋，朱村黄麻鸡，位于鸭埔村三巷5号，可送到中铁与西福蓝湾路口",//对订单的群体通知功能
+          inAWord: "自家走地鸡产的鸡蛋，朱村黄麻鸡，位于鸭埔村三巷5号，可送到中铁与西福蓝湾路口，顾客自行挑选",//对订单的群体通知功能
           pic: "../../image/goods/tujidan.jpg",
           price: 1,
           unit: "个",
           total: 78,
           surplus: 56,
-          lineOrder: false,
+          lineOrder: true,
+          takeOut: false,
           promulgator: "张二嫂",
           promulgatorId: "zhangersao",
           distance: "475米",
           latitude: 23.26092,
           longitude: 113.8107,
-          indate: "2019-05-01 18:30",
-          subTypes: []
+          indate: "2019-05-01 18:30"
         }
       ]
     }, {//最新发布
@@ -564,11 +522,11 @@ App({
           total: -1,//页面的处理应尽量简单
           surplus: -1,
           lineOrder: false,
+          takeOut: false,
           promulgator: "招牌鱼头粉",
           promulgatorId: "yutoufen",//雇佣关系的店最好用非个人微信
           distance: "243米",
-          indate: "0000-00-00 00:00",//长期有效
-          subTypes: []
+          indate: "0000-00-00 18:30"
         },
       ]
     }, {//生活服务
@@ -579,45 +537,44 @@ App({
         {
           id: "7",
           title: "顺风车接送（中铁-黄陂）",
-          inAWord: "早上7：30金城路美宜佳，下午6：30黄陂B口。车牌粤AC5564，程师傅13558888888。下单前请先咨询，以免耽误行程。",
+          inAWord: "早上7：30金城路美宜佳上车。车牌粤AC5564，程师傅13558888888。下单前请先咨询，以免耽误行程。",
           pic: "../../image/goods/shunfengcar.jpg",
           price: 15,
           unit: "位",
-          total: 8,
-          surplus: 5,
+          total: 4,
+          surplus: 4,
           lineOrder: true,
           promulgator: "顺风车-程",
           promulgatorId: "shunfengcar",
           distance: "361米",
-          indate: "",
-          subTypes:[
-            {
-              id:"7-1",
-              name:"早上7：30金城路美宜佳",
-              total: 4,
-              surplus: 3,
-              price: 15
-            }, {
-              id: "7-2",
-              name: "下午6：30黄陂B口",
-              total: 4,
-              surplus: 2,
-              price: 15
-            }
-          ]
-          //每天18:30之前有效。有效期，过了之后就会看不到，0000-00-00表示每天循环，如当天不提供服务，则需手动下架。系统自动判断节假日有点麻烦
+          indate: "0000-00-00 18:30"//有效期，过了之后就会看不到，0000-00-00表示每天循环，如当天不提供服务，则需手动下架。系统自动判断节假日有点麻烦
+        }, {
+          id: "8",
+          title: "顺风车接送（黄陂-中铁）",
+          inAWord: "下午6：30黄陂B口公车站前的卡口处上车。车牌粤AC5564，程师傅13558888888。下单前请先咨询，以免耽误行程。",
+          pic: "../../image/goods/shunfengcar.jpg",
+          price: 15,
+          unit: "位",
+          total: 4,
+          surplus: 4,
+          lineOrder: true,
+          takeOut:false,
+          promulgator: "顺风车-程",
+          promulgatorId: "shunfengcar",
+          distance: "361米",
+          indate: "0000-00-00 18:30"//有效期，过了之后就会看不到，0000-00-00表示每天循环，如当天不提供服务，则需手动下架。系统自动判断节假日有点麻烦
         },
       ]
     }
   ],
   //地址数据
-  myAddress:[
+  myAddress: [
     {
-      id:"1",
+      id: "1",
       latitude: 23.26093,//经度，中铁，电脑上获取的坐标
       longitude: 113.8109,//维度
       address: '广州市增城区朱村大道西145号中国铁建国际花园4栋',
-    },{
+    }, {
       id: "2",
       latitude: 23.12463,
       longitude: 113.36199,

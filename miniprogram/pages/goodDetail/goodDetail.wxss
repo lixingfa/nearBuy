@@ -24,3 +24,15 @@
 .tool .buy{background-color: #576b95;border: 1rpx solid #576b95; color: #fff;flex:1;margin: 0 20rpx 0 10rpx;}
 /*.cart-num{position: absolute; left: 5px;top: -20px; width: 40px; height:40px; line-height: 40px; text-align: center; border: 2px solid #fff;border-radius: 50%; background-color: #f00;color: #fff; box-shadow: 0 0 5px 0 #ccc;}*/
 .cart-num{color:#f00;}
+
+
+/******************/
+.tab{border-bottom: 1rpx solid #ddd;background-color: #fff;margin-bottom: 20rpx;}
+.tab .tit{border-bottom: 1rpx solid #eee;padding: 10rpx 25rpx;font-size:11pt; color: #999;}
+.tab .con{padding:20rpx 25rpx;font-size: 13pt;}
+
+.dt{display:flex;}
+.dt-item{flex: 1;padding:20rpx 60rpx;}
+
+.pos{position: relative;}
+.pos:after{content: " "; display:block;position: absolute; width: 0;height: 0;border-top:15rpx solid #576b95;border-left:10rpx solid transparent;border-right:10rpx solid transparent; left: 25rpx;top: 35rpx;}

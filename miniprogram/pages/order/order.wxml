@@ -6,17 +6,6 @@
   </view>
 </view>
 <view class="date tab">
-  <view class="tit">为提配送的商品选择配送日期/时间</view>
-  <view class="dt">
-    <picker mode="date" value="{{deliveryDate}}" class="dt-item pos" start="{{dateStart}}" end="{{dateEnd}}" bindchange="bindDateChange">
-      {{oinfo.DeliveryDate?oinfo.DeliveryDate:'选择配送日期'}}
-    </picker>
-    <picker mode="selector" value="{{arrTimeIndex}}" range="{{arrTime}}" class="dt-item pos" bindchange="bindTimeChange">
-      {{arrTime[arrTimeIndex]}}
-    </picker>
-  </view>
-</view>
-<view class="date tab">
   <view class="tit">商品详情 - 每件商品都可以留言？</view>
   <view class="pro" wx:for="{{plist}}" wx:for-item="p" wx:key="name">
     <image src="{{p.img}}" class="pimg"></image>
@@ -24,10 +13,6 @@
     <text class="pprice">{{p.price}} x {{p.num}}</text>
     <text class="ptprice">{{p.price*p.num}}</text>
   </view>
-</view>
-<view class="date tab" style="height:100px;">
-  <view class="tit">备注</view>
-  <textarea bindblur="bindTextAreaBlur" auto-height placeholder="" value="{{oinfo.Remarks}}" />
 </view>
 <view class="tool">
   <view class="sub" bindtap="submit">提交订单</view>

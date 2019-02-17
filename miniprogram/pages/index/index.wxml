@@ -32,6 +32,8 @@
                             <view class='good-inAWord'>{{good.inAWord}}</view>
 
 <text class='good-price'>{{good.price}}</text><text>元/{{good.unit}}</text>
+<text wx:if="{{good.lineOrder}}"> 在线下单</text>
+<text wx:if="{{good.takeOut}}"> 可送货</text>
 <!--
 <text class='right'>{{good.unit}}</text>
 <view class="stepper">
