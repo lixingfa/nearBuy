@@ -1,3 +1,4 @@
+var util = require('../../utils/util.js');
 var base = getApp();
 Page({
     data: {
@@ -31,13 +32,15 @@ Page({
           Remarks: "",
           TotalPrice: 0
         },
-      dateStart: "2017-01-01",
-      dateEnd: "2017-01-01"
+      dateStart: "",
+      dateEnd: ""
     },
     onLoad: function (e) {
+      // 调用函数时，传入new Date()参数，返回值是日期和时间  
+      var time = util.formatTime(new Date());
       var id = e && e.id ? e.id : 0;
       var good = base.getGoodById(id);
-      this.setData({ id: id, good: good});
+      this.setData({ id: id, good: good, dateStart: time});
     },
     onShow: function () {
       this.setData({ cartNum: base.cart.getNum(this.data.id)});

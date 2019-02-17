@@ -1,6 +1,6 @@
 <view class="tit">
   <view class="tit-back" catchtap="goBack" wx:if="{{his}}">返回</view>
-  <text class="tit-text">详情(向左滑动可移除)</text>
+  <text class="tit-text">向左滑动可移除</text>
   <view class="tit-tool" catchtap="clearCart">清空</view>
 </view>
 

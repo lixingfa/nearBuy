@@ -90,7 +90,7 @@ page {
 }
 
 .pro-con .ptprice {
-  width: 150rpx;
+  width: 50rpx;
   text-align: right;
   padding: 0 30rpx 0 0;
   color: #ff6a00;
