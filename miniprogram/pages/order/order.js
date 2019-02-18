@@ -1,10 +1,12 @@
 var base = getApp();
-var common=require('../../utils/common.js');
+var util = require('../../utils/util.js');
 Page({
     data: {
       addr: "",
       addresslist: [],
       addrShow: false,
+      plist: [],
+      time:null
     },
     addrEdit: function () {//触摸管理这个地址
         this.setData({ addrShow: true });
@@ -16,7 +18,8 @@ Page({
           this.setData({ addrShow: false });
     },
     onLoad: function (e) {
-      this.setData({ addr: base.location.address});
+      this.setData({
+        addr: base.location.address, plist: base.cart.getList(), time:util.formatTime(new Date())});
     },
     getAddressList: function () {
         var _this = this;
