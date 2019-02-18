@@ -51,10 +51,8 @@ Page({
         if ((surplus > 0 && t == 1) || (t == -1 && re >= 0)) {
             var id = this.data.plist[index].id;
             var key = "plist[" + index + "].num";
-            var obj = {}; obj[key] = re;  
-            base.cart.surplus(id, -t);//改变购物车中的数量
+            var obj = {}; obj[key] = re;
             base.cart.num(id, obj[key]);//id,num
-            base.changeGoodNum(id, -t);//改变缓存商品数量
             this.setData(obj);
             this.changeTotal();
             //局部更新就用这个？
@@ -72,8 +70,6 @@ Page({
         this.setData(obj);
         this.changeTotal();
         base.cart.remove(id);
-        //恢复商品数量
-        base.changeGoodNum(id, this.data.plist[index].num);
     },
     clearCart: function () {
         var _this = this;
@@ -81,10 +77,6 @@ Page({
             base.modal({
                 title: "确认清空所有商品？", confirmText: "清空", success: function (res) {
                     if (res.confirm) {
-                        for (var index in _this.data.plist){
-                          //恢复商品数量
-                          base.changeGoodNum(_this.data.plist[index].id, _this.data.plist[index].num);
-                        }
                         _this.setData({plist:[], total:0});
                         base.cart.clear();
                     }
@@ -93,7 +85,6 @@ Page({
         }
     },
     goOrder: function () {
-     //   this.ing();
         if (this.data.plist.length > 0 && this.data.total > 0) {
             wx.navigateTo({
                 url: '../order/order?from=cart'
@@ -104,6 +95,12 @@ Page({
                 showCancel: false
             })
         }
+    }, 
+    goDetail: function (e) {
+      var id = e.currentTarget.dataset.id;
+      wx.navigateTo({
+        url: '../goodDetail/goodDetail?id=' + id
+      })
     },
     p: {
         currentIndex: -1,

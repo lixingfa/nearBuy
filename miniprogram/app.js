@@ -102,7 +102,10 @@ App({
     num: function (id, n) {//改变购物车中的数量
       var dic = wx.getStorageSync(this.key) || {};
       if (id in dic) {
+        var num = dic[id].num;//原来的数量
+        num = n - num;//差值
         dic[id].num = n;
+        dic[id].surplus = dic[id].surplus - num;//剩余相应地变化
         //delete dic[id];//n=0就删掉是不合适的，因为可能在购物车减到0了，又想加回来
         wx.setStorageSync(this.key, dic);
       }
@@ -122,13 +125,13 @@ App({
     clear: function () {//清除购物车
       wx.removeStorageSync(this.key);
     },
-    surplus: function (id, change) {//改变购物车中商品的剩余量
+    /*surplus: function (id, change) {//改变购物车中商品的剩余量
       var dic = wx.getStorageSync(this.key) || {};
       if (id in dic) {
         dic[id].surplus = dic[id].surplus + change;
         wx.setStorageSync(this.key, dic);
       }
-    },
+    },*/
     updateGood:function(p){
       var dic = wx.getStorageSync(this.key) || {};
       if (p.id in dic) {
@@ -147,7 +150,7 @@ App({
   },
   getGoodById: function (id) {
     //从缓存找，可以减轻通讯，加快小程序的速度
-    var p = wx.getStorageSync('good' + id);//注意this的指代
+    var p = this.getGoodCache(id);//注意this的指代
     //获取不到再请求
     if (p == "") {
       for (var type in this.typeList) {//再包一层this就指本对象的了
@@ -162,11 +165,6 @@ App({
       }
     }
     return p;
-  },
-  changeGoodNum: function (id, num) {
-    var good = this.getGoodById(id);
-    good.surplus = good.surplus + num;
-    this.setGoodCache(good);
   },
   onLaunch: function () {
     //调用API从本地缓存中获取数据     

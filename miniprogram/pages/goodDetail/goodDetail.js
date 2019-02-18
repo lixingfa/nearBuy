@@ -57,9 +57,7 @@ Page({
       });
     },
     goCart: function (e) {
-      if (this.data.good.surplus == 0){//加入购物车按钮会消失，此时点击前往购物车，最好更新相关的内容
-        base.cart.updateGood(this.data.good);
-      }
+      base.cart.updateGood(this.data.good);//加入购物车按钮会消失，或者是留言后就去购物车。
       wx.switchTab({//wx.navigateTo和wx.redirectTo,不能跳转tabBar里的页面
         url: '../cart/cart'
       })
