@@ -3,72 +3,65 @@ var base = getApp();
 Page({
     data: {
         id: 0,
-        cartNum: 0,
         good:null,
-      arrTime: ['选择配送时间', '10:00-11:00', '11:00-12:00', '12:00-13:00', '13:00-14:00', '14:00-15:00', '15:00-16:00', '16:00-17:00', '17:00-18:00'],
-      objectArrTime: [
-        { id: 0, name: '选择配送时间' },
-        { id: 1, name: '10:00-11:00' },
-        { id: 2, name: '11:00-12:00' },
-        { id: 3, name: '12:00-13:00' },
-        { id: 4, name: '13:00-14:00' },
-        { id: 5, name: '14:00-15:00' },
-        { id: 6, name: '15:00-16:00' },
-        { id: 7, name: '16:00-17:00' },
-        { id: 8, name: '17:00-18:00' }],
-        arrTimeIndex: 0,
-        scrollTop: 100,
-        selectedID: -1,
-        oinfo: {
-          OrderSource: "all|web",
-          Consignee: "",
-          Cellphone: "",
-          City: "",
-          District: "",
-          Address: "",
-          DeliveryDate: "",
-          DeliveryTime: "",
-          Payment: "",
-          Remarks: "",
-          TotalPrice: 0
-        },
-      dateStart: "",
-      dateEnd: ""
+        dateStart: "",
+        dateEnd: "",
     },
     onLoad: function (e) {
-      // 调用函数时，传入new Date()参数，返回值是日期和时间  
-      var time = util.formatTime(new Date());
       var id = e && e.id ? e.id : 0;
-      var good = base.getGoodById(id);
-      this.setData({ id: id, good: good, dateStart: time});
+      var good = base.cart.getGood(id);
+      if (good != null){//购物车里存在，则拿购物车的，可以简化很多操作
+        this.setData({id:id,good:good});
+      }else{//初始化
+        good = base.getGoodById(id);
+        var time = null;
+        var arrTimeT = new Array("请选择时间");
+        if (good.chooseTime){//允许选择送货/取货时间
+          time = util.formatTime(new Date());//返回当前日期和时间，使日期默认显示在今天
+          var start = good.workTimeStart;//可选择的时间，是根据店铺的营业时间，或者个人提供服务的时间确定的
+          start = start.substring(0,start.indexOf(":"));
+          var end = good.workTimeEnd;
+          end = end.substring(0,end.indexOf(":"));
+          for (var t = parseInt(start); t < parseInt(end); t++){//每次增加1小时
+            arrTimeT.push(t + ":00-" + (t + 1) + ":00");
+          }
+        }
+        //初始化数值
+        this.setData({ id: id, good: good, dateStart: time, "good.arrTime": arrTimeT,"good.arrTimeIndex":0,"good.num":0});
+      }
     },
     onShow: function () {
-      this.setData({ cartNum: base.cart.getNum(this.data.id)});
     },
     addCart: function () {
-        //商品缓存数量减一
-        base.changeGoodNum(this.data.id,-1);
-        //直接整个对象放进去
-        base.cart.add(this.data.good);
-        //购物车数量减一，有可能是从购物车减到0又跳出来的
-        base.cart.surplus(this.data.id, -1);//改变购物车中的数量
-        //先改变数量，因为购物车那个列表是取购物车的，要保持购物车、缓存数据一致
-        var good = base.getGoodById(this.data.id);
-        //更新数据
-        this.setData({cartNum: base.cart.getNum(this.data.id), good: good});
+        base.cart.add(this.data.good);//直接整个对象放进去，并做一些操作
+        var good = base.cart.getGood(this.data.id);        
+        this.setData({good: good });//更新数据
     },
     bindTimeChange: function (e) {
       var _this = this;
       if (e.detail.value > 0) {
         _this.setData({
-          arrTimeIndex: e.detail.value,
-          "oinfo.DeliveryTime": _this.data.arrTime[e.detail.value]
+          "good.arrTimeIndex": e.detail.value,
+          "good.deliveryTime": _this.data.good.arrTime[e.detail.value]
         });
       }
     },
     bindDateChange: function (e) {
       this.setData({
-        "oinfo.DeliveryDate": e.detail.value
+        "good.deliveryDate": e.detail.value
+      })
+    }, 
+    bindTextAreaBlur: function (e) {
+      this.setData({
+        "good.remarks": e.detail.value
+      });
+    },
+    goCart: function (e) {
+      if (this.data.good.surplus == 0){//加入购物车按钮会消失，此时点击前往购物车，最好更新相关的内容
+        base.cart.updateGood(this.data.good);
+      }
+      wx.switchTab({//wx.navigateTo和wx.redirectTo,不能跳转tabBar里的页面
+        url: '../cart/cart'
       })
     },
 });

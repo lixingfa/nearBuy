@@ -51,25 +51,28 @@ App({
     key: "cart",
     ref: "",
     add: function (p) {//加入购物车
-      var re = false;
-      if (p.id && p.price) {
+      if (p.id) {
         var dic = wx.getStorageSync(this.key) || {};
         if (p.id in dic) {
-          dic[p.id].num += 1;
+          dic[p.id].num += 1;//数量
+          dic[p.id].arrTime = p.arrTime;//允许选择的时间
+          dic[p.id].arrTimeIndex = p.arrTimeIndex;//选择的时间索引
+          dic[p.id].deliveryTime = p.deliveryTime;//最终选择的时间
+          dic[p.id].deliveryDate = p.deliveryDate;//防止选了这些内容，加购物车，又通过返回按钮出去
+          dic[p.id].remarks = p.remarks;
         } else {
           dic[p.id] = p;
           dic[p.id].num = 1;//初始化，否则会出问题
         }
+        dic[p.id].surplus = dic[p.id].surplus - 1;//剩余数量-1
         wx.setStorageSync(this.key, dic);
-        re = true;
       }
-      return re;
     },
-    exist: function (id) {//是否存在
-      var re = false;
+    getGood: function (id) {//是否存在
+      var re = null;
       var dic = wx.getStorageSync(this.key) || {};
       if (id in dic) {
-        re = true;
+        re = dic[id];
       }
       return re;
     },
@@ -125,6 +128,13 @@ App({
         dic[id].surplus = dic[id].surplus + change;
         wx.setStorageSync(this.key, dic);
       }
+    },
+    updateGood:function(p){
+      var dic = wx.getStorageSync(this.key) || {};
+      if (p.id in dic) {
+        dic[p.id] = p;
+      }
+      wx.setStorageSync(this.key, dic);
     }
   },//应注意参考购物车的写法
   setGoodCache: function (good) {
@@ -453,7 +463,10 @@ App({
           distance: "498米",//点击可以看发布者填写的地址
           latitude: 23.26090,//经度
           longitude: 113.8108,//维度
-          indate: "2019-05-01 18:30"
+          indate: "2019-05-01 18:30",
+          chooseTime: true,
+          workTimeStart: "8:00",//可以送货的时间，或者营业时间
+          workTimeEnd: "20:00"
         }, {
           id: "2",
           title: "包点拼团，奶黄、紫薯、粗粮、麦香包15元/20个",
@@ -470,7 +483,10 @@ App({
           distance: "123米",
           latitude: 23.26091,
           longitude: 113.8108,
-          indate: "2019-05-01 18:30"
+          indate: "2019-05-01 18:30",
+          chooseTime: true,
+          workTimeStart: "8:00",
+          workTimeEnd: "20:00"
         }, {
           id: "3",
           title: "包点拼团，馒头、奶油、花卷10元/20个",
@@ -487,7 +503,10 @@ App({
           distance: "123米",
           latitude: 23.26091,
           longitude: 113.8108,
-          indate: "2019-05-01 18:30"
+          indate: "2019-05-01 18:30",
+          chooseTime: true,
+          workTimeStart: "8:00",
+          workTimeEnd: "20:00"
         }, {
           id: "5",
           title: "农家土鸡蛋",
@@ -504,7 +523,10 @@ App({
           distance: "475米",
           latitude: 23.26092,
           longitude: 113.8107,
-          indate: "2019-05-01 18:30"
+          indate: "2019-05-01 18:30",
+          chooseTime: true,//可以送到路口
+          workTimeStart: "18:00",//傍晚送货，其他时候要干农活
+          workTimeEnd: "20:00"
         }
       ]
     }, {//最新发布
@@ -526,7 +548,10 @@ App({
           promulgator: "招牌鱼头粉",
           promulgatorId: "yutoufen",//雇佣关系的店最好用非个人微信
           distance: "243米",
-          indate: "0000-00-00 18:30"
+          indate: "0000-00-00 18:30",
+          chooseTime: false,//不允许在线下单，就不允许选择时间了，没有支付就没有约束
+          workTimeStart: "",
+          workTimeEnd: ""
         },
       ]
     }, {//生活服务
@@ -547,7 +572,10 @@ App({
           promulgator: "顺风车-程",
           promulgatorId: "shunfengcar",
           distance: "361米",
-          indate: "0000-00-00 18:30"//有效期，过了之后就会看不到，0000-00-00表示每天循环，如当天不提供服务，则需手动下架。系统自动判断节假日有点麻烦
+          indate: "0000-00-00 18:30",//有效期，过了之后就会看不到，0000-00-00表示每天循环，如当天不提供服务，则需手动下架。系统自动判断节假日有点麻烦
+          chooseTime: false,//上下班类顺风车不允许选择时间
+          workTimeStart: "",
+          workTimeEnd: ""
         }, {
           id: "8",
           title: "顺风车接送（黄陂-中铁）",
@@ -562,7 +590,10 @@ App({
           promulgator: "顺风车-程",
           promulgatorId: "shunfengcar",
           distance: "361米",
-          indate: "0000-00-00 18:30"//有效期，过了之后就会看不到，0000-00-00表示每天循环，如当天不提供服务，则需手动下架。系统自动判断节假日有点麻烦
+          indate: "0000-00-00 18:30",
+          chooseTime:false,
+          workTimeStart:"",
+          workTimeEnd:""
         },
       ]
     }

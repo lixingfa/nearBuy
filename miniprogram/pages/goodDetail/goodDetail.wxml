@@ -12,28 +12,29 @@
                         </view>
                     </view>
 
-<view class="date tab" wx:if="{{good.lineOrder || good.takeOut}}">
-  <view class="tit" wx:if="{{good.takeOut}}">希望配送日期/时间</view>
-  <view class="tit" wx:if="{{good.lineOrder && !good.takeOut}}">预计取货日期/时间</view>
+<view class="date tab" wx:if="{{good.chooseTime}}">
+  <view class="tit" wx:if="{{good.takeOut}}">您希望的送货时间</view>
+  <view class="tit" wx:if="{{good.lineOrder && !good.takeOut}}">您预计的取货时间</view>
   <view class="dt">
-    <picker mode="date" value="{{deliveryDate}}" class="dt-item pos" start="{{dateStart}}" end="{{dateEnd}}" bindchange="bindDateChange">
-      {{oinfo.DeliveryDate?oinfo.DeliveryDate:'选择配送日期'}}
+    <picker mode="date" value="{{good.deliveryDate}}" class="dt-item pos" start="{{dateStart}}" end="{{dateEnd}}" bindchange="bindDateChange">
+      {{good.deliveryDate?good.deliveryDate:'选择日期'}}
     </picker>
-    <picker mode="selector" value="{{arrTimeIndex}}" range="{{arrTime}}" class="dt-item pos" bindchange="bindTimeChange">
-      {{arrTime[arrTimeIndex]}}
+    <picker mode="selector" value="{{good.deliveryTime}}" range="{{good.arrTime}}" class="dt-item pos" bindchange="bindTimeChange">
+      {{good.arrTime[good.arrTimeIndex]}}
     </picker>
   </view>
 </view>
-<view class="date tab" style="height:200px;"  wx:if="{{good.lineOrder || good.takeOut}}">
+<view class="date tab" style="height:200px;">
   <view class="tit">留言</view>
-  <textarea bindblur="bindTextAreaBlur" auto-height placeholder="" value="{{oinfo.Remarks}}" />
+  <textarea bindblur="bindTextAreaBlur" style="height:150px;" placeholder="" value="{{good.remarks}}" maxlength="200" />
 </view>
 
 <view class="tool">
-<view wx:if="{{good.surplus > 0}}" class="tbtn add" catchtap="addCart">加入购物车(<text class="cart-num">{{cartNum}}</text>)</view>
-    <!--<view wx:if="{{surplus == 0}}" class="tbtn add" catchtap="addCart">预订(<text class="cart-num">{{cartNum}}</text>)</view>增加复杂度-->
+<view wx:if="{{good.surplus > 0}}" class="tbtn add" catchtap="addCart">加入购物车(<text class="cart-num">{{good.num}}</text>)</view>
+<view class="tbtn add" catchtap="goCart">前往购物车</view>
+    <!--<view wx:if="{{surplus == 0}}" class="tbtn add" catchtap="addCart">预订(<text class="cart-num">{{cartNum}}</text>)</view>增加复杂度
 <view class="gobuy" bindtap="goOrder"><navigator url="/pages/cart/cart"
     open-type="switchTab"
     hover-class="other-navigator-hover"
->前往购物车</navigator></view>
+>前往购物车</navigator></view>-->
 </view>
