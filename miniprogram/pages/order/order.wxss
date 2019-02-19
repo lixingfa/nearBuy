@@ -1,11 +1,11 @@
 .body{z-index: 0;}
 
 .tab{padding: 0 5px}
-.tit .select{float:right;height:34px;font-size:14px;}
+.tit .select{float:right;height:30px;font-size:14px;}
 .addr{height:40px;}
 .phone{width: 100%;font-size: 14px;border-bottom: 1px solid #bbb;}
 
-.pro{padding: 0 5px; border-bottom: 1px dotted #bbb;font-size: 12px;}
+.pro{border-bottom: 1px dotted #bbb;font-size: 12px;}
 .pro .info{display:flex;justify-content: center;align-items: center; height: 120rpx; }
 .pro .pimg{width: 150rpx;height: 120rpx;}
 .pro .pname{padding-right:5px;font-size:14px;width:170px;}
