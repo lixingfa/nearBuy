@@ -22,7 +22,7 @@
   </view>
 </view>
 <view class="tool">
-  <view class="sub" bindtap="submit">提交订单</view>
+  <view class="sub" bindtap="submit">提交订单(￥{{totalPrice}})</view>
 </view>
 
 <!--我的地址-->

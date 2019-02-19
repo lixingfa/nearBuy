@@ -87,7 +87,7 @@ Page({
     goOrder: function () {
         if (this.data.plist.length > 0 && this.data.total > 0) {
             wx.navigateTo({
-                url: '../order/order?from=cart'
+              url: '../order/order?totalPrice=' + this.data.total
             })
         } else {
             base.modal({

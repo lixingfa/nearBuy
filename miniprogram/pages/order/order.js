@@ -6,7 +6,7 @@ Page({
       addresslist: [],
       addrShow: false,
       plist: [],
-      time:null
+      totalPrice:0
     },
     addrEdit: function () {//触摸管理这个地址
         this.setData({ addrShow: true });
@@ -18,8 +18,8 @@ Page({
           this.setData({ addrShow: false });
     },
     onLoad: function (e) {
-      this.setData({
-        addr: base.location.address, plist: base.cart.getList(), time:util.formatTime(new Date())});
+      var totalPrice = e && e.totalPrice ? e.totalPrice : 0;
+      this.setData({ addr: base.location.address, plist: base.cart.getList(), totalPrice: totalPrice});
     },
     getAddressList: function () {
         var _this = this;

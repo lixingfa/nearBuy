@@ -1,6 +1,6 @@
 .body{z-index: 0;}
 
-.arrow{position: relative;}
+.arrow{position: relative;font-size:16px;color:#999;}
 .arrow:after{content: ""; display:block;position: absolute;width: 20rpx;height: 20rpx;border-top:5rpx solid #ddd;border-right:5rpx solid #ddd;transform:rotateZ(45deg); top: 27rpx; right:30rpx;}
 
 .item{display:flex;padding:20rpx 20rpx;}
