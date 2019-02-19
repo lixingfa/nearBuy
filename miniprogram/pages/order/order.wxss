@@ -1,14 +1,11 @@
 .body{z-index: 0;}
 
-.arrow{position: relative;font-size:16px;color:#999;}
-.arrow:after{content: ""; display:block;position: absolute;width: 20rpx;height: 20rpx;border-top:5rpx solid #ddd;border-right:5rpx solid #ddd;transform:rotateZ(45deg); top: 27rpx; right:30rpx;}
+.tab{padding: 0 5px}
+.tit .select{float:right;height:34px;font-size:14px;}
+.addr{height:40px;}
+.phone{width: 100%;font-size: 14px;border-bottom: 1px solid #bbb;}
 
-.item{display:flex;padding:20rpx 20rpx;}
-.item .label{width: 200rpx;font-size: 12pt;}
-.item .content{flex: 1;}
-
-
-.pro{padding: 0 5px; border-bottom: 1rpx dotted #bbb;font-size: 12px;}
+.pro{padding: 0 5px; border-bottom: 1px dotted #bbb;font-size: 12px;}
 .pro .info{display:flex;justify-content: center;align-items: center; height: 120rpx; }
 .pro .pimg{width: 150rpx;height: 120rpx;}
 .pro .pname{padding-right:5px;font-size:14px;width:170px;}

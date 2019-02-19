@@ -19,14 +19,15 @@ App({
   location: {
     latitude: 23.26093,//经度，中铁，电脑上获取的坐标
     longitude: 113.8109,//维度
-    address: '',//地址
+    address: null,//地址
+    phone:null
   },
   user: {//用户信息，主要用于下单时显示
     key: "userkey",
     openId: '',//微信号
-    nickName: '',//昵称
+    nickName: null,//昵称
     avatarUrl: '',//头像地址
-    islogin: function (tp) {
+    /*islogin: function (tp) {
       var re = false;
       if (this.openId != null) {
         re = true;
@@ -45,7 +46,7 @@ App({
     },
     clear: function () {
       wx.removeStorageSync(this.key);
-    }
+    }*/
   },
   cart: {
     key: "cart",
@@ -125,13 +126,6 @@ App({
     clear: function () {//清除购物车
       wx.removeStorageSync(this.key);
     },
-    /*surplus: function (id, change) {//改变购物车中商品的剩余量
-      var dic = wx.getStorageSync(this.key) || {};
-      if (id in dic) {
-        dic[id].surplus = dic[id].surplus + change;
-        wx.setStorageSync(this.key, dic);
-      }
-    },*/
     updateGood:function(p){
       var dic = wx.getStorageSync(this.key) || {};
       if (p.id in dic) {
@@ -190,24 +184,6 @@ App({
         _this.updataLocation();
       }
     });
-  },
-  getUserInfo: function (cb) {
-    var that = this
-    if (this.globalData.userInfo) {
-      typeof cb == "function" && cb(this.globalData.userInfo)
-    } else {
-      //调用登录接口
-      wx.login({
-        success: function () {
-          wx.getUserInfo({
-            success: function (res) {
-              that.globalData.userInfo = res.userInfo
-              typeof cb == "function" && cb(that.globalData.userInfo)
-            }
-          })
-        }
-      })
-    }
   },
   globalData: {
     userInfo: null
@@ -598,16 +574,18 @@ App({
   ],
   //地址数据
   myAddress: [
-    {
+    /*{
       id: "1",
       latitude: 23.26093,//经度，中铁，电脑上获取的坐标
       longitude: 113.8109,//维度
       address: '广州市增城区朱村大道西145号中国铁建国际花园4栋',
+      phone:'18664900467'
     }, {
       id: "2",
       latitude: 23.12463,
       longitude: 113.36199,
       address: '广州市天河区天源路白沙水路89号明动软件',
-    }
+      phone: '18664900467'
+    }*/
   ]
 });

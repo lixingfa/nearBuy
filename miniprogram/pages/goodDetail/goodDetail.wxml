@@ -26,7 +26,7 @@
 </view>
 <view class="date tab" style="height:200px;">
   <view class="tit">留言</view>
-  <textarea bindblur="bindTextAreaBlur" style="height:150px;" placeholder="" value="{{good.remarks}}" maxlength="200" />
+  <textarea bindblur="bindTextAreaBlur" bindinput="bindTextAreaBlur" style="height:150px;" placeholder="留言信息" value="{{good.remarks}}" maxlength="200" />
 </view>
 
 <view class="tool">

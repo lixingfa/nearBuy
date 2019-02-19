@@ -2,14 +2,34 @@ var base = getApp();
 var util = require('../../utils/util.js');
 Page({
     data: {
-      addr: "",
-      addresslist: [],
-      addrShow: false,
+      //下单数据
+      addr: null,
+      phone:null,
       plist: [],
-      totalPrice:0
+      totalPrice:0,      
+      myAddress: [],//辅助数据
+      addrShow: false,
+      longitude:"0",
+      latitude:"0",
     },
     addrEdit: function () {//触摸管理这个地址
-        this.setData({ addrShow: true });
+      var _this = this;
+      if (_this.data.myAddress.length > 0){
+        _this.setData({ addrShow: true });//选地址
+
+      }else{
+        wx.chooseLocation({
+          success: function (res) {
+            //console.log(res.name);
+            _this.setData({
+              addr: res.address + ' ' + res.name
+            });
+          },
+          fail: function (err) {
+            console.log(err)
+          }
+        });
+      }
     },
     myaddrCancel: function () {//点击地址簿中取消按钮
         this.setData({ addrShow: false });
@@ -19,9 +39,12 @@ Page({
     },
     onLoad: function (e) {
       var totalPrice = e && e.totalPrice ? e.totalPrice : 0;
-      this.setData({ addr: base.location.address, plist: base.cart.getList(), totalPrice: totalPrice});
+      this.setData({ addr: base.location.address, phone: base.location.phone, plist: base.cart.getList(), totalPrice: totalPrice, myAddress: base.myAddress});
+      if (!this.data.addr || !this.data.phone){
+        this.setData({ longitude: base.location.longitude, latitude: base.location.latitude});
+      }
     },
-    getAddressList: function () {
+    /*getAddressList: function () {
         var _this = this;
         base.get({ c: "UserCenter", m: "GetAllAddress" }, function (d) {
             var dt = d.data;
@@ -41,84 +64,46 @@ Page({
 
             }
         })
-    },
-    onShow: function (e) {
-
-    },
-    getTotalPrice: function () {//应付金额
-        var _this = this;
-        var pl = _this.data.plist;//name: p.name, price: p.price, size: p.size, num: p.num, brand: p.brand,supplyno
-        var alltotal = 0;
-        for (var i = 0; i < pl.length; i++) {
-            if (!isNaN(pl[i].price)) {
-                alltotal += parseFloat(pl[i].price);
-            }
-        }
-        this.setData({
-            "oinfo.TotalPrice": alltotal
-        });
-    },
-    getProductList: function () {
-        var _this = this;
-        var arr_pro = [];
-        var pl = _this.data.plist;//name: p.name, price: p.price, size: p.size, num: p.num, brand: p.brand,supplyno
-        for (var i = 0; i < pl.length; i++) {
-            arr_pro.push({
-                ProductName: pl[i].name,
-                Price: pl[i].price,
-                Size: pl[i].size,
-                Num: pl[i].num,
-                CakeNo: 0,
-                OType: 0,
-                IType: 0,
-                SupplyNo: pl[i].supplyno,
-                //生日内容
-                IsCutting: 0,
-                CutNum: 0,
-                BrandCandleType: 0,
-                Remarks: '',
-                Premark: null,//生产备注
-            });
-        }
-        return arr_pro;
-    },
+    },*/
     valid: function () {
         var _this = this;
         var err = "";
-        if (!_this.data.oinfo.Consignee) {
-            err = "请选择收货人信息！";
-            wx.showModal({
-                showCancel: false,
-                title: '',
-                content: err
-            })
-            return false;
-        }
-        if (!_this.data.oinfo.DeliveryDate) {
-            err = "请选择配送日期！";
-            wx.showModal({
-                showCancel: false,
-                title: '',
-                content: err
-            })
-            return false;
-        }
-        if (!_this.data.oinfo.DeliveryTime) {
-            err = "请选择配送时间段！";
-            wx.showModal({
-                showCancel: false,
-                title: '',
-                content: err
-            })
-            return false;
-        }
+        if (!_this.data.addr || !_this.data.phone) {
+              err = "您还没完善收件地址，请点击顶部的收货地址进行完善。";
+              wx.showModal({
+                  showCancel: false,
+                  title: '',
+                  content: err
+              })
+              return false;
+          }
         return true;
     },
-    submit: function () {
-      base.cart.clear();
+    submit: function (e) {
+      var _this = this;
+      if (!_this.valid()) {
+        return;
+      }
+      if (base.user.nickName == null){
+        //获取个人信息
+        wx.getUserInfo({
+          success(res) {
+            var userInfo = res.userInfo
+            base.user.nickName = userInfo.nickName
+            base.user.avatarUrl = userInfo.avatarUrl
+            //user.gender = userInfo.gender // 性别 0：未知、1：男、2：女
+            //user.province = userInfo.province //省
+            //user.city = userInfo.city //市
+            //user.country = userInfo.country //国家
+            //encryptedData openId//即微信号需要另外处理
+
+          }
+        });
+      }
+      /*base.cart.clear();
       wx.redirectTo({
         url: "../user/myorder"
-      })
+      })*/
       /*
         var _this = this;
         if (_this.valid()) {
@@ -156,6 +141,16 @@ Page({
             })
 
         }*/
+    },
+    bindAddrBlur: function (e) {
+        this.setData({
+          addr: e.detail.value
+        });
+      },
+    bindPhoneBlur: function (e) {
+      this.setData({
+        phone: e.detail.value
+      });
     }
 })
 
@@ -168,21 +163,7 @@ Page({
           _this.user.avatarUrl = user.avatarUrl,//头像地址
           _this.user.address = user.address
         }else{
-            //个人信息
-          wx.getUserInfo({
-            success(res) {
-              var user = {};
-              var userInfo = res.userInfo
-              user.nickName = userInfo.nickName
-              user.avatarUrl = userInfo.avatarUrl
-              //user.gender = userInfo.gender // 性别 0：未知、1：男、2：女
-              //user.province = userInfo.province
-              //user.city = userInfo.city
-              //user.country = userInfo.country
-              //encryptedData openId//即微信号需要另外处理
-              _this.user.setCache(user);
-            }
-          });
+            
         }
         */
         /*wx.openLocation({
