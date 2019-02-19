@@ -8,15 +8,17 @@
 <view class="date tab">
   <view class="tit">商品详情</view>
   <view class="pro" wx:for="{{plist}}" wx:for-item="p" wx:key="id">
+    <view class="info">
     <!--<image src="{{p.img}}" class="pimg"></image>-->
     <text class="pname">{{p.title}}</text>
     <text class="pdeliveryTime">{{p.deliveryDate}} {{p.deliveryTime}}
     </text>
-      <text wx:if="{{p.chooseTime && p.takeOut}}">配送</text>
-      <text wx:if="{{p.chooseTime && p.lineOrder && !p.takeOut}}">取货</text>
+    <text class="chooseTime" wx:if="{{p.deliveryTime !=null && p.takeOut}}">配送</text>
+    <text class="chooseTime lineOrder" wx:if="{{p.deliveryTime != null && p.lineOrder && !p.takeOut}}">取货</text>
     <text class="pprice">{{p.price}} x {{p.num}}</text>
     <text class="ptprice">{{p.price*p.num}}</text>
-    <text wx:if="{{p.remarks != null}}">{{p.remarks}}</text>
+    </view>
+    <view class="remarks" wx:if="{{p.remarks != null}}">留言：{{p.remarks}}</view>
   </view>
 </view>
 <view class="tool">

@@ -1,10 +1,4 @@
 .body{z-index: 0;}
-page{background-color: #f0f0f0;}
-
-
-
-
-
 
 .arrow{position: relative;}
 .arrow:after{content: ""; display:block;position: absolute;width: 20rpx;height: 20rpx;border-top:5rpx solid #ddd;border-right:5rpx solid #ddd;transform:rotateZ(45deg); top: 27rpx; right:30rpx;}
@@ -14,12 +8,16 @@ page{background-color: #f0f0f0;}
 .item .content{flex: 1;}
 
 
-.pro{display:flex;justify-content: center;align-items: center; height: 160rpx; padding: 0 10px; border-bottom: 1rpx dotted #eee}
+.pro{padding: 0 5px; border-bottom: 1rpx dotted #bbb;font-size: 12px;}
+.pro .info{display:flex;justify-content: center;align-items: center; height: 120rpx; }
 .pro .pimg{width: 150rpx;height: 120rpx;}
-.pro .pname{flex: 1;padding-right:5px;font-size:14px;}
-.pro .pprice{flex: 1;}
-.pro .ptprice{width:100rpx;color: #ff6a00;}
-.pro .pdeliveryTime{font-size: 10px;flex: 1;}
+.pro .pname{padding-right:5px;font-size:14px;width:170px;}
+.pro .pprice{width:70px;font-size:14px;}
+.pro .ptprice{width:70px;color: #ff6a00;font-size: 18px;flex:1}
+.pro .pdeliveryTime{width:70px;}
+.pro .lineOrder{color: #ff6a00;}
+.pro .chooseTime{width: 20px;}
+.pro .remarks{color:#999;}
 
 .tool{position: fixed;left: 0;bottom: 0; padding: 20rpx 0; display: flex; width: 750rpx;border-top: 1rpx solid #ddd;box-shadow: 0 -1px 5px 0 #eee;background-color: #fff; }
 .tool .sub{background-color: #576b95;border: 1rpx solid #576b95; color: #fff;flex:1;margin: 0 20rpx;height: 40px;line-height: 40px; text-align: center;border-radius: 3px;}
