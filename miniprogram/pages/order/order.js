@@ -18,17 +18,7 @@ Page({
       if (_this.data.myAddress.length > 0){
         _this.setData({ addrShow: true });//选地址
       }else{
-        wx.chooseLocation({
-          success: function (res) {
-            //console.log(res.name);
-            _this.setData({
-              addr: res.address + ' ' + res.name
-            });
-          },
-          fail: function (err) {
-            console.log(err)
-          }
-        });
+        _this.chooseAddrInMap();//都没有地址，就在地图上选
       }
     },
     myaddrCancel: function () {//点击地址簿中取消按钮
@@ -44,36 +34,14 @@ Page({
         this.setData({ addr: base.location.address, phone: base.location.phone,longitude: base.location.longitude, latitude: base.location.latitude});
       }
     },
-    /*getAddressList: function () {
-        var _this = this;
-        base.get({ c: "UserCenter", m: "GetAllAddress" }, function (d) {
-            var dt = d.data;
-            if (dt.Status == "ok") {
-                var arr = [];
-                for (var i = 0; i < dt.Tag.length; i++) {
-                    var obj = dt.Tag[i];
-                    if (i == 0) {
-                        obj.isDefault = true;
-                    }
-                    arr.push(obj);
-
-                }
-                _this.setData({
-                    addresslist: arr
-                })
-
-            }
-        })
-    },*/
     valid: function () {
         var _this = this;
         var err = "";
         if (!_this.data.addr || !_this.data.phone) {
-              err = "您还没完善收件地址，请点击顶部的收货地址进行完善。";
               wx.showModal({
                   showCancel: false,
                   title: '',
-                  content: err
+                content: "您还没完善收件地址，请点击顶部的收货地址进行完善。"
               })
               return false;
           }
@@ -106,43 +74,6 @@ Page({
       wx.redirectTo({
         url: "../user/myorder"
       })*/
-      /*
-        var _this = this;
-        if (_this.valid()) {
-            _this.getTotalPrice();
-            var obj = {};
-            obj.UserName = base.user.phone;
-            obj.UserPhone = base.user.phone;
-            obj.OrderSource = _this.data.oinfo.OrderSource;
-            obj.Consignee = _this.data.oinfo.Consignee;//地址
-            obj.Cellphone = _this.data.oinfo.Cellphone;
-            obj.City = _this.data.oinfo.City;
-            obj.District = _this.data.oinfo.District;
-            obj.Address = _this.data.oinfo.Address;
-            obj.DeliveryDate = _this.data.oinfo.DeliveryDate;
-            obj.DeliveryTime = _this.data.oinfo.DeliveryTime;
-            obj.Payment = _this.data.oinfo.Payment;
-            obj.Uid = base.user.userid;
-            obj.Remarks = _this.data.oinfo.Remarks;
-            obj.TotalPrice = _this.data.oinfo.TotalPrice;
-            obj.TotalPrice = obj.TotalPrice < 0 ? 0 : obj.TotalPrice;
-            var oplArr = _this.getProductList();
-            var oal = [];
-            base.post({
-                c: "OrderCenter", m: "AddOrder", p: JSON.stringify(obj), proInfo: JSON.stringify(oplArr), oalInfo: JSON.stringify(oal)
-            }, function (d) {
-                console.log(d)
-                var dt = d.data;
-                if (dt.Status == "ok") {
-                    base.cart.clear();
-                    wx.redirectTo({
-                        url: "../payment/payment?oid=" + dt.Tag
-                    })
-                }
-
-            })
-
-        }*/
     },
     bindAddrBlur: function (e) {
         this.setData({
@@ -163,11 +94,80 @@ Page({
           _this.setData({
             phone: _this.data.myAddress[i].phone,
             addr: _this.data.myAddress[i].address,
-            addrShow: false
+            //addrShow: false
           });
-
           break;
         }
       }
     },
+    chooseAddrInMap:function(){
+      var _this = this;
+      wx.chooseLocation({
+        success: function (res) {
+          var latitude = res.latitude;
+          var longitude = res.longitude;
+          var distan = base.getDistance(base.location.latitude, base.location.longitude, latitude, longitude);
+          var address = res.address + ' ' + res.name;
+          if (distan > base.distan){
+            wx.showModal({
+              title: '距离提示',
+              content: '您选择的 “' + address + '” 与所购商品的平均距离大于' + base.distan + '米（实际相距' + distan + '米），可能会给双方带来不便。您可在“我的-个人信息”中对搜索距离进行调整。\n继续使用该地址？',
+              success: function (res) {
+                if (res.confirm) {
+                  base.location.longitude = longitude;
+                  base.location.latitude = latitude;
+                  _this.setData({
+                    addr: address,
+                    longitude: longitude,
+                    latitude: latitude,
+                    selectedID:-1,
+                    addrShow: false,
+                  });
+                }
+              }
+            });
+          }else{
+            base.location.longitude = longitude;
+            base.location.latitude = latitude;
+            _this.setData({
+              addr: address,
+              longitude: longitude,
+              latitude: latitude,
+              selectedID: -1,
+              addrShow: false,
+            });
+          }
+        },
+        fail: function (err) {
+          console.log(err)
+        }
+      });
+    },
+    toDeleteAddr:function(e){
+      var _this = this;
+      var id = e.currentTarget.dataset.id;
+      wx.showModal({
+        title: '地址删除提示',
+        content: '确认删除该地址？',
+        success: function (res) {
+          if (res.confirm) {
+            for (var i = 0; i < _this.data.myAddress.length; i++) {
+              if (_this.data.myAddress[i].id == id) {
+                _this.data.myAddress.splice(i, 1);
+                _this.setData({
+                  myAddress: _this.data.myAddress
+                });
+                if (_this.data.selectedID == id){//之前选了这个地址
+                  _this.setData({
+                    phone: null,
+                    addr: null,
+                  });
+                }
+                break;
+              }
+            }
+          }
+        }
+      });
+    }
 })

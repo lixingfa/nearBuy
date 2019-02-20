@@ -388,7 +388,7 @@ App({
           wx.showModal({
             title: '地址变更提示',
             //口不再显示
-            content: '您当前位于' + nowAddress.address + '附近，是否切换到当前位置？切换位置将显示附近三公里的信息，不切换则继续显示' + locationTEMP.address + '周边的信息，您可以点击顶部的地址来进行切换。',
+            content: '您当前位于' + nowAddress.address + '附近，是否切换到当前位置？切换位置将显示附近'+ base.distan +'米的信息，不切换则继续显示' + locationTEMP.address + '周边的信息，您可以点击顶部的地址来进行切换。',
             success: function (res) {
               if (res.confirm) {
                 _this.location = nowAddress;//有问题就分别赋值
