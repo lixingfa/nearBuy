@@ -37,13 +37,21 @@ Page({
     valid: function () {
         var _this = this;
         var err = "";
-        if (!_this.data.addr || !_this.data.phone) {
+        if (!_this.data.addr) {
               wx.showModal({
                   showCancel: false,
                   title: '',
-                content: "您还没完善收件地址，请点击顶部的收货地址进行完善。"
+                content: "您还没完善收件地址，请点击顶部的选择按钮进行完善。"
               })
               return false;
+          }
+          if (!_this.data.phone) {
+            wx.showModal({
+              showCancel: false,
+              title: '',
+              content: "请填写您的联系电话。"
+            })
+            return false;
           }
         return true;
     },
@@ -66,14 +74,22 @@ Page({
             //encryptedData openId//即微信号需要另外处理
           }
         });
+      }      
+      if (_this.data.selectedID == -1){//不是从列表里选的地址
+        var addr = {};
+        addr.addr = _this.data.addr;
+        addr.phone = _this.data.phone;
+        addr.longitude = _this.data.longitude;
+        addr.latitude = _this.data.latitude;
+        addr.id = Math.random() * 10000 + '';
+        base.myAddress.push(addr);
       }
-      /*
-      if (_this.data.myAddress.length == 0){//新增地址
-      }
-      base.cart.clear();
+      var order = {};
+
+      /*base.cart.clear();
       wx.redirectTo({
         url: "../user/myorder"
-      })*/
+      });*/
     },
     bindAddrBlur: function (e) {
         this.setData({
