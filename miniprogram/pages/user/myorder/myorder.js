@@ -1,20 +1,17 @@
-// pages/user/myorder/myorder.js
-
 var base = getApp();
-var _list = [];
 Page({
   data: {
     loaded: false,
-    mylist: [],
+    myOrder: [],
     pagenum: 1
   },
   onLoad: function (options) {
-    // 页面初始化 options为页面跳转所带来的参数
-    var _this = this;
-    this.initData();
-    wx.setNavigationBarTitle({
+    this.setData({
+      myOrder:base.myOrder
+    });
+    /*wx.setNavigationBarTitle({
       title: '我的订单列表'
-    })
+    })*/
   },
   initData: function () {
     this.getOrderList();  

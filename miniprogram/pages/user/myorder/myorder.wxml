@@ -1,20 +1,19 @@
 
 
-<view wx:if="{{loaded}}" class="body">
-     <view class="item itemjd" data-poid="{{p.oid}}" bindtap="toDetail" wx:for="{{mylist}}" wx:key="oid" wx:for-item="p">
+<view class="body">
+     <view class="item itemjd" data-poid="{{p.oid}}" bindtap="toDetail" wx:for="{{myOrder}}" wx:key="oid" wx:for-item="p">
       <view class="img">
         <image src="{{p.imgUrl}} " mode="aspectFit " />
       </view>
       <view class="con">
         <view class="nm">{{p.name}}</view>
         <view class="sub">￥
-          <text>{{p.totalprice}}</text>
+          <text>{{p.totalPrice}}</text>
         </view>
-        <view class="des">共{{p.num}}件商品</view>
+        <view class="des">{{p.date}}</view>
       </view>
       <view class="iconpadding">
         >>
-        <!--<image src="{{p.imgUrl}} " mode="aspectFit " />-->
       </view>
     </view>
 </view>

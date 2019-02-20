@@ -86,7 +86,7 @@ Page({
     },
     goOrder: function () {
         if (this.data.plist.length > 0 && this.data.total > 0) {
-            wx.navigateTo({
+            wx.navigateTo({//保留当前页面，到新页面，可以返回
               url: '../order/order?totalPrice=' + this.data.total
             })
         } else {

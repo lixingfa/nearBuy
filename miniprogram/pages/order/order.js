@@ -85,11 +85,23 @@ Page({
         base.myAddress.push(addr);
       }
       var order = {};
+      order.status = 0;//未支付
+      order.user = base.user;
+      order.user.addr = _this.data.addr;
+      order.user.phone = _this.data.addr;
+      order.plist = _this.data.plist;
+      order.totalPrice = _this.data.totalPrice;
+      order.date = util.formatTime(new Date());
 
-      /*base.cart.clear();
-      wx.redirectTo({
-        url: "../user/myorder"
-      });*/
+      base.myOrder.push(order);
+      base.cart.clear();
+
+      wx.switchTab({//redirectTo关闭当前页面，跳到新页面
+        url: "../user/myorder/myorder",
+        fail: function (res) {
+          console.log("跳转我的订单失败" + res);
+        }
+      });
     },
     bindAddrBlur: function (e) {
         this.setData({
