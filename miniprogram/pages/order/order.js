@@ -11,12 +11,12 @@ Page({
       addrShow: false,
       longitude:"0",
       latitude:"0",
+      selectedID: -1,
     },
-    addrEdit: function () {//触摸管理这个地址
+    addrSelect: function () {//选择地址
       var _this = this;
       if (_this.data.myAddress.length > 0){
         _this.setData({ addrShow: true });//选地址
-
       }else{
         wx.chooseLocation({
           success: function (res) {
@@ -39,9 +39,9 @@ Page({
     },
     onLoad: function (e) {
       var totalPrice = e && e.totalPrice ? e.totalPrice : 0;
-      this.setData({ addr: base.location.address, phone: base.location.phone, plist: base.cart.getList(), totalPrice: totalPrice, myAddress: base.myAddress});
-      if (!this.data.addr || !this.data.phone){
-        this.setData({ longitude: base.location.longitude, latitude: base.location.latitude});
+      this.setData({ plist: base.cart.getList(), totalPrice: totalPrice, myAddress: base.myAddress});
+      if (!this.data.addr || !this.data.phone){//为空表示没有地址（操作地址时，电话是必须的），可能需要选取地址
+        this.setData({ addr: base.location.address, phone: base.location.phone,longitude: base.location.longitude, latitude: base.location.latitude});
       }
     },
     /*getAddressList: function () {
@@ -96,11 +96,13 @@ Page({
             //user.city = userInfo.city //市
             //user.country = userInfo.country //国家
             //encryptedData openId//即微信号需要另外处理
-
           }
         });
       }
-      /*base.cart.clear();
+      /*
+      if (_this.data.myAddress.length == 0){//新增地址
+      }
+      base.cart.clear();
       wx.redirectTo({
         url: "../user/myorder"
       })*/
@@ -151,33 +153,21 @@ Page({
       this.setData({
         phone: e.detail.value
       });
-    }
-})
+    },
+    toSelect: function (e) {//选中地址
+      var _this = this;
+      var id = e.currentTarget.dataset.id;
+      _this.setData({ selectedID: id });
+      for (var i = 0; i < _this.data.myAddress.length; i++) {
+        if (_this.data.myAddress[i].id == id) {
+          _this.setData({
+            phone: _this.data.myAddress[i].phone,
+            addr: _this.data.myAddress[i].address,
+            addrShow: false
+          });
 
-/*
-//用户
-        var user = _this.user.getCache();
-        if (user != null && user != "") {
-          _this.user.openId = user.openId,//微信号
-          _this.user.nickName = user.nickName,//昵称
-          _this.user.avatarUrl = user.avatarUrl,//头像地址
-          _this.user.address = user.address
-        }else{
-            
+          break;
         }
-        */
-        /*wx.openLocation({
-                latitude: base.location.latitude,
-                longitude: base.location.longitude,
-                success:function(res){//成功打开地图
-                  wx.chooseLocation({
-                    success: function(res) {
-                      consoe.log(res);
-                      wx.showModal({
-                        title: '地址',
-                        content: res,
-                      })
-                    },
-                  })
-                }
-              });*/
+      }
+    },
+})

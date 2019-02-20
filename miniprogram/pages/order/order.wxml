@@ -1,13 +1,13 @@
 <view class="tab">
-  <view class="tit">收货地址：<button class='select' catchtap="addrEdit">选择</button></view>
+  <view class="tit">您的地址：<button class='select' catchtap="addrSelect">选择</button></view>
   <!--地址永远都会有值的，只是可能不准确，点击对这个地址进行管理-->
   <view>
-    <textarea bindblur="bindAddrBlur" bindinput="bindAddrBlur" placeholder="收货地址" value="{{addr}}" maxlength="200" class="phone addr"/>
+    <textarea bindinput="bindAddrBlur" placeholder="收货地址" value="{{addr}}" maxlength="200" class="phone addr"/>
   </view>
   <input value="{{phone==null?'':phone}}" bindblur="bindPhoneBlur" bindinput="bindPhoneBlur" placeholder="您的联系电话" maxlength="16" class='phone'></input>
 </view>
 <view class="tab">
-  <view class="tit">商品详情</view>
+  <view class="tit">商品详情：</view>
   <view class="pro" wx:for="{{plist}}" wx:for-item="p" wx:key="id">
     <view class="info">
     <!--<image src="{{p.img}}" class="pimg"></image>-->
@@ -31,32 +31,20 @@
   <view class="addr_head">
     <view class="addr_head_cancel" bindtap="myaddrCancel">取消</view>
     <view class="addr_head_title">我的地址</view>
+    <view class="addr_head_cancel" bindtap="myaddrCancel">在地图上查找</view>
   </view>
-<!--
   <scroll-view scroll-y="true" scroll-top="{{scrollTop}}" style="height: 250px;">
-    <view class="addr_body" data-aid="{{a.id}}" wx:for="{{addresslist}}" wx:key="id" wx:for-index="i" wx:for-item="a">
+    <view class="addr_body" data-id="{{a.id}}" wx:for="{{myAddress}}" wx:key="id" wx:for-index="i" wx:for-item="a">
       <view class="addr_body_edit"> <navigator url="{{'../user/editaddress/editaddress?mod=edit&id='+a.id}}" open-type="navigate" hover-class="navigator-hover">修改</navigator></view>
       <view class="addr_body_my">
-        <view> {{a.name}} {{a.phone}}</view>
-        <view class="addr_body_my_det">{{a.city}} {{a.area}} {{a.address}}</view>
+        <view> {{a.address}} {{a.phone}}</view><!--直接在里面填，点修改生效？-->
       </view>
-      <view class="addr_body_sel" data-aid="{{a.id}}" bindtap="toSelect">
-      <icon type="success" size="25" data-aid="{{a.id}}" color="{{a.id==selectedID?'green':'#EEE'}}" />
+      <view class="addr_body_sel" data-id="{{a.id}}" catchtap="toSelect">
+      <icon type="success" size="25" data-id="{{a.id}}" color="{{a.id==selectedID?'green':'#EEE'}}" />
       </view>
     </view>
   </scroll-view>
   <view class="addr_box_add"><navigator url="../user/editaddress/editaddress?mod=add" open-type="navigate" hover-class="navigator-hover"><label class="addr_lbl_add">+</label>新增收货地址</navigator></view>
--->
-<map
-  id="map"
-  longitude="{{longitude}}"
-  latitude="{{latitude}}"
-  scale="16"
-  show-location
-  markers
-  style="width: 100%; height: 300px;"
-></map>
-
 </view>
 <!--遮罩层-->
 <view class="hiddenbox" wx:if="{{addrShow}}" bindtap="closeaddr"></view>
