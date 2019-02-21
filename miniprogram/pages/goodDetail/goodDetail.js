@@ -33,6 +33,9 @@ Page({
     onShow: function () {
     },
     addCart: function () {
+        if (this.data.good.price > 0){
+          this.setData({"good.needPay":true});
+        }
         base.cart.add(this.data.good);//直接整个对象放进去，并做一些操作
         var good = base.cart.getGood(this.data.id);        
         this.setData({good: good });//更新数据
@@ -57,6 +60,9 @@ Page({
       });
     },
     goCart: function (e) {
+      if (this.data.good.price > 0) {
+        this.setData({ "good.needPay": true });
+      }
       base.cart.updateGood(this.data.good);//加入购物车按钮会消失，或者是留言后就去购物车。
       wx.switchTab({//wx.navigateTo和wx.redirectTo,不能跳转tabBar里的页面
         url: '../cart/cart'
