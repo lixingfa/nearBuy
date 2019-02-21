@@ -1,16 +1,13 @@
-<view class='good-item' catchtap="goDetail" data-id="{{good.id}}"><!--catchtap 会阻止冒泡事件，父容器的不执行-->
-                        <view class='good-title'>{{good.title}}</view>
-                        <view class='good-pic'>
-                            <image src="{{good.pic}}" mode="aspectFill"></image>
-                        </view>
-                        <view class='good-desc'>
-                            <view class='good-inAWord'>{{good.inAWord}}</view>
-
-<text class='good-price'>{{good.price}}</text><text>元/{{good.unit}}</text>
-                            <view class='other-info'>共{{good.total}}{{good.unit}}，剩余{{good.surplus}}{{good.unit}}，
+  <view class='good-title'>{{good.title}}</view>
+  <view class='good-pic'>
+    <image src="{{good.pic}}" mode="aspectFill"></image>
+  </view>
+  <view class='good-inAWord'>{{good.inAWord}}</view>
+  <view class='good-desc'>
+    <text class='good-price'>{{good.price}}</text><text>元/{{good.unit}}</text>
+    <view class='good-inAWord'>共{{good.total}}{{good.unit}}，剩余{{good.surplus}}{{good.unit}}，
                             {{good.promulgator}}发布，距您{{good.distance}}</view>
                         </view>
-                    </view>
 
 <view class="date tab" wx:if="{{good.chooseTime}}">
   <view class="tit" wx:if="{{good.takeOut}}">您希望的送货时间</view>
@@ -24,9 +21,9 @@
     </picker>
   </view>
 </view>
-<view class="date tab" style="height:200px;">
+<view class="date tab">
   <view class="tit">留言</view>
-  <textarea bindblur="bindTextAreaBlur" bindinput="bindTextAreaBlur" style="height:150px;" placeholder="留言信息" value="{{good.remarks}}" maxlength="200" />
+  <textarea bindblur="bindTextAreaBlur" bindinput="bindTextAreaBlur" placeholder="您的留言信息" value="{{good.remarks}}" maxlength="200" class='remark'/>
 </view>
 
 <view class="tool">

@@ -9,7 +9,7 @@ Page({
     promulgator:"",
     price:""
   },
-  onLoad: function () {
+  onShow: function () {//加载过又不关闭的话，onLoad不会再执行
     console.log(base.user.nickName);
     this.setData({
       myOrder: base.myOrder.getList()

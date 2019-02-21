@@ -31,6 +31,6 @@
   <view class="total">总金额：
     <text>￥{{total}}</text>
   </view>
-  <view class="gobuy" bindtap="goOrder">确认下单</view>
+  <button class="gobuy" open-type="getUserInfo" bindtap="goOrder">确认下单</button>
 </view>
 <view class="tool-layer"></view>

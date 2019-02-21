@@ -36,8 +36,14 @@
         "selectedIconPath": "icon/cart-2.png"
       },
       {
+        "pagePath": "pages/user/myorder/myorder",
+        "text": "我的订单",
+        "iconPath": "icon/my-1.png",
+        "selectedIconPath": "icon/my-2.png"
+      },
+      {
         "pagePath": "pages/user/user",
-        "text": "我的",
+        "text": "个人信息",
         "iconPath": "icon/my-1.png",
         "selectedIconPath": "icon/my-2.png"
       }

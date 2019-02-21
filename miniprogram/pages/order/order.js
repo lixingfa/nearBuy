@@ -104,7 +104,7 @@ Page({
       base.myOrder.add(order);
       base.cart.clear();
 
-      wx.redirectTo({//关闭当前页面，跳到新页面
+      wx.switchTab({//关闭当前页面，跳到新页面
         url: "../user/myorder/myorder",
         fail: function (res) {
           console.log("跳转我的订单失败" + res);

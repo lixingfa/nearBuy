@@ -440,7 +440,7 @@ App({
           takeOut: true,
           promulgator: "利利",//大家熟知的称呼，如发哥、二嫂
           promulgatorId: "lili",//
-          qrcode: "../../image/user/qrcode.png",
+          qrcode: "../../../image/user/qrcode.png",
           distance: "498米",//点击可以看发布者填写的地址
           latitude: 23.26090,//经度
           longitude: 113.8108,//维度
@@ -482,7 +482,7 @@ App({
           takeOut: true,
           promulgator: "小青",
           promulgatorId: "xiaoqing",
-          qrcode: "../../image/user/qrcode.png",
+          qrcode: "../../../image/user/qrcode.png",
           distance: "123米",
           latitude: 23.26091,
           longitude: 113.8108,
@@ -503,7 +503,7 @@ App({
           takeOut: false,
           promulgator: "张二嫂",
           promulgatorId: "zhangersao",
-          qrcode: "../../image/user/qrcode.png",
+          qrcode: "../../../image/user/qrcode.png",
           distance: "475米",
           latitude: 23.26092,
           longitude: 113.8107,
@@ -531,7 +531,7 @@ App({
           takeOut: false,
           promulgator: "招牌鱼头粉",
           promulgatorId: "yutoufen",//雇佣关系的店最好用非个人微信
-          qrcode: "../../image/user/qrcode.png",
+          qrcode: "../../../image/user/qrcode.png",
           distance: "243米",
           indate: "0000-00-00 18:30",
           chooseTime: false,//不允许在线下单，就不允许选择时间了，没有支付就没有约束
@@ -556,7 +556,7 @@ App({
           lineOrder: true,
           promulgator: "顺风车-程",
           promulgatorId: "shunfengcar",
-          qrcode: "../../image/user/qrcode.png",
+          qrcode: "../../../image/user/qrcode.png",
           distance: "361米",
           indate: "0000-00-00 18:30",//有效期，过了之后就会看不到，0000-00-00表示每天循环，如当天不提供服务，则需手动下架。系统自动判断节假日有点麻烦
           chooseTime: false,//上下班类顺风车不允许选择时间
@@ -575,7 +575,7 @@ App({
           takeOut:false,
           promulgator: "顺风车-程",
           promulgatorId: "shunfengcar",
-          qrcode:"../../image/user/qrcode.png",
+          qrcode:"../../../image/user/qrcode.png",
           distance: "361米",
           indate: "0000-00-00 18:30",
           chooseTime:false,
