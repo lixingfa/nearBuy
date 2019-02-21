@@ -1,19 +1,24 @@
-
-
 <view class="body">
-     <view class="item itemjd" data-poid="{{p.oid}}" bindtap="toDetail" wx:for="{{myOrder}}" wx:key="oid" wx:for-item="p">
-      <view class="img">
-        <image src="{{p.imgUrl}} " mode="aspectFit " />
+     <view class="item" data-poid="{{p.id}}" bindtap="toDetail" wx:for="{{myOrder}}" wx:key="id" wx:for-item="p">
+      <view class='title'>
+        <text>订单编号：{{p.id}} </text>
+        <text>总金额：￥{{p.totalPrice}}</text>
+        <view>下单时间：{{p.date}}</view>
       </view>
-      <view class="con">
-        <view class="nm">{{p.name}}</view>
-        <view class="sub">￥
-          <text>{{p.totalPrice}}</text>
+      <view class="pro" wx:for="{{p.plist}}" wx:for-item="g" wx:key="id">
+        <view class="info">
+        <!--<image src="{{p.img}}" class="pimg"></image>-->
+        <text class="pname">{{g.title}}</text>
+        <text class="pdeliveryTime">{{g.deliveryDate}} {{g.deliveryTime}}
+        </text>
+        <text class="chooseTime" wx:if="{{g.deliveryTime !=null && g.takeOut}}">配送</text>
+        <text class="chooseTime lineOrder" wx:if="{{g.deliveryTime != null && g.lineOrder && !g.takeOut}}">取货</text>
+        <text class="pprice">{{g.price}} x {{g.num}}</text>
+        <text class="ptprice">{{g.price*g.num}}</text>
         </view>
-        <view class="des">{{p.date}}</view>
+        <view class="remarks">{{p.user.addr}} {{p.user.phone}}</view>
+        <view class="remarks" wx:if="{{g.remarks != null}}">留言：{{g.remarks}}</view>
       </view>
-      <view class="iconpadding">
-        >>
-      </view>
+
     </view>
 </view>

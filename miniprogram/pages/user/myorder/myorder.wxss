@@ -1,10 +1,16 @@
-/* pages/user/myorder/myorder.wxss */
-.body{margin: 10px 0; background-color: #eee; box-shadow:  5px 0 #ccc; font-family: 'microsoft yahei',Verdana,Arial,Helvetica,sans-serif; }
-.item{display: flex; padding: 10px 0; background-color: #fff;  margin-bottom:5px;}
-.item .img{width:300rpx; text-align: center;}
-.itemjd .img image{width: 250rpx;height: 150rpx;}
-.itemjz .img image{width:100%;height:200rpx;}
-.item .con{flex: 1; padding: 0 10px 0 0;}
-.con .nm{font-size: 12pt; font-weight: bold;}
-.con .des{line-height: 20px; font-size: 12pt; padding: 5px 0;color: #666;}
-.iconpadding{padding:30px 30px 0 0;}
+.body{padding:0 10px;}
+.item{font-size: 12px;background:#fafafa;margin-top:10px;padding:5px 0;}
+
+.title{border-bottom: 1px dashed  #bbb;}
+.title text{padding-right:10px;}
+
+.pro{border-bottom: 1px dashed #bbb;}
+.pro .info{display:flex;justify-content: center;align-items: center; height: 120rpx; }
+.pro .pimg{width: 150rpx;height: 120rpx;}
+.pro .pname{padding-right:5px;font-size:14px;width:170px;}
+.pro .pprice{width:70px;font-size:14px;}
+.pro .ptprice{width:70px;color: #ff6a00;font-size: 18px;flex:1}
+.pro .pdeliveryTime{width:70px;}
+.pro .lineOrder{color: #ff6a00;}
+.pro .chooseTime{width: 20px;}
+.pro .remarks{color:#888;}

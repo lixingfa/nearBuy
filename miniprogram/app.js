@@ -20,7 +20,8 @@ App({
     latitude: 23.26093,//经度，中铁，电脑上获取的坐标
     longitude: 113.8109,//维度
     address: null,//地址
-    phone:null
+    phone:null,
+    id:-1
   },
   user: {//用户信息，主要用于下单时显示
     key: "userkey",
@@ -182,7 +183,8 @@ App({
         _this.location.latitude = latitude;
         _this.location.longitude = longitude;
         _this.updataLocation();
-      }
+      },
+
     });
   },
   globalData: {
@@ -370,8 +372,12 @@ App({
         //地址放入缓存，补刀，否则地址都没更新，外面就已经放入缓存了
         wx.setStorageSync("location", _this.location);
       },
-      fail: function (res) {
-        console.log(res);
+      fail() {
+        wx.showModal({
+          showCancel: false,
+          title: '',
+          content: "获取你的位置失败，将无法准确展示您周边的信息。可以退出小程序，重新进入获取位置信息。"
+        })
       }
     });
   },
@@ -588,5 +594,21 @@ App({
       phone: '18664900467'
     }
   ],
-  myOrder:[]
+  myOrder:{
+    key: "order",
+    ref: "",
+    add: function (p) {//加入购物车
+        var dic = wx.getStorageSync(this.key) || {};
+        dic[p.id] = p;
+        wx.setStorageSync(this.key, dic);
+    },
+    getList: function () {//获取购物车中的商品列表
+      var list = [];
+      var dic = wx.getStorageSync(this.key);
+      for (var p in dic) {
+        list.push(dic[p]);
+      }
+      return list;
+    }
+  }
 });

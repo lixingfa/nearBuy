@@ -31,7 +31,7 @@ Page({
       var totalPrice = e && e.totalPrice ? e.totalPrice : 0;
       this.setData({ plist: base.cart.getList(), totalPrice: totalPrice, myAddress: base.myAddress});
       if (!this.data.addr || !this.data.phone){//为空表示没有地址（操作地址时，电话是必须的），可能需要选取地址
-        this.setData({ addr: base.location.address, phone: base.location.phone,longitude: base.location.longitude, latitude: base.location.latitude});
+        this.setData({ addr: base.location.address, phone: base.location.phone, longitude: base.location.longitude, latitude: base.location.latitude, selectedID:base.location.id});
       }
     },
     valid: function () {
@@ -72,10 +72,17 @@ Page({
             //user.city = userInfo.city //市
             //user.country = userInfo.country //国家
             //encryptedData openId//即微信号需要另外处理
+            _this.creatOrder();
           }
         });
-      }      
-      if (_this.data.selectedID == -1){//不是从列表里选的地址
+      }else{
+        _this.creatOrder();
+      }
+      
+    },
+    creatOrder:function(){
+      var _this = this;
+      if (_this.data.selectedID == -1) {//不是从列表里选的地址
         var addr = {};
         addr.addr = _this.data.addr;
         addr.phone = _this.data.phone;
@@ -85,18 +92,19 @@ Page({
         base.myAddress.push(addr);
       }
       var order = {};
+      order.id = Math.random() * 10000 + '';
       order.status = 0;//未支付
       order.user = base.user;
       order.user.addr = _this.data.addr;
-      order.user.phone = _this.data.addr;
+      order.user.phone = _this.data.phone;
       order.plist = _this.data.plist;
       order.totalPrice = _this.data.totalPrice;
       order.date = util.formatTime(new Date());
 
-      base.myOrder.push(order);
+      base.myOrder.add(order);
       base.cart.clear();
 
-      wx.switchTab({//redirectTo关闭当前页面，跳到新页面
+      wx.redirectTo({//关闭当前页面，跳到新页面
         url: "../user/myorder/myorder",
         fail: function (res) {
           console.log("跳转我的订单失败" + res);
