@@ -1,14 +1,13 @@
-page{padding: 5px;font-size: 16px;}
+view{padding: 0 5px;font-size: 16px;}
 .good-title{font-size: 20px;text-align: center;}
 .good-pic{text-align: center;}
-.good-pic image{width: 90%;}
 .good-inAWord{color: #555;}
 .good-price{color: #f00}
 .remark{width: 100%;height: 70px;border:1px solid #ccc;}
 
 
 
-.tool{position: fixed;left: 0;bottom: 0; padding: 20rpx 0; display: flex; width: 750rpx;border-top: 1rpx solid #ddd;box-shadow: 0 -1px 5px 0 #eee;background-color: #fff;z-index: 100 }
+.tool{padding: 20rpx 0; display: flex;}
 .tool .tbtn{height: 40px;line-height: 40px; text-align: center;border-radius: 3px;}
 .tool .add{background-color: #f0f0f0;border: 1rpx solid #ddd;flex:1;margin: 0 10rpx 0 20rpx; position: relative;}
 .cart-num{color:#f00;}
