@@ -525,8 +525,8 @@ App({
           pic: "../../image/goods/yutoufen.jpg",
           price: 20,
           unit: "份",
-          total: -1,//页面的处理应尽量简单
-          surplus: -1,
+          total: 0,//页面的处理应尽量简单
+          surplus: 0,
           lineOrder: false,
           takeOut: false,
           promulgator: "招牌鱼头粉",
@@ -581,7 +581,26 @@ App({
           chooseTime:false,
           workTimeStart:"",
           workTimeEnd:""
-        },
+        }, {
+          id: "9",
+          title: "亲子活动",
+          inAWord: "本周六上午九点在朱村文化广场举办‘美好生活’画画涂鸦亲子活动，欢迎各位家长携4-6岁的小朋友参加。本次活动由朱村街道办举办，增城蓝淋画室承办。",
+          pic: "../../image/goods/qinzi.jpg",
+          price: 0,
+          unit: "位",
+          total: 20,
+          surplus: 14,
+          lineOrder: true,
+          takeOut: false,
+          promulgator: "蓝淋画室",
+          promulgatorId: "lanling",
+          qrcode: "",
+          distance: "1361米",
+          indate: "0000-00-00 18:30",
+          chooseTime: false,
+          workTimeStart: "",
+          workTimeEnd: ""
+        }
       ]
     }
   ],

@@ -2,7 +2,7 @@ var base = getApp();
 Page({
     data: {
         userInfo: {},
-        jzb: "0.00",
+        jzb: "0",
         loaded: false,
         exp: 0,
         phone: "",

@@ -1,29 +1,57 @@
 <view class="u" wx:if="{{loaded}}" >
   <view class="logo" bindtap="changeimg">
-    <image src="{{headimg}}"></image>
+    <image src="{{base.user.avatarUrl}}"></image>
   </view>
   <view class="des">
-    <view class="uname">{{userInfo.nickName}}</view>
-    <view class="phone">{{phone}}</view>
+    <view class="uname">{{base.user.nickName}}</view>
+    <view class="phone">{{base.location.phone}}</view>
   </view>
 </view>
 <view class="ua">
   <view class="jzb tab">
     <view class="amount">
-      <text>{{jzb}}</text>元</view>
-    <view class="nm">极致币</view>
+      <text>{{jzb}}</text>个订单</view>
+    <view class="nm">待处理</view>
   </view>
   <view class="cpn tab">
     <view class="amount">
-      <text>2</text>张</view>
-    <view class="nm">优惠券</view>
+      <text>2</text>个商品</view>
+    <view class="nm">在售</view>
   </view>
   <view class="exp tab">
     <view class="amount">
-      <text>{{exp}}</text>分</view>
-    <view class="nm">经验</view>
+      <text>{{exp}}</text>元</view>
+    <view class="nm">累计收入</view>
   </view>
 </view>
+<!--卖方菜单-->
+<view class="ub">
+  <view class="item item-a" >
+    <view class="icon">
+    </view>
+    <view class="tit" >
+      <navigator url="../user/pendingOrder/pendingOrder" open-type="navigate" hover-class="navigator-hover">待处理订单</navigator>
+    </view>
+    <view class="con"></view>
+  </view>
+  <view class="item item-a">
+    <view class="icon">
+    </view>
+    <view class="tit" >
+      <navigator url="../user/myaddress/myaddress" open-type="navigate" hover-class="navigator-hover">新增商品</navigator>
+    </view>
+    <view class="con"></view>
+  </view>
+    <view class="item item-a">
+    <view class="icon">
+    </view>
+    <view class="tit" >
+      <navigator url="../user/mycoupons/mycoupons" open-type="navigate" hover-class="navigator-hover">商品管理</navigator>
+    </view>
+    <view class="con"></view>
+  </view>
+</view>
+<!--买方菜单和个人信息-->
 <view class="ub">
   <view class="item item-a" >
     <view class="icon">
@@ -37,7 +65,7 @@
     <view class="icon">
     </view>
     <view class="tit" >
-      <navigator url="../user/myaddress/myaddress" open-type="navigate" hover-class="navigator-hover">收货地址</navigator>
+      <navigator url="../user/userInfo/userInfo" open-type="navigate" hover-class="navigator-hover">个人信息</navigator>
     </view>
     <view class="con"></view>
   </view>
@@ -45,10 +73,13 @@
     <view class="icon">
     </view>
     <view class="tit" >
-      <navigator url="../user/mycoupons/mycoupons" open-type="navigate" hover-class="navigator-hover">我的优惠券</navigator>
+      <navigator url="../user/mycoupons/mycoupons" open-type="navigate" hover-class="navigator-hover">咨询投诉</navigator>
     </view>
     <view class="con"></view>
   </view>
+</view>
+<!---退出登录-->
+<view class="ub">
   <view class="item  ">
     <view class="icon">
     </view>
