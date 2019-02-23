@@ -11,6 +11,19 @@ function formatTime(date) {
   return [year, month, day].map(formatNumber).join('-') + ' ' + [hour, minute, second].map(formatNumber).join(':')
 }
 
+function getUUID(prefix){
+  var year = date.getFullYear();
+  var month = date.getMonth() + 1;
+  var day = date.getDate();
+
+  var hour = date.getHours();
+  var minute = date.getMinutes();
+  var second = date.getSeconds();
+  var milliseconds = getMilliseconds();
+  var random = Math.random() * 10000 % 1;
+  return prefix + year + month + day + hour + minute + second + milliseconds + random;
+}
+
 function formatNumber(n) {
   n = n.toString()
   return n[1] ? n : '0' + n

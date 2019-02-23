@@ -162,6 +162,11 @@ App({
     return p;
   },
   onLaunch: function () {
+    //云开发初始化
+    wx.cloud.init({
+      env: 'nearbuy-test',
+      traceUser: true
+    })
     //调用API从本地缓存中获取数据     
     var _this = this;
     //位置

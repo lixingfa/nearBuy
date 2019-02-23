@@ -71,8 +71,19 @@ Page({
             //user.province = userInfo.province //省
             //user.city = userInfo.city //市
             //user.country = userInfo.country //国家
-            //encryptedData openId//即微信号需要另外处理
-            _this.creatOrder();
+            //encryptedData openId//微信号需要另外处理，但这里使用云端直接获取
+            wx.cloud.callFunction({
+              // 云函数名称
+              name: 'login',
+              // 传给云函数的参数
+              data: {},
+              success(res) {
+                console.log(res.result.openid + " " + res.result.appid + " " + res.result.unionid);
+                base.user.openId = res.result.openid;
+                _this.creatOrder();
+              },
+              fail: console.error()
+            })
           }
         });
       }else{
