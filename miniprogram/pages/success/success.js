@@ -27,7 +27,7 @@ Page({
   go: function () {
     var _this = this;
     wx.navigateTo({
-      url: "../user/myorderdetals/myorderdetals?oid=" + _this.data.oid
+      url: "../user/myorder/myorder?oid=" + _this.data.oid
     })
 
   }

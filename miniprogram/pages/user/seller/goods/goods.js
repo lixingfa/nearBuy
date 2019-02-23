@@ -104,6 +104,27 @@ Page({
         //     that.setData({
         //         userInfo: userInfo
         //     })
-        // })
+        // })        
+        if (!base.user.islogin()) {
+            wx.redirectTo({
+                // url: '../login/login'
+                url: '../phone/phone'
+            });
+        }
+        else {
+            this.setData({
+                loaded: true,
+                jzb: base.user.jzb,
+                exp: base.user.exp,
+                phone: base.user.phone,
+                levels: base.user.levels,
+                headimg: base.user.headimg
+
+            });
+        }
+
+
+
+
     }
 });

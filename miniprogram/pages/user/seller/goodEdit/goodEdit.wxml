@@ -1,0 +1,35 @@
+<view>
+  <view>商品名称：<input/></view>
+  <view>商品简介：<textarea></textarea></view>
+  <view>商品图片：</view>
+  <view>价格：<input/></view><!--限制数字-->
+  <view>单位：<input/></view>
+  <view>商品总数：<input/></view><!--限制数字-->
+  <view>允许在线下单：<radio-group class="radio-group" bindchange="radioChange">
+  <label class="radio" wx:for="{{items}}">
+    <radio value="{{item.name}}" checked="{{item.checked}}" />
+    {{item.value}}
+  </label>
+</radio-group></view>
+<view>提供送货服务：<radio-group class="radio-group" bindchange="radioChange">
+  <label class="radio" wx:for="{{items}}">
+    <radio value="{{item.name}}" checked="{{item.checked}}" />
+    {{item.value}}
+  </label>
+</radio-group></view>
+<view>可以预约取货/送货时间：<radio-group class="radio-group" bindchange="radioChange">
+  <label class="radio" wx:for="{{items}}">
+    <radio value="{{item.name}}" checked="{{item.checked}}" />
+    {{item.value}}
+  </label>
+</radio-group></view>
+<view>取货/送货时间从</view>
+<view>到</view>
+<view>有效期至：</view>
+<view>商品：<radio-group class="radio-group" bindchange="radioChange"><!--有效、无效-->
+  <label class="radio" wx:for="{{items}}">
+    <radio value="{{item.name}}" checked="{{item.checked}}" />
+    {{item.value}}
+  </label>
+</radio-group></view>
+</view>

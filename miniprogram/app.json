@@ -9,11 +9,10 @@
     "pages/phone/phone",
     "pages/cart/cart",
     "pages/user/user",
-    "pages/login/login",
-    "pages/logs/logs",
     "pages/user/myorder/myorder",
-    "pages/user/pendingOrder/pendingOrder",
-    "pages/user/userInfo/userInfo"
+    "pages/user/userInfo/userInfo",
+    "pages/user/seller/pendingOrder/pendingOrder",
+    "pages/user/seller/goodEdit/goodEdit"
   ],
   "window": {
     "backgroundColor": "#F6F6F6",
@@ -35,12 +34,6 @@
         "text": "购物车",
         "iconPath": "icon/cart-1.png",
         "selectedIconPath": "icon/cart-2.png"
-      },
-      {
-        "pagePath": "pages/user/myorder/myorder",
-        "text": "我的订单",
-        "iconPath": "icon/my-1.png",
-        "selectedIconPath": "icon/my-2.png"
       },
       {
         "pagePath": "pages/user/user",

@@ -30,7 +30,7 @@
     <view class="icon">
     </view>
     <view class="tit" >
-      <navigator url="../user/pendingOrder/pendingOrder" open-type="navigate" hover-class="navigator-hover">待处理订单</navigator>
+      <navigator url="../user/seller/goods/goodEdit/goodEdit" open-type="navigate" hover-class="navigator-hover">新增商品</navigator>
     </view>
     <view class="con"></view>
   </view>
@@ -38,7 +38,7 @@
     <view class="icon">
     </view>
     <view class="tit" >
-      <navigator url="../user/seller/goodEdit/goodEdit" open-type="navigate" hover-class="navigator-hover">新增商品</navigator>
+      <navigator url="../user/myaddress/myaddress" open-type="navigate" hover-class="navigator-hover">新增商品</navigator>
     </view>
     <view class="con"></view>
   </view>
@@ -46,7 +46,7 @@
     <view class="icon">
     </view>
     <view class="tit" >
-      <navigator url="../user/seller/goods/goods" open-type="navigate" hover-class="navigator-hover">商品管理</navigator>
+      <navigator url="../user/mycoupons/mycoupons" open-type="navigate" hover-class="navigator-hover">商品管理</navigator>
     </view>
     <view class="con"></view>
   </view>
