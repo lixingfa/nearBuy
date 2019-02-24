@@ -3,15 +3,11 @@ view{padding: 0 5px;font-size: 16px;}
 .good-pic{text-align: center;}
 .good-inAWord{color: #555;}
 .good-price{color: #f00}
-.remark{width: 100%;height: 70px;border:1px solid #ccc;}
-
-
 
 .tool{padding: 20rpx 0; display: flex;}
 .tool .tbtn{height: 40px;line-height: 40px; text-align: center;border-radius: 3px;}
 .tool .add{background-color: #f0f0f0;border: 1rpx solid #ddd;flex:1;margin: 0 10rpx 0 20rpx; position: relative;}
 .cart-num{color:#f00;}
-
 
 /******************/
 .tab{margin-bottom: 10rpx;}

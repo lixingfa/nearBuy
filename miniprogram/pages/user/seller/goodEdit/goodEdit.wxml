@@ -1,35 +1,60 @@
 <view>
-  <view>商品名称：<input/></view>
-  <view>商品简介：<textarea></textarea></view>
-  <view>商品图片：</view>
-  <view>价格：<input/></view><!--限制数字-->
-  <view>单位：<input/></view>
-  <view>商品总数：<input/></view><!--限制数字-->
-  <view>允许在线下单：<radio-group class="radio-group" bindchange="radioChange">
-  <label class="radio" wx:for="{{items}}">
-    <radio value="{{item.name}}" checked="{{item.checked}}" />
-    {{item.value}}
-  </label>
-</radio-group></view>
-<view>提供送货服务：<radio-group class="radio-group" bindchange="radioChange">
-  <label class="radio" wx:for="{{items}}">
-    <radio value="{{item.name}}" checked="{{item.checked}}" />
-    {{item.value}}
-  </label>
-</radio-group></view>
-<view>可以预约取货/送货时间：<radio-group class="radio-group" bindchange="radioChange">
-  <label class="radio" wx:for="{{items}}">
-    <radio value="{{item.name}}" checked="{{item.checked}}" />
-    {{item.value}}
-  </label>
-</radio-group></view>
-<view>取货/送货时间从</view>
-<view>到</view>
-<view>有效期至：</view>
-<view>商品：<radio-group class="radio-group" bindchange="radioChange"><!--有效、无效-->
-  <label class="radio" wx:for="{{items}}">
-    <radio value="{{item.name}}" checked="{{item.checked}}" />
-    {{item.value}}
-  </label>
-</radio-group></view>
+  <view class='tab'>商品名称：<input/></view>
+  <view class='tab'>商品简介：<textarea></textarea></view>
+  <view class='tab'>商品图片：</view>
+  <view class='tab'>价格：<input/></view><!--限制数字-->
+  <view class='tab'>单位：<input/></view>
+  <view class='tab'>商品总数：<input/></view><!--限制数字-->
+  <view class='tab'>允许在线下单：
+    <radio-group class="radio-group" bindchange="radioChange" data-param="good.lineOrder">
+      <label class="radio" wx:for="{{items}}">
+        <radio value="{{item.value}}" checked="{{item.checked}}" />
+        {{item.name}}
+      </label>
+    </radio-group>
+</view>
+<view class='tab'>提供送货服务：
+  <radio-group class="radio-group" bindchange="radioChange" data-param="good.takeOut">
+    <label class="radio" wx:for="{{items}}">
+      <radio value="{{item.value}}" checked="{{item.checked}}" />
+      {{item.name}}
+    </label>
+  </radio-group>
+</view>
+<view class='tab'>可以预约取货/送货时间：
+  <radio-group class="radio-group" bindchange="radioChange" data-param="good.chooseTime">
+    <label class="radio" wx:for="{{items}}">
+      <radio value="{{item.value}}" checked="{{item.checked}}" />
+      {{item.name}}
+    </label>
+  </radio-group>
+</view>
+<view class="dt">从
+    <picker mode="selector" value="{{good.deliveryTime}}" range="{{good.arrTime}}" class="dt-item pos" bindchange="bindTimeChange">
+      {{good.arrTime[good.arrTimeIndex]}}
+    </picker>
+到
+  <picker mode="selector" value="{{good.deliveryTime}}" range="{{good.arrTime}}" class="dt-item pos" bindchange="bindTimeChange">
+      {{good.arrTime[good.arrTimeIndex]}}
+    </picker>
+</view>
+<view class='tab'>有效期至：
+    <picker mode="date" value="{{good.deliveryDate}}" class="dt-item pos" start="{{dateStart}}" end="{{dateEnd}}" bindchange="bindDateChange">
+      {{good.deliveryDate?good.deliveryDate:'选择日期'}}
+    </picker>
+    <picker mode="selector" value="{{good.deliveryTime}}" range="{{good.arrTime}}" class="dt-item pos" bindchange="bindTimeChange">
+      {{good.arrTime[good.arrTimeIndex]}}
+    </picker>
+  </view>
+<view class='tab'>商品有效：
+  <radio-group class="radio-group" value="{{good.status}}" bindchange="radioChange" data-param="good.status">
+    <label class="radio" wx:for="{{items}}">
+      <radio value="{{item.value}}" checked="{{item.checked}}" />
+      {{item.name}}
+    </label>
+  </radio-group>
+</view>
+<view class="tool">
+<view class="tbtn add" catchtap="goCart">添加商品</view>
+</view>
 </view>
