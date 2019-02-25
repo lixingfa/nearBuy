@@ -1,60 +1,63 @@
 <view>
-  <view class='tab'>商品名称：<input/></view>
-  <view class='tab'>商品简介：<textarea></textarea></view>
-  <view class='tab'>商品图片：</view>
-  <view class='tab'>价格：<input/></view><!--限制数字-->
-  <view class='tab'>单位：<input/></view>
-  <view class='tab'>商品总数：<input/></view><!--限制数字-->
+  <view class='tab'>商品名称：<input bindblur="input" bindinput="input" data-param="good.title"/></view>
+  <view class='tab'>商品简介：<textarea bindblur="input" bindinput="input" data-param="good.inAWord"></textarea></view>
+  <view class='tab'>商品图片：
+    <image src="{{good.pic}}" mode="scaleToFill"></image>
+    <button catchtap="chooseGoodPic">选择图片</button>
+  </view>
+  <view class='tab'>价格：<input bindblur="input" bindinput="input" data-param="good.price"/></view><!--限制数字-->
+  <view class='tab'>单位：<input bindblur="input" bindinput="input" data-param="good.unit"/></view>
+  <view class='tab'>商品总数：<input bindblur="input" bindinput="input" data-param="good.total"/></view><!--限制数字-->
   <view class='tab'>允许在线下单：
-    <radio-group class="radio-group" bindchange="radioChange" data-param="good.lineOrder">
-      <label class="radio" wx:for="{{items}}">
-        <radio value="{{item.value}}" checked="{{item.checked}}" />
+    <radio-group class="radio-group" bindchange="input" data-param="good.lineOrder">
+      <label class="radio" wx:for="{{items}}" wx:key="value">
+        <radio value="{{item.value}}" checked="{{good.lineOrder == item.value}}" />
         {{item.name}}
       </label>
     </radio-group>
 </view>
 <view class='tab'>提供送货服务：
-  <radio-group class="radio-group" bindchange="radioChange" data-param="good.takeOut">
-    <label class="radio" wx:for="{{items}}">
-      <radio value="{{item.value}}" checked="{{item.checked}}" />
+  <radio-group class="radio-group" bindchange="input" data-param="good.takeOut">
+    <label class="radio" wx:for="{{items}}" wx:key="value">
+      <radio value="{{item.value}}" checked="{{good.takeOut == item.value}}" />
       {{item.name}}
     </label>
   </radio-group>
 </view>
 <view class='tab'>可以预约取货/送货时间：
-  <radio-group class="radio-group" bindchange="radioChange" data-param="good.chooseTime">
-    <label class="radio" wx:for="{{items}}">
-      <radio value="{{item.value}}" checked="{{item.checked}}" />
+  <radio-group class="radio-group" bindchange="input" data-param="good.chooseTime">
+    <label class="radio" wx:for="{{items}}" wx:key="value">
+      <radio value="{{item.value}}" checked="{{good.chooseTime == item.value}}" />
       {{item.name}}
     </label>
   </radio-group>
 </view>
 <view class="dt">从
-    <picker mode="selector" value="{{good.deliveryTime}}" range="{{good.arrTime}}" class="dt-item pos" bindchange="bindTimeChange">
+    <picker mode="selector" value="{{good.workTimeStart}}" range="{{good.arrTime}}" class="dt-item pos" bindchange="input" data-param="good.workTimeStart">
       {{good.arrTime[good.arrTimeIndex]}}
     </picker>
 到
-  <picker mode="selector" value="{{good.deliveryTime}}" range="{{good.arrTime}}" class="dt-item pos" bindchange="bindTimeChange">
+  <picker mode="selector" value="{{good.workTimeEnd}}" range="{{good.arrTime}}" class="dt-item pos" bindchange="input" data-param="good.workTimeEnd">
       {{good.arrTime[good.arrTimeIndex]}}
     </picker>
 </view>
 <view class='tab'>有效期至：
-    <picker mode="date" value="{{good.deliveryDate}}" class="dt-item pos" start="{{dateStart}}" end="{{dateEnd}}" bindchange="bindDateChange">
+    <picker mode="date" value="{{good.indate}}" class="dt-item pos" start="{{dateStart}}" end="{{dateEnd}}" bindchange="input" data-param="good.indate">
       {{good.deliveryDate?good.deliveryDate:'选择日期'}}
     </picker>
-    <picker mode="selector" value="{{good.deliveryTime}}" range="{{good.arrTime}}" class="dt-item pos" bindchange="bindTimeChange">
+    <picker mode="selector" value="{{good.validTime}}" range="{{good.arrTime}}" class="dt-item pos" bindchange="input" data-param="good.validTime">
       {{good.arrTime[good.arrTimeIndex]}}
     </picker>
   </view>
 <view class='tab'>商品有效：
-  <radio-group class="radio-group" value="{{good.status}}" bindchange="radioChange" data-param="good.status">
-    <label class="radio" wx:for="{{items}}">
-      <radio value="{{item.value}}" checked="{{item.checked}}" />
+  <radio-group class="radio-group" bindchange="input" data-param="good.status">
+    <label class="radio" wx:for="{{items}}" wx:key="value">
+      <radio value="{{item.value}}" checked="{{good.status == item.value}}" />
       {{item.name}}
     </label>
   </radio-group>
 </view>
 <view class="tool">
-<view class="tbtn add" catchtap="goCart">添加商品</view>
+<view class="tbtn add" catchtap="addGood">添加商品</view>
 </view>
 </view>

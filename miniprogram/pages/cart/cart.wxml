@@ -5,11 +5,11 @@
 </view>
 
 <view class="pro" animation="{{p._ani}}" wx:if="{{!p.del}}" wx:for="{{plist}}" wx:for-item="p" wx:key="id"><!--animation动画相关的属性-->
-  <view class="pro-con" animation="{{p.ani}}" bindtouchstart="ptouchsatrt" data-index="{{p.index}}" bindtouchend="ptouchend" data-id="{{p.id}}" catchtap="goDetail"><!--bindtouchs触控事件-->
+  <view class="pro-con" animation="{{p.ani}}" bindtouchstart="ptouchsatrt" data-index="{{p.index}}" bindtouchend="ptouchend" data-id="{{p.id}}" ><!--bindtouchs触控事件-->
     <view class="pimg" data-index="{{p.index}}" data-name="{{p.title}}" data-brand="{{p.brand}}" catchtap="previewImg" >
       <image src="{{p.pic}}" mode="aspectFill"></image>
     </view>
-    <view class="pname">
+    <view class="pname" catchtap="goDetail">
       <view class="name">{{p.title}}-{{p.promulgator}}</view>
       <!--<text class="des">{{p.inAWord}}</text>-->
     </view>

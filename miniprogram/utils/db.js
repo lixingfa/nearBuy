@@ -13,6 +13,9 @@ function where(table,where){
         // res.data 是包含以上定义的两条记录的数组
         console.log(res.data);
         return res.data;
+      },
+      fail(res) {
+        console.log(res);
       }
     })
 }
@@ -27,6 +30,9 @@ function add(table,data){
       // res 是一个对象，其中有 _id 字段标记刚创建的记录的 id
       console.log(res);
       return res._id;
+    },
+    fail(res){
+      console.log(res);
     }
   })
 }
@@ -39,6 +45,9 @@ function update(table,id,data){
     data: data,
     success(res) {
       console.log(res.data);
+    },
+    fail(res) {
+      console.log(res);
     }
   })
 }
