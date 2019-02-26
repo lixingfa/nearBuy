@@ -3,9 +3,8 @@ var util = require('../../../../utils/util.js');
 var base = getApp();
 Page({
     data: {
-      id:0,
       good:null,
-      items: [{ name: '是', value: true }, { name: '否', value: false}]
+      items: [{ name: '是', value: 'true' }, { name: '否', value: 'false'}]//数据变更函数取值是字符串，需要对应
     },
     onLoad: function (e) {
         var id = e && e.id ? e.id : 0;
@@ -14,14 +13,14 @@ Page({
           good.title = '';//已经有的属性才可以setData局部改变
           good.inAWord = '';
           good.unit = '';
-          good.chooseTime = false;
+          good.chooseTime = 'false';
           good.arrTime = ['选择时间', '6:00', '7:00', '8:00', '9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00'];
           good.arrTimeStartIndex = '0';
           good.arrTimeEndIndex = '0';
           good.validTimeIndex = '0';
-          good.lineOrder = true;
-          good.takeOut = true;
-          good.status = true;//商品有效
+          good.lineOrder = 'true';
+          good.takeOut = 'true';
+          good.status = 'true';//商品有效
           var time = util.formatTime(new Date());//返回当前日期和时间，使日期默认显示在今天
           //初始化数值
           this.setData({id: id, good: good});
@@ -53,7 +52,7 @@ Page({
             success: res => {
               // 返回文件 ID
               var fileID = res.fileID;
-              _this.setData({ "good.fileID": fileID, "good.pic": tempFilePath, "good.id": id });
+              _this.setData({ "good.fileID": fileID, "good.pic": tempFilePath, "good.id": id});
             },
             fail: console.error
           });
@@ -108,16 +107,19 @@ Page({
       "good.promulgator": base.user.nickName,
       "good.promulgatorId": base.user.openId,
       "good.latitude": base.location.latitude,
-      "good.longitude": base.location.longitude
+      "good.longitude": base.location.longitude,
+      "good.surplus":this.data.good.total
       });
-    var _id = db.add('goods',this.data.good);
+    db.add('goods', this.data.good, addGoodNext);
+
+  },
+  addGoodNext:function(_id){
     if(_id){
       wx.showModal({
         showCancel: false,
         title: '',
         content: "新增商品成功。"
       });
-      
     }
   }
 });

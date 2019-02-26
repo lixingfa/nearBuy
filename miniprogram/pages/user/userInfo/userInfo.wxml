@@ -1,32 +1,27 @@
 <view class="body">
-    <view wx:if="{{myOrder.length==0}}" class="null">暂无订单</view>
-     <view class="item" data-poid="{{p.id}}" wx:for="{{myOrder}}" wx:key="id" wx:for-item="p">
-      <view class='title'>
-        <text>订单编号：{{p.id}} </text>
-        <text>总金额：￥<text class="ptprice">{{p.totalPrice}}</text></text>
-        <view>下单时间：{{p.date}}</view>
-      </view>
-      <view class="pro" wx:for="{{p.plist}}" wx:for-item="g" wx:key="id">
-        <view class="info">
-        <!--<image src="{{p.user.avatarUrl}}" class="pimg"></image>-->
-        <text class="pname">{{g.title}} - {{g.promulgator}}</text>
-        <text class="pdeliveryTime">{{g.deliveryDate}} {{g.deliveryTime}}
-        </text>
-        <text class="chooseTime" wx:if="{{g.deliveryTime !=null && g.takeOut}}">配送</text>
-        <text class="chooseTime lineOrder" wx:if="{{g.deliveryTime != null && g.lineOrder && !g.takeOut}}">取货</text>
-        <text class="pprice">{{g.price}} x {{g.num}}</text>
-        <text class="ptprice">{{g.price*g.num}}</text>
-        <text class="pprice" wx:if="{{g.needPay}}" data-id="{{g.id}}" data-oid="{{p.id}}" data-qrcode="{{g.qrcode}}" data-promulgator="{{g.promulgator}}" data-price="{{g.price}}" data-num="{{g.num}}" catchtap="pay">点击付款</text>
-        </view>
-        <view class="remarks" wx:if="{{g.remarks != null}}">留言：{{g.remarks}}</view>
-        
-      </view>
-      <view>地址：{{p.user.addr}} {{p.user.phone}}</view>
-    </view>
-
-    <view class="addr_box" wx:if="{{qrcodeShow}}">
-      <image src="{{qrcode}}" class="pimg"></image>
-      <view>用微信扫一扫上面的二维码，给 {{promulgator}} 付款 {{price}}元。转账之前请认真核对信息。</view>
-      <view class='tool'><view class="tbtn add" catchtap="cancel">取消</view><view class="tbtn add" catchtap="hasPay">已付款</view></view>
-    </view>
+  <image src="{{user.avatarUrl}}" mode="scaleToFill"></image>
+  <view>{{user.nickName}}</view>
+  <button class="sub" open-type="getUserInfo" catchtap="getUserInfo">更新昵称和头像</button>
+  <view>{{user.phone}}</view>
+  <view>工作时间（会影响取货/送货时间的范围）：</view>
+  <view class="dt">从
+    <picker mode="selector" value="{{user.workTimeStart}}" range="{{arrTime}}" class="dt-item pos" bindchange="input" data-param="user.arrTimeStartIndex">
+      {{user.arrTime[user.arrTimeStartIndex]}}
+    </picker>
+  到
+    <picker mode="selector" value="{{user.workTimeEnd}}" range="{{arrTime}}" class="dt-item pos" bindchange="input" data-param="user.arrTimeEndIndex">
+        {{user.arrTime[user.arrTimeEndIndex]}}
+      </picker>
+  </view>
+  <view class='tab'>状态：
+    <radio-group class="radio-group" bindchange="input" data-param="user.status">
+      <label class="radio" wx:for="{{items}}" wx:key="value">
+        <radio value="{{item.value}}" checked="{{user.status == item.value}}" />
+        {{item.name}}
+      </label>
+    </radio-group>
+  </view>
+  <view class="tool">
+    <button class="sub" catchtap="submit">保存</button>
+  </view>
 </view>

@@ -16,12 +16,15 @@ function where(table,where){
       },
       fail(res) {
         console.log(res);
+      }, 
+      complete(res) {
+        return null;
       }
     })
 }
 
 //新增一条记录
-function add(table,data){
+function add(table,data,func){
   var _id = null;
   var db = wx.cloud.database();//默认环境的数据库引用
   db.collection(table).add({
@@ -33,9 +36,11 @@ function add(table,data){
     },
     fail(res){
       console.log(res);
+    },
+    complete(res){
+      func(_id);
     }
   });
-  return _id;
 }
 
 //更新，整个对象更新，如果需更新子对象，需要用set，具体查看API
@@ -49,6 +54,9 @@ function update(table,id,data){
     },
     fail(res) {
       console.log(res);
+    },
+    complete(res) {
+      
     }
   })
 }

@@ -5,9 +5,9 @@
     <image src="{{good.pic}}" mode="scaleToFill"></image>
     <button catchtap="chooseGoodPic">选择图片</button>
   </view>
-  <view class='tab'>价格：<input bindblur="input" bindinput="input" data-param="good.price" placeholder="免费活动可以写0" maxlength='7'/></view><!--限制数字-->
+  <view class='tab'>价格：<input bindblur="input" bindinput="input" data-param="good.price" placeholder="免费活动可以写0" maxlength='7' type='digit'/></view>
   <view class='tab'>单位：<input bindblur="input" bindinput="input" data-param="good.unit" placeholder="如：斤、个、打、位……" maxlength='2'/></view>
-  <view class='tab'>商品总数：<input bindblur="input" bindinput="input" data-param="good.total"  placeholder="商品的总数" maxlength='5'/></view><!--限制数字-->
+  <view class='tab'>商品总数：<input bindblur="input" bindinput="input" data-param="good.total"  placeholder="商品的总数" maxlength='5' type='number'/></view>
   <view class='tab'>允许在线下单：
     <radio-group class="radio-group" bindchange="input" data-param="good.lineOrder">
       <label class="radio" wx:for="{{items}}" wx:key="value">
@@ -24,7 +24,9 @@
     </label>
   </radio-group>
 </view>
-<view class='tab'>可以预约取货/送货时间：
+<view class='tab'>可以预约
+  <text wx:if="{{good.takeOut ！= 'true' && good.lineOrder == 'true'}}">取货</text>
+  <text wx:if="{{good.takeOut == 'true'}}">送货</text>时间：
   <radio-group class="radio-group" bindchange="input" data-param="good.chooseTime">
     <label class="radio" wx:for="{{items}}" wx:key="value">
       <radio value="{{item.value}}" checked="{{good.chooseTime == item.value}}" />
@@ -32,7 +34,7 @@
     </label>
   </radio-group>
 </view>
-<view class="dt">从
+<view class="dt" wx:if="{{good.chooseTime == 'true'}}">从
     <picker mode="selector" value="{{good.workTimeStart}}" range="{{good.arrTime}}" class="dt-item pos" bindchange="input" data-param="good.arrTimeStartIndex">
       {{good.arrTime[good.arrTimeStartIndex]}}
     </picker>
