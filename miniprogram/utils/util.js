@@ -8,7 +8,6 @@ function formatTime(date) {
   var minute = date.getMinutes()
   var second = date.getSeconds()
 
-
   return [year, month, day].map(formatNumber).join('-') + ' ' + [hour, minute, second].map(formatNumber).join(':')
 }
 
@@ -26,7 +25,7 @@ function getUUID(prefix){
   var random = parseInt(Math.random() * 10000);
   return prefix + year + month + day + hour + minute + second + milliseconds + random;
 }
-
+//获取日期格式的路径
 function getDatePath() {
   var date = new Date();
   var year = date.getFullYear();

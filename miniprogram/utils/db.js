@@ -22,19 +22,20 @@ function where(table,where){
 
 //新增一条记录
 function add(table,data){
+  var _id = null;
   var db = wx.cloud.database();//默认环境的数据库引用
   db.collection(table).add({
     // data 字段表示需新增的 JSON 数据
     data: data,
     success(res) {
       // res 是一个对象，其中有 _id 字段标记刚创建的记录的 id
-      console.log(res);
-      return res._id;
+      _id = res._id;
     },
     fail(res){
       console.log(res);
     }
-  })
+  });
+  return _id;
 }
 
 //更新，整个对象更新，如果需更新子对象，需要用set，具体查看API

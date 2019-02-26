@@ -16,13 +16,15 @@ Page({
           good.unit = '';
           good.chooseTime = false;
           good.arrTime = ['选择时间', '6:00', '7:00', '8:00', '9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00'];
-          good.arrTimeIndex = 0;
+          good.arrTimeStartIndex = '0';
+          good.arrTimeEndIndex = '0';
+          good.validTimeIndex = '0';
           good.lineOrder = true;
           good.takeOut = true;
           good.status = true;//商品有效
           var time = util.formatTime(new Date());//返回当前日期和时间，使日期默认显示在今天
           //初始化数值
-          this.setData({id: id, good: good, dateStart: time});
+          this.setData({id: id, good: good});
         }else{
           var good = db.doc('goods',id);
           this.setData({good:good});
@@ -60,33 +62,48 @@ Page({
     },
   input:function(e){
     var param = e.currentTarget.dataset.param;
-    this.setData({ param: e.detail.value });
+    this.setData({[param]: e.detail.value });//变量key
   },
   valid: function () {
     var _this = this;
-    var err = "";
-    if (!_this.data.addr) {
+    if (!_this.data.good.title) {
       wx.showModal({
         showCancel: false,
         title: '',
-        content: "您还没完善收件地址，请点击顶部的选择按钮进行完善。"
+        content: "您还没填写商品标题。。"
       })
       return false;
     }
-    if (!_this.data.phone) {
+    if (!_this.data.good.fileID) {
       wx.showModal({
         showCancel: false,
         title: '',
-        content: "请填写您的联系电话。"
+        content: "请上传一张商品图片。"
+      })
+      return false;
+    }
+    if (!_this.data.good.price) {
+      wx.showModal({
+        showCancel: false,
+        title: '',
+        content: "请填写商品价格。"
+      })
+      return false;
+    }
+    if (!_this.data.good.total) {
+      wx.showModal({
+        showCancel: false,
+        title: '',
+        content: "请填写商品总数。"
       })
       return false;
     }
     return true;
   },
   addGood:function(){
-    /*if (!this.valid()) {
+    if (!this.valid()) {
       return;
-    }*/
+    }
     this.setData({
       "good.promulgator": base.user.nickName,
       "good.promulgatorId": base.user.openId,
@@ -99,7 +116,8 @@ Page({
         showCancel: false,
         title: '',
         content: "新增商品成功。"
-      })
+      });
+      
     }
   }
 });
