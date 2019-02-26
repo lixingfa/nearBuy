@@ -2,7 +2,8 @@
   <image src="{{user.avatarUrl}}" mode="scaleToFill"></image>
   <view>{{user.nickName}}</view>
   <button class="sub" open-type="getUserInfo" catchtap="getUserInfo">更新昵称和头像</button>
-  <view>{{user.phone}}</view>
+  <view>电话：<input value='{{user.phone}}' bindblur="input" bindinput="input" data-param="user.phone"  placeholder="商品检索的范围" maxlength='6' type='number'/></view>
+  <view>展示范围：<input value='{{user.distan}}' bindblur="input" bindinput="input" data-param="user.distan"  placeholder="商品检索的范围" maxlength='6' type='number'/>米</view>
   <view>工作时间（会影响取货/送货时间的范围）：</view>
   <view class="dt">从
     <picker mode="selector" value="{{user.workTimeStart}}" range="{{arrTime}}" class="dt-item pos" bindchange="input" data-param="user.arrTimeStartIndex">
