@@ -28,7 +28,7 @@
   </radio-group>
 </view>
 <view class='tab'>可以预约
-  <text wx:if="{{good.takeOut ！= 'true' && good.lineOrder == 'true'}}">取货</text>
+  <text wx:if="{{good.takeOut != 'true' && good.lineOrder == 'true'}}">取货</text>
   <text wx:if="{{good.takeOut == 'true'}}">送货</text>时间：
   <radio-group class="radio-group" bindchange="input" data-param="good.chooseTime">
     <label class="radio" wx:for="{{items}}" wx:key="value">

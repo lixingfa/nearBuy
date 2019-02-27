@@ -11,11 +11,99 @@ App({
       return wx.getStorageSync(this.key);
     }
   },
-  path: {
-    res: "https://res.bestcake.com/",
-    //www: "https://mcstj.bestcake.com/"
-    www: "http://localhost:9419/"
+  xuexi: function () {
+    this.test()
+      .then(jj => {
+        //这里是将test方法中resolve返回值赋值给下一个方法,
+        //在这里可以对数据进行判断是否继续进行
+        return this.runAsync1(jj);
+      })
+      .then(hh => {
+        //这里是将runAsync1方法中resolve返回值赋值给下一个方法
+        return this.runAsync2(hh);
+      })
+      .then(mm => {
+        //这里是将runAsync2方法中resolve返回值赋值给下一个方法
+        this.runAsync3(mm);
+      })
   },
+  xuexi2: function () {
+    //只是等待上一个完成后就进行下一个不关心上一个的状态,没有数据的交互
+    /*this.test()
+      .then(this.runAsync1)
+     .then(this.runAsync2)
+     .then(this.runAsync3);*/
+    this.test()
+      .then(this.t2);
+  },
+  t2:function(d){
+    console.log(d);
+  },
+  test: function () {
+    var p = new Promise(function (resolve, reject) {
+      setTimeout(function () {
+        //注意:一旦你把promise的状态定义了哪他的状态就不会再改变.
+        //比如我这里先写的resolve下面又跟着写了reject,
+        //reject的代码会执行但是promise的状态是不会变的就是reject
+        resolve("调用成功");
+        reject("调用失败");
+      }, 5000);
+    })
+    return p;
+  },
+  runAsync1: function (jj) {
+    var p = new Promise(function (resolve, reject) {
+      //做一些异步操作
+      setTimeout(function () {
+        console.log(jj);
+        resolve("测试的数据1");
+      }, 3000);
+    });
+    return p;
+  },
+  runAsync2: function (hh) {
+    var p = new Promise(function (resolve, reject) {
+      //做一些异步操作
+      setTimeout(function () {
+        console.log(hh);
+        resolve('随便什么数据2');
+      }, 2000);
+    });
+    return p;
+  },
+  runAsync3: function (mm) {
+    var p = new Promise(function (resolve, reject) {
+      //做一些异步操作
+      setTimeout(function () {
+        console.log(mm);
+        resolve('随便什么数据6');
+      }, 2000);
+    });
+    return p;
+  },
+  doc: function () {
+    return new Promise(function (resolve) {
+      //做一些异步操作
+      setTimeout(function () {
+        console.log('执行完成');
+        resolve('随便什么数据');
+        //reject('reject');
+      }, 2000);
+    });
+  },
+
+
+  //缓存相关
+  getCache:function(key){
+    return wx.getStorageSync(key)||'';
+  },
+  setCache: function (key,obj) {
+    wx.setStorageSync(key, obj);
+  },
+  clear: function (key) {
+    wx.removeStorageSync(key);
+  },
+  
   location: {
     latitude: 23.26093,//经度，中铁，电脑上获取的坐标
     longitude: 113.8109,//维度
@@ -28,26 +116,6 @@ App({
     openId: '',//微信号
     nickName: null,//昵称
     avatarUrl: '',//头像地址
-    /*islogin: function (tp) {
-      var re = false;
-      if (this.openId != null) {
-        re = true;
-      } else {
-        wx.navigateTo({
-          url: '../phone/phone'
-        })
-      }
-      return re;
-    },
-    setCache: function (obj) {
-      wx.setStorageSync(this.key, obj);
-    },
-    getCache: function () {
-      return wx.getStorageSync(this.key);
-    },
-    clear: function () {
-      wx.removeStorageSync(this.key);
-    }*/
   },
   cart: {
     key: "cart",
@@ -161,14 +229,38 @@ App({
     }
     return p;
   },
+  t:function(){
+    this.doc()
+      .then(
+        new function (data) {//then的参数是一个函数，其参数就是doc里resolve放入的
+          //_this.setData({ user: user });
+          console.log(data);
+        }
+      );
+  },
   onLaunch: function () {
+    //this.t();
+    //this.xuexi();
+    this.xuexi2();
+    /*
     //云开发初始化
     wx.cloud.init({
       env: 'nearbuy-test',
       traceUser: true
-    })
+    });
     //调用API从本地缓存中获取数据     
     var _this = this;
+    //用户的openId
+    wx.cloud.callFunction({
+      name: 'login',// 云函数名称
+      data: {},// 传给云函数的参数
+      success(res) {
+        //console.log(res.result.openid + " " + res.result.appid + " " + res.result.unionid);
+        _this.user.openId = res.result.openid;
+        //_this.creatOrder();
+      },
+      fail: console.error()
+    });
     //位置
     var nowAddress = null;
     //每次打开都获取当前位置
@@ -190,7 +282,7 @@ App({
         _this.updataLocation();
       },
 
-    });
+    });*/
   },
   globalData: {
     userInfo: null

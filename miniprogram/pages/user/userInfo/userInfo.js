@@ -1,4 +1,4 @@
-var db = require('../../../../utils/db.js');
+var db = require('../../../utils/db.js');
 var base = getApp();
 Page({
   data: {
@@ -7,8 +7,47 @@ Page({
     user:null
   },
   onShow: function () {//加载过又不关闭的话，onLoad不会再执行
-    var user = db.doc(table, base.user.openId);
-    this.setData({user:user});
+  },
+  doc:function(){
+    return new Promise(function (resolve) {
+      //做一些异步操作
+      setTimeout(function () {
+        console.log('执行完成');
+        resolve('随便什么数据');
+        //reject('reject');
+      }, 2000);
+    });
+  },
+  onLoad:function(){
+    var _this = this;
+    this.doc('user', base.user.openId)
+      .then(
+        new function (data) {//then的参数是一个函数，其参数就是doc里resolve放入的
+        //_this.setData({ user: user });
+        console.log(data);
+      }
+    );
+
+/*
+    var user = base.getCache('user');
+    if(user == ''){
+      var table = wx.cloud.database().collection('user');
+      table.doc(base.user.openId).get({
+        success(res) {
+          // res.data 包含该记录的数据
+          console.log(res.data);
+        },
+        fail(res) {
+          console.log(res);
+        },
+        complete() {
+          user._id = base.user.openId;
+          this.setData({ user: user });
+        }
+      });
+    }else{
+      this.setData({user:user});
+    }*/
   },
   input: function (e) {
     var param = e.currentTarget.dataset.param;

@@ -1,8 +1,29 @@
 //查询一条记录
 function doc(table,id){
-  var db = wx.cloud.database();//默认环境的数据库引用
-  var table = db.collection(table);
-  return table.doc(id);
+  var p = new Promise(function (resolve, reject) {
+    //做一些异步操作
+    setTimeout(function () {
+      console.log('执行完成');
+      resolve('随便什么数据');
+      //reject('reject');
+    }, 2000);
+    /*
+    var _this = this;
+    var db = wx.cloud.database();//默认环境的数据库引用
+    var table = db.collection(table);
+    table.doc(id).get({
+      success(res) {
+        // res.data 包含该记录的数据
+        console.log(res.data);
+        _this.resolve(res.data); //引用的时候调用then方法，then接收一个参数，是函数，并且会拿到这里放入的参数
+      },
+      fail(res) {
+        console.log(res);
+        _this.reject(id);//then函数的第二个参数执行
+      }
+    });*/
+  });
+  return p;
 }
 //条件查询,where是一个JSON，每次最多取20，需要根据API重写
 function where(table,where){
