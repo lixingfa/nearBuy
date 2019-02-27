@@ -28,6 +28,7 @@ Page({
     user.status = '1';
     user.arrTimeStartIndex = '3';
     user.arrTimeEndIndex = '13';
+    user.distan = 3000;
     this.setData({ user: user,isNew:true });
   },
   input: function (e) {

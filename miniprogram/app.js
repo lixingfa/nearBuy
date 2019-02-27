@@ -153,6 +153,11 @@ App({
       traceUser: true
     });
     //调用API从本地缓存中获取数据     
+    var user = this.getCache('user');
+    if(user != ''){
+      this.distan = user.distan;
+    }
+
     var _this = this;
     //用户的openId
     wx.cloud.callFunction({

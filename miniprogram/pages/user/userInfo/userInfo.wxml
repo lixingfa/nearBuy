@@ -1,9 +1,9 @@
 <view class="body">
   <image src="{{user.avatarUrl}}" mode="scaleToFill"></image>
   <view>{{user.nickName}}</view>
-  <button class="sub" open-type="getUserInfo" catchtap="getUserInfo">更新昵称和头像</button>
+  <button class="sub" open-type="getUserInfo" catchtap="getUserInfo">获取昵称和头像</button>
   <view>电话：<input value='{{user.phone}}' bindblur="input" bindinput="input" data-param="user.phone"  placeholder="您的联系电话" maxlength='15' type='number'/></view>
-  <view>信息搜索范围（米）：<input value='{{user.distan?user.distan:3000}}' bindblur="input" bindinput="input" data-param="user.distan"  placeholder="商品检索的范围" maxlength='6' type='number'/></view>
+  <view>信息搜索范围（米）：<input value='{{user.distan}}' bindblur="input" bindinput="input" data-param="user.distan"  placeholder="商品检索的范围" maxlength='6' type='number'/></view>
   <view>工作时间（会影响取货/送货时间的范围）：</view>
   <view class="dt">从
     <picker mode="selector" value="{{user.workTimeStart}}" range="{{arrTime}}" class="dt-item pos" bindchange="input" data-param="user.arrTimeStartIndex">
