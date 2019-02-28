@@ -22,6 +22,7 @@ Page({
           good.lineOrder = 'true';
           good.takeOut = 'true';
           good.status = 'true';//商品有效
+          good.editTotal = true;
           var time = util.formatTime(new Date());//返回当前日期和时间，使日期默认显示在今天
           //初始化数值
           this.setData({good: good});
@@ -29,6 +30,7 @@ Page({
           user.getThisUser(base.openId,this.getUser);
         }else{
           var good = db.doc('goods',id);
+          good.editTotal = false;
           this.setData({good:good});
         }
     },
@@ -129,7 +131,7 @@ Page({
       "good.longitude": base.location.longitude,
       "good.surplus":this.data.good.total
       });
-    db.add('goods', this.data.good).then(addGoodNext, addGoodNext);
+    db.add('goods', this.data.good).then(this.addGoodNext, this.addGoodNext);
 
   },
   addGoodNext:function(_id){

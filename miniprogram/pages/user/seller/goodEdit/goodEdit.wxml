@@ -8,8 +8,8 @@
   <view class='tab'>价格：<input value='{{good.price}}' bindblur="input" bindinput="input" data-param="good.price" placeholder="免费活动可以写0" maxlength='7' type='digit'/></view>
   <view class='tab'>单位：<input value='{{good.unit}}' bindblur="input" bindinput="input" data-param="good.unit" placeholder="如：斤、个、打、位……" maxlength='2'/></view>
   <view class='tab'>商品总数：
-    <input value='{{good.total}}' bindblur="input" bindinput="input" data-param="good.total"  placeholder="商品的总数" maxlength='5' type='number' wx:if="{{!good.id}}"/>
-    <text wx:if="{{good.id}}">{{good.total}}</text>
+    <input value='{{good.total}}' bindblur="input" bindinput="input" data-param="good.total"  placeholder="商品的总数" maxlength='5' type='number' wx:if="{{good.editTotal}}"/>
+    <text wx:if="{{!good.editTotal}}">{{good.total}}</text>
   </view>
   <view class='tab'>允许在线下单：
     <radio-group class="radio-group" bindchange="input" data-param="good.lineOrder">
