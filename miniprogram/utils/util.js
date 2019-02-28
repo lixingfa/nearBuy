@@ -34,6 +34,11 @@ function getDatePath() {
   return [year, month, day].map(formatNumber).join('/');
 }
 
+function formatNumber(n) {
+  n = n.toString()
+  return n[1] ? n : '0' + n
+}
+
 //获取GPS坐标
 function getGPS(){
   return new Promise(function (resolve, reject) {
@@ -45,6 +50,11 @@ function getGPS(){
       },
       fail(res) {
         console.log(res);
+        wx.showModal({
+          showCancel: false,
+          title: '',
+          content: "获取当前位置失败，将无法展示周边信息，请退出小程序后重新进入，并同意获取位置信息。"
+        });
         reject(false);
       }
     });

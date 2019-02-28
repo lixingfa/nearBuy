@@ -75,20 +75,21 @@ function add(table,data){
 
 //更新，整个对象更新，如果需更新子对象，需要用set，具体查看API
 function update(table,id,data){
-  var db = wx.cloud.database();
-  db.collection(table).doc(id).update({
-    // data 传入需要局部更新的数据
-    data: data,
-    success(res) {
-      console.log(res.data);
-    },
-    fail(res) {
-      console.log(res);
-    },
-    complete(res) {
-      
-    }
-  })
+  return new Promise(function (resolve, reject) {
+    var db = wx.cloud.database();
+    db.collection(table).doc(id).update({
+      // data 传入需要局部更新的数据
+      data: data,
+      success(res) {
+        resolve(res);
+        base.clear(table + id);//删掉缓存，重新获取
+      },
+      fail(res) {
+        console.log(res);
+        reject(false);
+      }
+    });
+  });
 }
 //不提供删除，一切数据都逻辑删，为后面积累数据和找回。提供历史商品、历史订单的功能
   //function remove()

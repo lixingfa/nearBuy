@@ -24,9 +24,9 @@ Page({
           good.status = 'true';//商品有效
           var time = util.formatTime(new Date());//返回当前日期和时间，使日期默认显示在今天
           //初始化数值
-          this.setData({id: id, good: good});
+          this.setData({good: good});
           //获取用户
-          user.getThisUser(this.getUser);
+          user.getThisUser(base.openId,this.getUser);
         }else{
           var good = db.doc('goods',id);
           this.setData({good:good});
@@ -34,14 +34,17 @@ Page({
     },
     getUser:function(user){
       if(user){
-        this.setData({ "good.promulgator": user.nickName,});
+        this.setData({"good.promulgator": user.nickName,
+          "good.arrTimeStartIndex": user.arrTimeStartIndex,
+          "good.arrTimeEndIndex": user.arrTimeEndIndex
+        });
       }else{
         wx.showModal({
           title: '提示',
           content: '请先完善个人信息。',
           showCancel: false,
           success: function (res) {
-            wx.redirectTo('../userInfo/userInfo');
+            wx.redirectTo({url:'../../userInfo/userInfo'});
           }
         });
       }
@@ -121,7 +124,7 @@ Page({
       return;
     }
     this.setData({
-      "good.promulgatorId": base.user.openId,
+      "good.promulgatorId": base.openId,
       "good.latitude": base.location.latitude,
       "good.longitude": base.location.longitude,
       "good.surplus":this.data.good.total

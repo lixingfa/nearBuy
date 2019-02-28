@@ -9,7 +9,7 @@ Page({
     isNew:false
   },
   onLoad:function(){
-    user.getThisUser(this.setUser);
+    user.getThisUser(base.openId,this.setUser);
   },
   setUser:function(user){
     if(user){
@@ -17,10 +17,12 @@ Page({
       base.setCache('user',user);
     }else{
       var user = {};
-      user.id = base.user.openId;
+      user.id = base.openId;
       user.status = '1';
       user.arrTimeStartIndex = '3';
+      //user.workTimeStart = this.arrTime[3];
       user.arrTimeEndIndex = '13';
+      //user.workTimeEnd = this.arrTime[13];
       user.distan = 3000;
       this.setData({ user: user,isNew:true });
     }
@@ -28,11 +30,11 @@ Page({
   input: function (e) {
     var param = e.currentTarget.dataset.param;
     this.setData({ [param]: e.detail.value });//变量key
-    if(param == 'user.arrTimeStartIndex'){
-      this.setData({ 'user.workTimeStart': arrTime[e.detail.value] });
+    /*if(param == 'user.arrTimeStartIndex'){
+      this.setData({ 'user.workTimeStart': this.arrTime[e.detail.value] });
     } else if (param == 'user.arrTimeEndIndex'){
-      this.setData({ 'user.workTimeEnd': arrTime[e.detail.value] });
-    }
+      this.setData({ 'user.workTimeEnd': this.arrTime[e.detail.value] });
+    }*/
   },
   getUserInfo:function(){
     var _this = this;

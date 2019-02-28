@@ -3,6 +3,7 @@ var QQMapWX = require('/libs/qqmap-wx-jssdk.js');
 var qqmapsdk;
 var util = require('/utils/util.js');
 var user = require('/utils/user.js');
+var db = require('/utils/db.js');
 App({
   distan: 3000,//与默认地址距离多少米就认为是新的地址
   openId : '',
@@ -37,18 +38,19 @@ App({
       env: 'nearbuy-test',
       traceUser: true
     });
+    
     //获取openId、GPS坐标
     Promise.all([util.getGPS(), util.getOpenId()])
       .then(function (results) {
-        console.log(results);
         _this.location.latitude = results[0].latitude;
         _this.location.longitude = results[0].longitude;
         _this.openId = results[1];
-        user.getThisUser(function (user) {//再获取用户信息
+        user.getThisUser(results[1],function (user) {//再获取用户信息
           if(user){//老用户
             var where = {};
             where.userId = user.id;
-            db.where('address', where).then();
+            _this.distan = user.distan;//更新搜索范围
+            db.where('address', where).then(_this.updataLocation, _this.updataLocation);
           }else{//新用户
 
           }
@@ -168,22 +170,24 @@ App({
     return (r * 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(a / 2), 2) + Math.cos(rad1) * Math.cos(rad2) * Math.pow(Math.sin(b / 2), 2)))).toFixed(0)
   },
   //根据坐标，获取最接近，并且小于规定范围的已有地址
-  getAddressByGPS: function (latitude, longitude) {
+  getAddressByGPS: function (latitude, longitude, myAddress) {
     var min = 1000000;
     var addr = null;
-    for (var a in this.myAddress) {//地址可能为空
-      var la = this.myAddress[a].latitude - latitude;
-      var lo = this.myAddress[a].longitude - longitude;
-      la = Math.abs(la + lo);
-      if (la < min) {
-        min = la;
-        addr = this.myAddress[a];
+    if (myAddress){
+      for (var a in myAddress) {//地址可能为空
+        var la = myAddress[a].latitude - latitude;
+        var lo = myAddress[a].longitude - longitude;
+        la = Math.abs(la + lo);
+        if (la < min) {
+          min = la;
+          addr = myAddress[a];
+        }
       }
-    }
-    if (addr != null) {
-      var distance = this.getDistance(latitude, longitude, addr.latitude, addr.longitude);
-      if (addr != null && distance > this.distan) {
-        return null;//最近的地址也超出了业务范围
+      if (addr != null) {
+        var distance = this.getDistance(latitude, longitude, addr.latitude, addr.longitude);
+        if (addr != null && distance > this.distan) {
+          return null;//最近的地址也超出了业务范围
+        }
       }
     }
     return addr;
@@ -217,14 +221,14 @@ App({
     });
   },
   //更新位置信息
-  updataLocation: function () {
+  updataLocation: function (address) {
     var _this = this;
     var locationTEMP = wx.getStorageSync("location");
     if (locationTEMP != "") {//缓存了上次的地址坐标
       var distan = _this.getDistance(_this.location.latitude, _this.location.longitude, locationTEMP.latitude, locationTEMP.longitude);
       if (distan >= _this.distan) {//与上次的距离超过设定的距离
         //与已有地址进行比较
-        var nowAddress = _this.getAddressByGPS(_this.location.latitude, _this.location.longitude);
+        var nowAddress = _this.getAddressByGPS(_this.location.latitude, _this.location.longitude,address);
         if (nowAddress != null) {//与现有地址接近
           wx.showModal({
             title: '地址变更提示',
@@ -245,7 +249,7 @@ App({
         _this.location = locationTEMP;
       }
     } else {//没获取到缓存的地址
-      var nowAddress = _this.getAddressByGPS(_this.location.latitude, _this.location.longitude);
+      var nowAddress = _this.getAddressByGPS(_this.location.latitude, _this.location.longitude, address);
       if (nowAddress != null) {
         _this.location = nowAddress;//以距离当前最近的地址为准
       } else {//没有距离当前最近的地址
