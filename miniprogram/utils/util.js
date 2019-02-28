@@ -34,13 +34,44 @@ function getDatePath() {
   return [year, month, day].map(formatNumber).join('/');
 }
 
-function formatNumber(n) {
-  n = n.toString()
-  return n[1] ? n : '0' + n
+//获取GPS坐标
+function getGPS(){
+  return new Promise(function (resolve, reject) {
+    wx.getLocation({
+      type: 'wgs84',//wgs84 返回 gps 坐标，gcj02 返回可用于 wx.openLocation 的坐标
+      //altitude: 'true',//返回高度信息，需要较高精确度，会减慢接口返回速度
+      success(res) {
+        resolve(res);
+      },
+      fail(res) {
+        console.log(res);
+        reject(false);
+      }
+    });
+  });
+}
+
+//获取当前用户的唯一标识
+function getOpenId(){
+  return new Promise(function (resolve, reject) {
+    wx.cloud.callFunction({
+      name: 'login',// 云函数名称
+      data: {},// 传给云函数的参数
+      success(res) {
+        resolve(res.result.openid);
+      },
+      fail(res){
+        console.log(res);
+        reject(false);
+      }
+    });
+  });
 }
 
 module.exports = {
   formatTime: formatTime,
   getUUID: getUUID,
-  getDatePath: getDatePath
+  getDatePath: getDatePath,
+  getGPS: getGPS,
+  getOpenId: getOpenId
 }

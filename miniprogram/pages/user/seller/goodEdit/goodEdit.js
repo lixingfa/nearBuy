@@ -1,5 +1,6 @@
 var db = require('../../../../utils/db.js');
 var util = require('../../../../utils/util.js');
+var user = require('../../../../utils/user.js');
 var base = getApp();
 Page({
     data: {
@@ -24,10 +25,26 @@ Page({
           var time = util.formatTime(new Date());//返回当前日期和时间，使日期默认显示在今天
           //初始化数值
           this.setData({id: id, good: good});
+          //获取用户
+          user.getThisUser(this.getUser);
         }else{
           var good = db.doc('goods',id);
           this.setData({good:good});
         }
+    },
+    getUser:function(user){
+      if(user){
+        this.setData({ "good.promulgator": user.nickName,});
+      }else{
+        wx.showModal({
+          title: '提示',
+          content: '请先完善个人信息。',
+          showCancel: false,
+          success: function (res) {
+            wx.redirectTo('../userInfo/userInfo');
+          }
+        });
+      }
     },
     chooseGoodPic:function(){
       var _this = this;
@@ -104,13 +121,12 @@ Page({
       return;
     }
     this.setData({
-      "good.promulgator": base.user.nickName,
       "good.promulgatorId": base.user.openId,
       "good.latitude": base.location.latitude,
       "good.longitude": base.location.longitude,
       "good.surplus":this.data.good.total
       });
-    db.add('goods', this.data.good, addGoodNext);
+    db.add('goods', this.data.good).then(addGoodNext, addGoodNext);
 
   },
   addGoodNext:function(_id){

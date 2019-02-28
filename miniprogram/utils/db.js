@@ -1,3 +1,5 @@
+var base = getApp();
+
 //查询一条记录
 function doc(table,id){
   return new Promise(function (resolve, reject) {
@@ -7,6 +9,7 @@ function doc(table,id){
       success(res) {
         // res.data 包含该记录的数据
         resolve(res.data); //引用的时候调用then方法，then接收一个参数，是函数，并且会拿到这里放入的参数
+        base.setCache(table + id,res.data);
       },
       fail(res) {
         console.log(res);
@@ -22,11 +25,25 @@ function where(table,where){
     db.collection(table).where(where)
       .get({
         success(res) {
-          if(res.length > 0){
-            resolve(res.data);// res.data 是包含以上定义的两条记录的数组
-          }else{
-            reject(false);
-          }
+          resolve(res.data);// res.data 是包含以上定义的两条记录的数组
+        },
+        fail(res) {
+          console.log(res);
+          reject(false);
+        }
+      })
+
+  });
+}
+//只取一条数据
+function whereSingle(table, where) {
+  return new Promise(function (resolve, reject) {
+    var db = wx.cloud.database();//默认环境的数据库引用
+    db.collection(table).where(where)
+      .get({
+        success(res) {
+          resolve(res.data[0]);// res.data 是包含以上定义的两条记录的数组
+          base.setCache(table + res.data[0]._id, res.data[0]);
         },
         fail(res) {
           console.log(res);
@@ -46,6 +63,7 @@ function add(table,data){
       success(res) {
         // res 是一个对象，其中有 _id 字段标记刚创建的记录的 id
         resolve(res._id);
+        base.setCache(table + res._id, data);
       },
       fail(res){
         console.log(res);
@@ -79,7 +97,8 @@ module.exports = {
   doc: doc,
   where: where,
   add: add,
-  update: update
+  update: update,
+  whereSingle: whereSingle
 }
 /*Node应用由模块组成，采用CommonJS模块规范。
 根据这个规范，每个文件就是一个模块，有自己的作用域。在一个文件里面定义的变量、函数、类，都是私有的，对其他文件不可见。所以需要加上exports*/

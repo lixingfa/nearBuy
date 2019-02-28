@@ -1,4 +1,5 @@
 var db = require('../../../utils/db.js');
+var user = require('../../../utils/user.js');
 var base = getApp();
 Page({
   data: {
@@ -8,28 +9,21 @@ Page({
     isNew:false
   },
   onLoad:function(){
-    var user = base.getCache('user');
-    if(user == ''){
-      var where = {};
-      where.id = base.user.openId;//微信的openId就是本程序中的id
-      db.where('user', where)
-        .then(this.setUser, this.initUser);
-    }else{
-      this.setData({user:user});
-    }
+    user.getThisUser(this.setUser);
   },
   setUser:function(user){
-    this.setData({ user: user });
-    base.setCache('user',user);
-  },
-  initUser:function(){
-    var user = {};
-    user.id = base.user.openId;
-    user.status = '1';
-    user.arrTimeStartIndex = '3';
-    user.arrTimeEndIndex = '13';
-    user.distan = 3000;
-    this.setData({ user: user,isNew:true });
+    if(user){
+      this.setData({ user: user });
+      base.setCache('user',user);
+    }else{
+      var user = {};
+      user.id = base.user.openId;
+      user.status = '1';
+      user.arrTimeStartIndex = '3';
+      user.arrTimeEndIndex = '13';
+      user.distan = 3000;
+      this.setData({ user: user,isNew:true });
+    }
   },
   input: function (e) {
     var param = e.currentTarget.dataset.param;
