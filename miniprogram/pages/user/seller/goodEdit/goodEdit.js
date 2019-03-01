@@ -7,7 +7,8 @@ Page({
       good:null,
       hasAdd:false,
       arrTime: base.arrTime,
-      items: [{ name: '是', value: 'true' }, { name: '否', value: 'false'}]//数据变更函数取值是字符串，需要对应
+      items: [{ name: '是', value: 'true' }, { name: '否', value: 'false'}],//数据变更函数取值是字符串，需要对应
+      goodTypes:base.goodTypes
     },
     onLoad: function (e) {
         var id = e && e.id ? e.id : 0;
