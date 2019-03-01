@@ -4,9 +4,9 @@ var base = getApp();
 Page({
   data: {
     items: [{ name: '正常营业', value: '1' }, { name: '放假休息', value: '0' }],
-    arrTime:['选择时间', '6:00', '7:00', '8:00', '9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00'],
     user:null,
-    isNew:false
+    isNew:false,
+    arrTime: base.arrTime
   },
   onLoad:function(){
     user.getThisUser(base.openId,this.setUser);
@@ -19,10 +19,8 @@ Page({
       var user = {};
       user.id = base.openId;
       user.status = '1';
-      user.arrTimeStartIndex = '3';
-      //user.workTimeStart = this.arrTime[3];
-      user.arrTimeEndIndex = '13';
-      //user.workTimeEnd = this.arrTime[13];
+      user.workTimeStart = this.data.arrTime[3];
+      user.workTimeEnd = this.data.arrTime[13];
       user.distan = 3000;
       this.setData({ user: user,isNew:true });
     }
@@ -30,11 +28,11 @@ Page({
   input: function (e) {
     var param = e.currentTarget.dataset.param;
     this.setData({ [param]: e.detail.value });//变量key
-    /*if(param == 'user.arrTimeStartIndex'){
-      this.setData({ 'user.workTimeStart': this.arrTime[e.detail.value] });
-    } else if (param == 'user.arrTimeEndIndex'){
-      this.setData({ 'user.workTimeEnd': this.arrTime[e.detail.value] });
-    }*/
+    if(param == 'arrTimeStartIndex'){
+      this.setData({ 'user.workTimeStart': this.data.arrTime[e.detail.value] });
+    } else if (param == 'arrTimeEndIndex'){
+      this.setData({ 'user.workTimeEnd': this.data.arrTime[e.detail.value] });
+    }
   },
   getUserInfo:function(){
     var _this = this;

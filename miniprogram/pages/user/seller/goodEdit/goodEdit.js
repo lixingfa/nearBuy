@@ -5,6 +5,8 @@ var base = getApp();
 Page({
     data: {
       good:null,
+      hasAdd:false,
+      arrTime: base.arrTime,
       items: [{ name: '是', value: 'true' }, { name: '否', value: 'false'}]//数据变更函数取值是字符串，需要对应
     },
     onLoad: function (e) {
@@ -15,10 +17,9 @@ Page({
           good.inAWord = '';
           good.unit = '';
           good.chooseTime = 'false';
-          good.arrTime = ['选择时间', '6:00', '7:00', '8:00', '9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00'];
-          good.arrTimeStartIndex = '0';
-          good.arrTimeEndIndex = '0';
-          good.validTimeIndex = '0';
+          good.workTimeStart = '10:00';
+          good.workTimeEnd = '18:00';
+          good.validTime = '23:00';
           good.lineOrder = 'true';
           good.takeOut = 'true';
           good.status = 'true';//商品有效
@@ -37,8 +38,8 @@ Page({
     getUser:function(user){
       if(user){
         this.setData({"good.promulgator": user.nickName,
-          "good.arrTimeStartIndex": user.arrTimeStartIndex,
-          "good.arrTimeEndIndex": user.arrTimeEndIndex
+          'good.workTimeStart': user.workTimeStart,
+          'good.workTimeEnd': user.workTimeEnd
         });
       }else{
         wx.showModal({
@@ -84,6 +85,13 @@ Page({
   input:function(e){
     var param = e.currentTarget.dataset.param;
     this.setData({[param]: e.detail.value });//变量key
+    if (param == 'arrTimeStartIndex') {
+      this.setData({ 'good.workTimeStart': this.data.arrTime[e.detail.value] });
+    } else if (param == 'arrTimeEndIndex') {
+      this.setData({ 'good.workTimeEnd': this.data.arrTime[e.detail.value] });
+    } else if (param == 'validTimeIndex') {
+      this.setData({ 'good.validTime': this.data.arrTime[e.detail.value] });
+    }
   },
   valid: function () {
     var _this = this;
@@ -141,6 +149,7 @@ Page({
         title: '',
         content: "新增商品成功。"
       });
+      this.setData({ hasAdd:true});
     }
   }
 });

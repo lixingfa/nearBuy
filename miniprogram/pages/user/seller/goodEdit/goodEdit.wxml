@@ -38,22 +38,23 @@
   </radio-group>
 </view>
 <view class="dt" wx:if="{{good.chooseTime == 'true'}}">从
-    <picker mode="selector" value="{{good.workTimeStart}}" range="{{good.arrTime}}" class="dt-item pos" bindchange="input" data-param="good.arrTimeStartIndex">
-      {{good.arrTime[good.arrTimeStartIndex]}}
+    <picker mode="selector" value="{{good.workTimeStart}}" range="{{arrTime}}" class="dt-item pos" bindchange="input" data-param="arrTimeStartIndex">
+      {{good.workTimeStart}}
     </picker>
 到
-  <picker mode="selector" value="{{good.workTimeEnd}}" range="{{good.arrTime}}" class="dt-item pos" bindchange="input" data-param="good.arrTimeEndIndex">
-      {{good.arrTime[good.arrTimeEndIndex]}}
+  <picker mode="selector" value="{{good.workTimeEnd}}" range="{{arrTime}}" class="dt-item pos" bindchange="input" data-param="arrTimeEndIndex">
+      {{good.workTimeEnd}}
     </picker>
 </view>
 <view class='tab'>有效期至：
     <picker mode="date" value="{{good.indate}}" class="dt-item pos" start="{{dateStart}}" end="{{dateEnd}}" bindchange="input" data-param="good.indate">
       {{good.indate?good.indate:'选择日期'}}
     </picker>
-    <picker mode="selector" value="{{good.validTime}}" range="{{good.arrTime}}" class="dt-item pos" bindchange="input" data-param="good.validTimeIndex">
-      {{good.arrTime[good.validTimeIndex]}}
+    <picker mode="selector" value="{{good.validTime}}" range="{{arrTime}}" class="dt-item pos" bindchange="input" data-param="validTimeIndex">
+      {{good.validTime}}
     </picker>
   </view>
+  类型
 <view class='tab'>商品上架：
   <radio-group class="radio-group" bindchange="input" data-param="good.status">
     <label class="radio" wx:for="{{items}}" wx:key="value">
@@ -63,6 +64,10 @@
   </radio-group>
 </view>
 <view class="tool">
-<view class="tbtn add" catchtap="addGood">添加商品</view>
+  <view class="tbtn add" catchtap="addGood" wx:if="{{!hasAdd}}">添加商品</view>
+  <view class="tbtn add" wx:if="{{hasAdd}}">
+    <navigator url="../goods/goods" open-type="navigate" hover-class="navigator-hover">商品列表</navigator>
+  </view>
+  <view class="tbtn add" catchtap="onLoad" wx:if="{{hasAdd}}">继续添加</view>
 </view>
 </view>

@@ -22,8 +22,12 @@
   </view>
 </view>
 <view class="date tab">
-  <view class="tit">留言</view>
-  <textarea bindblur="bindTextAreaBlur" bindinput="bindTextAreaBlur" placeholder="您的留言信息" value="{{good.remarks}}" maxlength="200" class='remark'/>
+  <view class="tit">下单留言</view>
+  <textarea value='留言是否可见由卖家控制、是否公布卖家电话（下单后才拿到彼此号码）' bindblur="bindTextAreaBlur" bindinput="bindTextAreaBlur" placeholder="您的留言信息" value="{{good.remarks}}" maxlength="200" class='remark'/>
+</view>
+<view class="date tab">
+  <view class="tit">咨询：弹框列表</view>
+  <textarea value='留言是否可见由卖家控制、是否公布卖家电话' bindblur="bindTextAreaBlur" bindinput="bindTextAreaBlur" placeholder="您的留言信息" value="{{good.remarks}}" maxlength="200" class='remark'/>
 </view>
 
 <view class="tool">
