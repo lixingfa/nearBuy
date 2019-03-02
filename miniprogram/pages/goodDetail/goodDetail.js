@@ -6,14 +6,24 @@ Page({
         good:null,
         dateStart: "",
         dateEnd: "",
+        answerShow:true,
+        answers:null
     },
     onLoad: function (e) {
       var id = e && e.id ? e.id : 0;
-      good.getGood(id,this.initGood);
+      var _this = this;
+      good.getGood(id, this.initGood)
+      .then(function (id) { 
+        good.getGoodAnswers(id, 
+        function (answers) { 
+          _this.setData({ answers: answers})
+        })
+      });
     },
   initGood:function(good){
       if (good){//购物车里存在，则拿购物车的，可以简化很多操作
         this.setData({good:good});
+
       }else{//初始化
         good = base.getGoodById(id);
         var time = null;

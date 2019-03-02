@@ -20,3 +20,13 @@ view{padding: 0 5px;font-size: 16px;}
 
 .pos{position: relative;}
 .pos:after{content: " "; display:block;position: absolute; width: 0;height: 0;border-top:15rpx solid #576b95;border-left:10rpx solid transparent;border-right:10rpx solid transparent; left: 25rpx;top: 35rpx;}
+
+
+/*我的地址css*/
+.addr_box{height:350px;width:100%;background:#fff;position:fixed;bottom:0; z-index:10; }
+.addr_head{display: flex;border-bottom:1px solid #eee;height: 40px;background:#fff;}
+.addr_head_cancel{font-size: 14px;margin:15px 1px;}
+.addr_head_title{font-size: 18px;margin:15px auto;}
+.addr_body{display: flex;border-bottom:1px dashed #000;margin:10px;opacity: 0.9}
+.sub_type{font-size:16px;background:#ded;margin:0 5px;}
+.hiddenbox{height:100%;width:100%;position: fixed;background:#666;opacity: 0.5;z-index: 1;top:0;}

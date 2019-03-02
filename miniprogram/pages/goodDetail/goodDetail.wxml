@@ -21,20 +21,38 @@
     </picker>
   </view>
 </view>
-<view class="date tab">
+<view class="date tab" wx:if="{{good.lineOrder == 'true'}}">
   <view class="tit">下单留言</view>
   <textarea value='留言是否可见由卖家控制、是否公布卖家电话（下单后才拿到彼此号码）' bindblur="bindTextAreaBlur" bindinput="bindTextAreaBlur" placeholder="您的留言信息" value="{{good.remarks}}" maxlength="200" class='remark'/>
 </view>
-<view class="date tab">
-  <view class="tit">咨询：弹框列表</view>
-  <textarea value='留言是否可见由卖家控制、是否公布卖家电话' bindblur="bindTextAreaBlur" bindinput="bindTextAreaBlur" placeholder="您的留言信息" value="{{good.remarks}}" maxlength="200" class='remark'/>
-</view>
 
 <view class="tool">
-  <view wx:if="{{good.surplus > 0}}" class="tbtn add" catchtap="addCart">加入购物车(<text class="cart-num">{{good.num}}</text>)</view>
-  <view class="tbtn add" catchtap="goCart" wx:if="{{good.lineOrder}}">前往购物车</view>
-  <view class="gobuy" bindtap="goOrder"><navigator delta='1'
+  <view wx:if="{{good.surplus > 0 && good.lineOrder == 'true'}}" class="tbtn add" catchtap="addCart">加入购物车(<text class="cart-num">{{good.num}}</text>)</view>
+  <view class="tbtn add" catchtap="goCart" wx:if="{{good.lineOrder == 'true'}}">前往购物车</view>
+  <view class="tbtn add" wx:if="{{good.lineOrder == 'false'}}"><navigator delta='1'
       open-type="navigateBack" 
       hover-class="other-navigator-hover"
   >返回</navigator></view>
 </view>
+
+<!--咨询-->
+<view class="addr_box" wx:if="{{answerShow}}">
+  <view class="addr_head">
+    <view class="addr_head_title">咨询问答</view>
+    <view class="addr_head_cancel" bindtap="typeCancel">关闭</view>
+  </view>
+  <scroll-view scroll-y="true" scroll-top="{{scrollTop}}" style="height: 375px;">
+    <view class="date tab">
+      <textarea bindblur="bindTextAreaBlur" bindinput="bindTextAreaBlur" placeholder="您的咨询内容" value="{{good.remarks}}" maxlength="200" class='remark'/>
+      <button>提交</button>
+    </view>
+    <view class="addr_body" wx:for="{{answers}}" wx:key="id" wx:for-index="i" wx:for-item="a">
+      <view class="sub_type" wx:if="{{a.show || a.ownerId == base.openId}}">
+        {{a.creatTime}} {{a.quizzer}}：{{a.content}}
+        <text catchtap="select" data-id='{{a.id}}'>公开</text>
+      </view>
+    </view>
+  </scroll-view>
+</view>
+<!--遮罩层-->
+<view class="hiddenbox" wx:if="{{answerShow}}" bindtap="closeaddr"></view>

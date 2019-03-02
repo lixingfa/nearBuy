@@ -1,29 +1,39 @@
 var db = require('db.js');
 var util = require('util.js');
-
+var base = getApp();
 //获取最新添加的商品
 function getNewGoods(fn){
-  var formatTime = util.formatTime(new Date());
-  formatTime = formatTime.split(' ');
   var where = {};
-  where.indate = wx.cloud.database().command.gte(formatTime[0]);
-  where.validTime = wx.cloud.database().command.gte(formatTime[1]);
-
-  db.where('goods', where,'createTime','desc').then(fn);
+  where.validTimeTrue = wx.cloud.database().command.gte(util.formatTime(new Date()));
+  db.where('goods', where, 'createTime', 'desc').then(fn);
 }
 
+//获取单个商品信息
 function getGood(id,fn){
-  var good = wx.getStorageSync('goods' + id);
-  if (good == '') {
-    var where = {};
-    where.id = id;//微信的openId就是本程序中的id
-    db.whereSingle('goods', where).then(fn, fn);
-  } else {
-    fn(good);
-  }
+  return new Promise(function (resolve) {
+    var good = wx.getStorageSync('goods' + id);
+    if (good == '') {
+      var where = {};
+      where.id = id;
+      db.whereSingle('goods', where).then(fn, fn);
+    } else {
+      fn(good);
+    }
+    resolve(id);
+  });
+}
+
+//获取商品的问答信息
+function getGoodAnswers(goodId,fn){
+  var where = {};
+  var _ = wx.cloud.database().command;
+  //where = _.or([{ show: true }, { ownerId: base.openId}]);
+  where.goodId = goodId;
+  db.where('answers', where, 'createTime', 'desc').then(fn, fn);
 }
 
 module.exports = {
   getNewGoods: getNewGoods,
-  getGood: getGood
+  getGood: getGood,
+  getGoodAnswers: getGoodAnswers
 }

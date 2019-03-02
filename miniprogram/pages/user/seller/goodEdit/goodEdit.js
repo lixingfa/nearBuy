@@ -161,9 +161,9 @@ Page({
       "good.longitude": base.location.longitude,
       "good.surplus":this.data.good.total,
       "good.createTime": util.formatTime(new Date),
+      "good.validTimeTrue": this.data.good.indate + ' ' +this.data.good.validTime
       });
     db.add('goods', this.data.good).then(this.addGoodNext, this.addGoodNext);
-
   },
   addGoodNext:function(_id){
     if(_id){
