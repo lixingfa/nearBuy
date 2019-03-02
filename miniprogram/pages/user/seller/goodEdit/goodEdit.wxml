@@ -67,10 +67,11 @@
 <view class="tool">
   <view class="tbtn add" catchtap="addGood" wx:if="{{!hasAdd}}">添加商品</view>
   <view class="tbtn add" wx:if="{{hasAdd}}">
-    <navigator url="../goods" open-type="navigate" hover-class="navigator-hover">商品列表</navigator>
+    <navigator url="../goods/goods" open-type="navigate" hover-class="navigator-hover">商品列表</navigator>
   </view>
   <view class="tbtn add" catchtap="onLoad" wx:if="{{hasAdd}}">继续
-    <text wx:if="{{!good.id}}">添加</text><text wx:if="{{!good.id}}">修改</text></view>
+    <text wx:if="{{!eidt}}">添加</text>
+    <text wx:if="{{eidt}}">修改</text></view>
 </view>
 </view>
 

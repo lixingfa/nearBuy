@@ -1,17 +1,19 @@
 var util = require('../../utils/util.js');
+var good = require('../../utils/good.js');
 var base = getApp();
 Page({
     data: {
-        id: 0,
         good:null,
         dateStart: "",
         dateEnd: "",
     },
     onLoad: function (e) {
       var id = e && e.id ? e.id : 0;
-      var good = base.cart.getGood(id);
-      if (good != null){//购物车里存在，则拿购物车的，可以简化很多操作
-        this.setData({id:id,good:good});
+      good.getGood(id,this.initGood);
+    },
+  initGood:function(good){
+      if (good){//购物车里存在，则拿购物车的，可以简化很多操作
+        this.setData({good:good});
       }else{//初始化
         good = base.getGoodById(id);
         var time = null;
@@ -27,9 +29,9 @@ Page({
           }
         }
         //初始化数值
-        this.setData({ id: id, good: good, dateStart: time, "good.arrTime": arrTimeT,"good.arrTimeIndex":0,"good.num":0});
+        this.setData({good: good, dateStart: time, "good.arrTime": arrTimeT,"good.arrTimeIndex":0,"good.num":0});
       }
-    },
+  },
     onShow: function () {
     },
     addCart: function () {

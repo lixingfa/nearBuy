@@ -45,6 +45,7 @@
 	padding: 10rpx 10px;
   margin-bottom: 5px;
   background: #fff;
+  display:flex;
 }
 
 .good-inAWord{
@@ -52,8 +53,8 @@
 }
 
 .good-pic image{
-	width: 710rpx;
-	height: 560rpx;
+	width: 110rpx;
+	height: 110rpx;
 }
 
 .good-title{

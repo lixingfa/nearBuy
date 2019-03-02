@@ -9,9 +9,9 @@
                             {{good.promulgator}}发布，距您{{good.distance}}</view>
                         </view>
 
-<view class="date tab" wx:if="{{good.chooseTime}}">
-  <view class="tit" wx:if="{{good.takeOut}}">您希望的送货时间</view>
-  <view class="tit" wx:if="{{good.lineOrder && !good.takeOut}}">您预计的取货时间</view>
+<view class="date tab" wx:if="{{good.chooseTime == 'true'}}">
+  <view class="tit" wx:if="{{good.takeOut == 'true'}}">您希望的送货时间</view>
+  <view class="tit" wx:if="{{good.lineOrder == 'true' && good.takeOut != 'true'}}">您预计的取货时间</view>
   <view class="dt">
     <picker mode="date" value="{{good.deliveryDate}}" class="dt-item pos" start="{{dateStart}}" end="{{dateEnd}}" bindchange="bindDateChange">
       {{good.deliveryDate?good.deliveryDate:'选择日期'}}
@@ -31,11 +31,10 @@
 </view>
 
 <view class="tool">
-<view wx:if="{{good.surplus > 0}}" class="tbtn add" catchtap="addCart">加入购物车(<text class="cart-num">{{good.num}}</text>)</view>
-<view class="tbtn add" catchtap="goCart">前往购物车</view>
-    <!--<view wx:if="{{surplus == 0}}" class="tbtn add" catchtap="addCart">预订(<text class="cart-num">{{cartNum}}</text>)</view>增加复杂度
-<view class="gobuy" bindtap="goOrder"><navigator url="/pages/cart/cart"
-    open-type="switchTab"
-    hover-class="other-navigator-hover"
->前往购物车</navigator></view>-->
+  <view wx:if="{{good.surplus > 0}}" class="tbtn add" catchtap="addCart">加入购物车(<text class="cart-num">{{good.num}}</text>)</view>
+  <view class="tbtn add" catchtap="goCart" wx:if="{{good.lineOrder}}">前往购物车</view>
+  <view class="gobuy" bindtap="goOrder"><navigator delta='1'
+      open-type="navigateBack" 
+      hover-class="other-navigator-hover"
+  >返回</navigator></view>
 </view>

@@ -1,9 +1,10 @@
 //index.js
 //获取应用实例
 var base = getApp();
+var good = require('../../utils/good.js');
 Page({
   data: {
-    typeList:base.typeList
+    goods:[]
   },
   goDetail: function (e) {
     var id = e.currentTarget.dataset.id;
@@ -12,5 +13,13 @@ Page({
     })
   },
   onLoad: function () {
+    var _this = this;
+    good.getNewGoods(function(goods){
+      for(var i in goods){
+        var distance = base.getDistance(base.location.latitude, base.location.longitude, goods[i].latitude, goods[i].latilongitudetude);
+        goods[i].distance = distance;
+      }
+      _this.setData({goods:goods});
+    });
   }
 })

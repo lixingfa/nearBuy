@@ -19,20 +19,23 @@ function doc(table,id){
   });
 }
 //条件查询,where是一个JSON，每次最多取20，需要根据API重写
-function where(table,where){
+function where(table,where,orderBy,order){
   return new Promise(function (resolve, reject) {
     var db = wx.cloud.database();//默认环境的数据库引用
     db.collection(table).where(where)
-      .get({
+      .orderBy(orderBy, order).get({
         success(res) {
           resolve(res.data);// res.data 是包含以上定义的两条记录的数组
+          for (var i in res.data){
+            var d = res.data[i];
+            base.setCache(table + d.id, d);
+          }
         },
         fail(res) {
           console.log(res);
           reject(false);
         }
       })
-
   });
 }
 //只取一条数据

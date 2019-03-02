@@ -57,18 +57,6 @@ App({
           }
         });
     });
-/*
-    //用户的openId
-
-    //调用API从本地缓存中获取数据     
-    var user = this.getCache('user' + this.user.openId);
-    if (user != '') {
-      this.distan = user.distan;
-    }
-    //位置
-    var nowAddress = null;
-    //每次打开都获取当前位置
-*/
   },
   cart: {
     key: "cart",

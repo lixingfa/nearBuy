@@ -6,7 +6,7 @@ function getThisUser(openId,fn){
   if (user == '') {
     var where = {};
     where.id = openId;//微信的openId就是本程序中的id
-    db.whereSingle('user', where).then(fn, fn);
+    db.whereSingle('user', where,'id','desc').then(fn, fn);
   } else {
     fn(user);
   }

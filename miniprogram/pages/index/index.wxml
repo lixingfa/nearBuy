@@ -1,53 +1,43 @@
 <view id='search'>
-        <form bindsubmit="searchGood">
-            <input name='keyword' placeholder="输入商品信息" type="text" maxlength="50"/>
-            <button form-type="submit" size="mini" >搜索</button>
-        </form>
-    </view>
-
-<swiper id="banner" interval="5000" duration="2000" autoplay circular indicator-dots>
-        <swiper-item>
-            <image src="../../image/swiper/zhuniankuaile.png" mode="scaleToFill" ></image>
-        </swiper-item>
-        <swiper-item>
-            <image src="../../image/swiper/jinzhu.jpg" mode="scaleToFill" ></image>
-        </swiper-item>
-    </swiper>
-<!--早餐、蔬菜、土特产，前面是最热卖的类型，后面三个是最新出现的类型-->
-    <!--内容区-->
-    <block wx:for="{{typeList}}" wx:key="id">
-        <view class='goodlist'>
-            <view class='good-head'>
-                <text>{{item.name}}</text>
-                <text class='right more' bindtap="navigateToShop" data-id="{{item.id}}">更多>></text>
-            </view>
-            <view class='good-body'>
-                <block wx:for="{{item.goods}}" wx:key="id" wx:for-item="good">
-                    <view class='good-item' catchtap="goDetail" data-id="{{good.id}}"><!--catchtap 会阻止冒泡事件，父容器的不执行-->
-                        <view class='good-title'>{{good.title}}</view>
-                        <view class='good-pic'>
-                            <image src="{{good.pic}}" mode="aspectFill"></image>
-                        </view>
-                        <view class='good-desc'>
-                            <view class='good-inAWord'>{{good.inAWord}}</view>
-
-<text class='good-price'>{{good.price}}</text><text>元/{{good.unit}}</text>
-<text wx:if="{{good.lineOrder}}"> 在线下单</text>
-<text wx:if="{{good.takeOut}}"> 可送货</text>
-<!--
-<text class='right'>{{good.unit}}</text>
-<view class="stepper">
-    <text class="{{minusStatus}}" bindtap="bindMinus">-</text>
-    <input type="number" bindchange="bindManual" value="{{num}}" />
-    <text class="normal" bindtap="bindPlus">+</text>  
+  <form bindsubmit="searchGood">
+    <input name='keyword' placeholder="输入商品信息" type="text" maxlength="50"/>
+    <button form-type="submit" size="mini" >搜索</button>
+  </form>
 </view>
-<text class='right'>预订</text>
--->
-                            <view class='other-info'>共{{good.total}}{{good.unit}}，剩余{{good.surplus}}{{good.unit}}，
-                            {{good.promulgator}}发布，距您{{good.distance}}</view>
-                        </view>
-                    </view>
-                </block>
+<swiper id="banner" interval="5000" duration="2000" autoplay circular indicator-dots>
+  <swiper-item>
+    <image src="../../image/swiper/zhuniankuaile.png" mode="scaleToFill" ></image>
+  </swiper-item>
+  <swiper-item>
+    <image src="../../image/swiper/jinzhu.jpg" mode="scaleToFill" ></image>
+  </swiper-item>
+</swiper>
+<!--早餐、蔬菜、土特产，前面是最热卖的类型，后面三个是最新出现的类型-->
+<!--内容区
+<block wx:for="{{typeList}}" wx:key="id">
+  <view class='goodlist'>
+    <view class='good-head'>
+      <text>{{item.name}}</text>
+      <text class='right more' bindtap="navigateToShop" data-id="{{item.id}}">更多>></text>
+    </view>-->
+    <view class='good-body'>
+      <block wx:for="{{goods}}" wx:key="id" wx:for-item="good">
+        <view class='good-item' catchtap="goDetail" data-id="{{good.id}}"><!--catchtap 会阻止冒泡事件，父容器的不执行-->
+          <view class='good-title'>{{good.title}}</view>
+            <view class='good-pic'>
+              <image src="{{good.pic}}" mode="aspectFill"></image>
+            </view>
+            <view class='good-desc'>
+              <view class='good-inAWord'>{{good.inAWord}}</view>
+              <text class='good-price'>{{good.price}}</text><text>元/{{good.unit}}</text>
+              <text wx:if="{{good.lineOrder == 'true'}}"> 在线下单</text>
+              <text wx:if="{{good.takeOut == 'true'}}"> 可送货</text>
+              <view class='other-info'>共{{good.total}}{{good.unit}}，剩余{{good.surplus}}{{good.unit}}，
+              {{good.promulgator}}发布，距您{{good.distance}}米
+              </view>
             </view>
         </view>
-    </block>
+      </block>
+    </view>
+  <!--</view>
+</block>-->

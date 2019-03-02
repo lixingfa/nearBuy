@@ -6,6 +6,7 @@ Page({
     data: {
       good:null,
       hasAdd:false,
+      eidt:false,
       typeName:'',
       typeShow:false,
       arrTime: base.arrTime,
@@ -35,7 +36,7 @@ Page({
         }else{
           var good = db.doc('goods',id);
           good.editTotal = false;
-          this.setData({good:good});
+          this.setData({good:good,eidt:true});
         }
     },
     getUser:function(user){
@@ -158,7 +159,8 @@ Page({
       "good.promulgatorId": base.openId,
       "good.latitude": base.location.latitude,
       "good.longitude": base.location.longitude,
-      "good.surplus":this.data.good.total
+      "good.surplus":this.data.good.total,
+      "good.createTime": util.formatTime(new Date),
       });
     db.add('goods', this.data.good).then(this.addGoodNext, this.addGoodNext);
 
