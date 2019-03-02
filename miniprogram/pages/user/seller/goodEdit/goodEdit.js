@@ -6,6 +6,8 @@ Page({
     data: {
       good:null,
       hasAdd:false,
+      typeName:'',
+      typeShow:false,
       arrTime: base.arrTime,
       items: [{ name: '是', value: 'true' }, { name: '否', value: 'false'}],//数据变更函数取值是字符串，需要对应
       goodTypes:base.goodTypes
@@ -27,7 +29,7 @@ Page({
           good.editTotal = true;
           var time = util.formatTime(new Date());//返回当前日期和时间，使日期默认显示在今天
           //初始化数值
-          this.setData({good: good});
+          this.setData({ good: good, hasAdd: false, typeName:''});
           //获取用户
           user.getThisUser(base.openId,this.getUser);
         }else{
@@ -128,7 +130,25 @@ Page({
       })
       return false;
     }
+    if (!_this.data.good.typeId) {
+      wx.showModal({
+        showCancel: false,
+        title: '',
+        content: "请选择商品类别"
+      })
+      return false;
+    }
     return true;
+  },
+  typeShow:function(){
+    this.setData({ typeShow:true});
+  },
+  typeCancel:function(){
+    this.setData({ typeShow: false });
+  },
+  select:function(e){
+    var typeId = e.currentTarget.dataset.id;
+    this.setData({ 'good.typeId': typeId, typeName: e.currentTarget.dataset.name});
   },
   addGood:function(){
     if (!this.valid()) {

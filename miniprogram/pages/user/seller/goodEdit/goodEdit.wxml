@@ -1,12 +1,13 @@
 <view>
   <view class='tab'>商品标题：<input value='{{good.title}}' bindblur="input" bindinput="input" data-param="good.title" maxlength='50' placeholder="好的商品标题容易吸引人"/></view>
   <view class='tab'>商品简介：<textarea bindblur="input" bindinput="input" data-param="good.inAWord" maxlength='500' placeholder="简短准确的描述可增加下单">{{good.inAWord}}</textarea></view>
+  <view class='tab'>商品类别：{{typeName}}<button catchtap="typeShow">选择</button></view>
   <view class='tab'>商品图片：
     <image src="{{good.pic}}" mode="scaleToFill"></image>
     <button catchtap="chooseGoodPic">选择图片</button>
   </view>
   <view class='tab'>价格：<input value='{{good.price}}' bindblur="input" bindinput="input" data-param="good.price" placeholder="免费活动可以写0" maxlength='7' type='digit'/></view>
-  <view class='tab'>单位：<input value='{{good.unit}}' bindblur="input" bindinput="input" data-param="good.unit" placeholder="如：斤、个、打、位……" maxlength='2'/></view>
+  <view class='tab'>单位：<input value='{{good.unit}}' bindblur="input" bindinput="input" data-param="good.unit" placeholder="如：斤、个、打、位……" maxlength='5'/></view>
   <view class='tab'>商品总数：
     <input value='{{good.total}}' bindblur="input" bindinput="input" data-param="good.total"  placeholder="商品的总数" maxlength='5' type='number' wx:if="{{good.editTotal}}"/>
     <text wx:if="{{!good.editTotal}}">{{good.total}}</text>
@@ -66,26 +67,27 @@
 <view class="tool">
   <view class="tbtn add" catchtap="addGood" wx:if="{{!hasAdd}}">添加商品</view>
   <view class="tbtn add" wx:if="{{hasAdd}}">
-    <navigator url="../goods/goods" open-type="navigate" hover-class="navigator-hover">商品列表</navigator>
+    <navigator url="../goods" open-type="navigate" hover-class="navigator-hover">商品列表</navigator>
   </view>
-  <view class="tbtn add" catchtap="onLoad" wx:if="{{hasAdd}}">继续添加</view>
+  <view class="tbtn add" catchtap="onLoad" wx:if="{{hasAdd}}">继续
+    <text wx:if="{{!good.id}}">添加</text><text wx:if="{{!good.id}}">修改</text></view>
 </view>
 </view>
 
 <!--商品分类-->
-<view class="addr_box" wx:if="{{addrShow}}">
+<view class="addr_box" wx:if="{{typeShow}}">
   <view class="addr_head">
     <view class="addr_head_title">商品类别</view>
-    <view class="addr_head_cancel" bindtap="myaddrCancel">关闭</view>
+    <view class="addr_head_cancel" bindtap="typeCancel">关闭</view>
   </view>
   <scroll-view scroll-y="true" scroll-top="{{scrollTop}}" style="height: 375px;">
-    <view class="addr_body" data-id="{{a.id}}" wx:for="{{goodTypes}}" wx:key="id" wx:for-index="i" wx:for-item="t">
-      <view>{{t.name}}</view>
-      <view class="" wx:for="{{t.sub}}" wx:key="id" wx:for-item="s" color="{{s.id==selectedID?'green':'#EEE'}}" catchtap="select">
+    <view class="addr_body" wx:for="{{goodTypes}}" wx:key="id" wx:for-index="i" wx:for-item="t">
+      <view>{{t.name}}：</view>
+      <view class="sub_type" wx:for="{{t.sub}}" wx:key="id" wx:for-item="s" style="{{s.id==good.typeId?'background: #fea;':''}}" catchtap="select" data-id='{{s.id}}' data-name='{{s.name}}'>
         {{s.name}}
       </view>
     </view>
   </scroll-view>
 </view>
 <!--遮罩层-->
-<view class="hiddenbox" wx:if="{{addrShow}}" bindtap="closeaddr"></view>
+<view class="hiddenbox" wx:if="{{typeShow}}" bindtap="closeaddr"></view>
