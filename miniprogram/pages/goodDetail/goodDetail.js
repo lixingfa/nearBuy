@@ -1,29 +1,27 @@
 var util = require('../../utils/util.js');
 var good = require('../../utils/good.js');
+var user = require('../../utils/user.js');
+var db = require('../../utils/db.js');
 var base = getApp();
 Page({
     data: {
         good:null,
-        dateStart: "",
-        dateEnd: "",
-        answerShow:true,
-        answers:null
+        //dateStart: "",
+        //dateEnd: "",
+        openId: null,
+        answerShow:false,
+        answers:[],//该商品的所有问答信息
+        answer:{}//本次提交的问答内容
     },
     onLoad: function (e) {
       var id = e && e.id ? e.id : 0;
       var _this = this;
-      good.getGood(id, this.initGood)
-      .then(function (id) { 
-        good.getGoodAnswers(id, 
-        function (answers) { 
-          _this.setData({ answers: answers})
-        })
-      });
+      good.getGood(id, this.initGood);
+      _this.setData({ openId: base.openId })
     },
   initGood:function(good){
       if (good){//购物车里存在，则拿购物车的，可以简化很多操作
         this.setData({good:good});
-
       }else{//初始化
         good = base.getGoodById(id);
         var time = null;
@@ -39,7 +37,7 @@ Page({
           }
         }
         //初始化数值
-        this.setData({good: good, dateStart: time, "good.arrTime": arrTimeT,"good.arrTimeIndex":0,"good.num":0});
+        this.setData({good: good, "good.arrTime": arrTimeT,"good.arrTimeIndex":0,"good.num":0});
       }
   },
     onShow: function () {
@@ -52,25 +50,6 @@ Page({
         var good = base.cart.getGood(this.data.id);        
         this.setData({good: good });//更新数据
     },
-    bindTimeChange: function (e) {
-      var _this = this;
-      if (e.detail.value > 0) {
-        _this.setData({
-          "good.arrTimeIndex": e.detail.value,
-          "good.deliveryTime": _this.data.good.arrTime[e.detail.value]
-        });
-      }
-    },
-    bindDateChange: function (e) {
-      this.setData({
-        "good.deliveryDate": e.detail.value
-      })
-    }, 
-    bindTextAreaBlur: function (e) {
-      this.setData({
-        "good.remarks": e.detail.value
-      });
-    },
     goCart: function (e) {
       if (this.data.good.price > 0) {
         this.setData({ "good.needPay": true });
@@ -80,4 +59,75 @@ Page({
         url: '../cart/cart'
       })
     },
+  input: function (e) {
+    var param = e.currentTarget.dataset.param;
+    this.setData({ [param]: e.detail.value });//变量key
+    if (param == 'deliveryTime') {
+      this.setData({ 'good.deliveryTime': this.data.good.arrTime[e.detail.value] });
+    }
+  },
+  answerCancel:function(){
+    this.setData({ answerShow:false});
+  },
+  answerShow:function(){
+    var _this = this;
+    var all = false;
+    if (_this.data.good.promulgatorId == base.openId) {
+      all = true;//商品所有者
+    }
+    good.getGoodAnswers(_this.data.good.id, all, base.openId,
+      function (answers) {
+        _this.setData({ answers: answers, answerShow: true });
+      });
+  },
+  quiz:function(){
+    var _this = this;
+    var answer = this.data.answer;
+    answer.creatTime = util.formatTime(new Date());
+    answer.goodId = this.data.good.id;
+    answer.id = util.getUUID('answer');
+    answer.ownerId = this.data.good.promulgatorId;//商品所有者
+    answer.quizzerId = base.openId;
+    answer.show = false;
+    user.getThisUser(base.openId,function(data){
+      if(data){
+        answer.quizzer = data.nickName;//当前用户的昵称
+      }else{
+        answer.quizzer = '游客';//获取不到用户信息
+      }
+      _this.setData({answer:answer});
+      db.add('answers', answer).then(_this.updateAnswers, _this.updateAnswers);
+    });
+  },
+  updateAnswers:function(_id){
+    if(_id){
+      if (_id.indexOf('answer') != -1){//自己的id，更新
+        for (var i in this.data.answers){
+          if (this.data.answers[i].id == _id){
+            if(this.data.answers[i].show){
+              this.data.answers[i].show = false;
+            }else{
+              this.data.answers[i].show = true;
+            }
+            break;
+          }
+        }
+      }else{//添加
+        this.data.answers.push(this.data.answer);
+      }
+      this.setData({ answers: this.data.answers});
+    }
+  },
+  chang:function(e){
+    var id = e.currentTarget.dataset.id;
+    var show = e.currentTarget.dataset.show;
+    var answer = {};
+    answer.id = id;
+    if(show == 'true'){
+      answer.shwo = false;
+    }else{
+      answer.show = true;
+    }
+    db.update('answers', id, answer).then(this.updateAnswers, this.updateAnswers);
+  }
 });

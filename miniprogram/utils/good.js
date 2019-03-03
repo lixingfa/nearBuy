@@ -1,6 +1,5 @@
 var db = require('db.js');
 var util = require('util.js');
-var base = getApp();
 //获取最新添加的商品
 function getNewGoods(fn){
   var where = {};
@@ -24,11 +23,14 @@ function getGood(id,fn){
 }
 
 //获取商品的问答信息
-function getGoodAnswers(goodId,fn){
+function getGoodAnswers(goodId, all,openId,fn){
   var where = {};
-  var _ = wx.cloud.database().command;
-  //where = _.or([{ show: true }, { ownerId: base.openId}]);
-  where.goodId = goodId;
+  //对于非所有者，只能看到公开的和自己的
+  if (!all){
+    var _ = wx.cloud.database().command;
+    where = _.or([{ show: true }, { quizzerId:openId}]);
+  }
+  where.goodId = goodId;//这个商品下的咨询
   db.where('answers', where, 'createTime', 'desc').then(fn, fn);
 }
 

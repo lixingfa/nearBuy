@@ -66,7 +66,7 @@ function add(table,data){
       success(res) {
         // res 是一个对象，其中有 _id 字段标记刚创建的记录的 id
         resolve(res._id);
-        base.setCache(table + res._id, data);
+        base.setCache(table + res.id, data);//不一定能知道_id
       },
       fail(res){
         console.log(res);
@@ -84,7 +84,7 @@ function update(table,id,data){
       // data 传入需要局部更新的数据
       data: data,
       success(res) {
-        resolve(res);
+        resolve(id);
         base.clear(table + id);//删掉缓存，重新获取
       },
       fail(res) {

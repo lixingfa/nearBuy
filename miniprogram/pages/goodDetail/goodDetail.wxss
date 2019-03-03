@@ -27,6 +27,7 @@ view{padding: 0 5px;font-size: 16px;}
 .addr_head{display: flex;border-bottom:1px solid #eee;height: 40px;background:#fff;}
 .addr_head_cancel{font-size: 14px;margin:15px 1px;}
 .addr_head_title{font-size: 18px;margin:15px auto;}
-.addr_body{display: flex;border-bottom:1px dashed #000;margin:10px;opacity: 0.9}
-.sub_type{font-size:16px;background:#ded;margin:0 5px;}
+.addr_body{border-bottom:1px dashed #000;margin:10px;opacity: 0.9}
+.sub_type{font-size:10px;color: #aaa}
+.change_button{float:right;font-size:14px;}
 .hiddenbox{height:100%;width:100%;position: fixed;background:#666;opacity: 0.5;z-index: 1;top:0;}

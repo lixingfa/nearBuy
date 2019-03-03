@@ -13,18 +13,19 @@
   <view class="tit" wx:if="{{good.takeOut == 'true'}}">您希望的送货时间</view>
   <view class="tit" wx:if="{{good.lineOrder == 'true' && good.takeOut != 'true'}}">您预计的取货时间</view>
   <view class="dt">
-    <picker mode="date" value="{{good.deliveryDate}}" class="dt-item pos" start="{{dateStart}}" end="{{dateEnd}}" bindchange="bindDateChange">
+    <picker mode="date" value="{{good.deliveryDate}}" class="dt-item pos" start="{{dateStart}}" end="{{dateEnd}}" bindchange="input" data-param="deliveryDate">
       {{good.deliveryDate?good.deliveryDate:'选择日期'}}
     </picker>
-    <picker mode="selector" value="{{good.deliveryTime}}" range="{{good.arrTime}}" class="dt-item pos" bindchange="bindTimeChange">
-      {{good.arrTime[good.arrTimeIndex]}}
+    <picker mode="selector" value="{{good.deliveryTime}}" range="{{good.arrTime}}" class="dt-item pos" bindchange="input" data-param="deliveryTime">
+      {{good.deliveryTime}}
     </picker>
   </view>
 </view>
 <view class="date tab" wx:if="{{good.lineOrder == 'true'}}">
   <view class="tit">下单留言</view>
-  <textarea value='留言是否可见由卖家控制、是否公布卖家电话（下单后才拿到彼此号码）' bindblur="bindTextAreaBlur" bindinput="bindTextAreaBlur" placeholder="您的留言信息" value="{{good.remarks}}" maxlength="200" class='remark'/>
+  <textarea value='您的下单留言' bindblur="input" bindinput="input" placeholder="您的留言信息" value="{{good.remarks}}" maxlength="200" class='remark' data-param="good.remarks"/>
 </view>
+<button catchtap="answerShow">向{{good.promulgator}}咨询</button>
 
 <view class="tool">
   <view wx:if="{{good.surplus > 0 && good.lineOrder == 'true'}}" class="tbtn add" catchtap="addCart">加入购物车(<text class="cart-num">{{good.num}}</text>)</view>
@@ -39,18 +40,22 @@
 <view class="addr_box" wx:if="{{answerShow}}">
   <view class="addr_head">
     <view class="addr_head_title">咨询问答</view>
-    <view class="addr_head_cancel" bindtap="typeCancel">关闭</view>
+    <view class="addr_head_cancel" catchtap="answerCancel">关闭</view>
   </view>
-  <scroll-view scroll-y="true" scroll-top="{{scrollTop}}" style="height: 375px;">
-    <view class="date tab">
-      <textarea bindblur="bindTextAreaBlur" bindinput="bindTextAreaBlur" placeholder="您的咨询内容" value="{{good.remarks}}" maxlength="200" class='remark'/>
-      <button>提交</button>
+    <view class="date tab" style="display: flex;">
+      <textarea bindblur="input" bindinput="input" placeholder="您的咨询内容" data-param="answer.content" maxlength="200" class='remark'/>
+      <button catchtap="quiz">提交</button>
     </view>
+  <scroll-view scroll-y="true" scroll-top="{{scrollTop}}" style="height: 375px;">
     <view class="addr_body" wx:for="{{answers}}" wx:key="id" wx:for-index="i" wx:for-item="a">
-      <view class="sub_type" wx:if="{{a.show || a.ownerId == base.openId}}">
-        {{a.creatTime}} {{a.quizzer}}：{{a.content}}
-        <text catchtap="select" data-id='{{a.id}}'>公开</text>
+      <view>
+        {{a.content}}
+        <button catchtap="chang" data-id='{{a.id}}' data-show='{{a.show}}' class='change_button' wx:if="{{a.ownerId == openId}}">
+          <text wx:if="{{!a.show}}">公开</text>
+          <text wx:if="{{a.show}}">隐藏</text>
+        </button>
       </view>
+      <view class="sub_type">{{a.quizzer}} {{a.creatTime}}</view>
     </view>
   </scroll-view>
 </view>
