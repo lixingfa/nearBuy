@@ -1,7 +1,7 @@
 <view>
   <view class='tab'>商品标题：<input value='{{good.title}}' bindblur="input" bindinput="input" data-param="good.title" maxlength='50' placeholder="好的商品标题容易吸引人"/></view>
   <view class='tab'>商品简介：<textarea bindblur="input" bindinput="input" data-param="good.inAWord" maxlength='500' placeholder="简短准确的描述可增加下单">{{good.inAWord}}</textarea></view>
-  <view class='tab'>商品类别：{{typeName}}<button catchtap="typeShow">选择</button></view>
+  <view class='tab'>商品类别：{{good.typeName}}<button catchtap="typeShow">选择</button></view>
   <view class='tab'>商品图片：
     <image src="{{good.pic}}" mode="scaleToFill"></image>
     <button catchtap="chooseGoodPic">选择图片</button>
@@ -65,13 +65,13 @@
   </radio-group>
 </view>
 <view class="tool">
-  <view class="tbtn add" catchtap="addGood" wx:if="{{!hasAdd}}">添加商品</view>
+  <view class="tbtn add" catchtap="addGood" wx:if="{{!hasAdd}}">
+    <text wx:if="{{!eidt}}">添加</text><text wx:if="{{eidt}}">修改</text>商品
+  </view>
   <view class="tbtn add" wx:if="{{hasAdd}}">
     <navigator url="../goods/goods" open-type="navigate" hover-class="navigator-hover">商品列表</navigator>
   </view>
-  <view class="tbtn add" catchtap="onLoad" wx:if="{{hasAdd}}">继续
-    <text wx:if="{{!eidt}}">添加</text>
-    <text wx:if="{{eidt}}">修改</text></view>
+  <view class="tbtn add" catchtap="onLoad" wx:if="{{hasAdd}}">继续<text wx:if="{{!eidt}}">添加</text><text wx:if="{{eidt}}">修改</text></view>
 </view>
 </view>
 

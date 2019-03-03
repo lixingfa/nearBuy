@@ -77,15 +77,17 @@ function add(table,data){
 }
 
 //更新，整个对象更新，如果需更新子对象，需要用set，具体查看API
-function update(table,id,data){
+function update(table,_id,data){
+  delete data._openid;//否则会更新失败
+  delete data._id;//否则会更新失败
   return new Promise(function (resolve, reject) {
     var db = wx.cloud.database();
-    db.collection(table).doc(id).update({
+    db.collection(table).doc(_id).update({
       // data 传入需要局部更新的数据
       data: data,
       success(res) {
-        resolve(id);
-        base.clear(table + id);//删掉缓存，重新获取
+        resolve(_id);
+        base.clear(table + data.id);//删掉缓存，重新获取
       },
       fail(res) {
         console.log(res);

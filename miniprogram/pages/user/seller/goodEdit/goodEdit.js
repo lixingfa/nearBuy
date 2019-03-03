@@ -1,6 +1,7 @@
 var db = require('../../../../utils/db.js');
 var util = require('../../../../utils/util.js');
 var user = require('../../../../utils/user.js');
+var goodutil = require('../../../../utils/good.js');
 var base = getApp();
 Page({
     data: {
@@ -30,13 +31,17 @@ Page({
           good.editTotal = true;
           var time = util.formatTime(new Date());//返回当前日期和时间，使日期默认显示在今天
           //初始化数值
-          this.setData({ good: good, hasAdd: false, typeName:''});
+          this.setData({ good: good, hasAdd: false});
           //获取用户
           user.getThisUser(base.openId,this.getUser);
         }else{
-          var good = db.doc('goods',id);
-          good.editTotal = false;
-          this.setData({good:good,eidt:true});
+          var _this = this;
+          goodutil.getGood(id,function(good){
+            if(good){
+              good.editTotal = false;
+              _this.setData({ good: good, eidt: true});
+            }
+          });
         }
     },
     getUser:function(user){
@@ -149,7 +154,7 @@ Page({
   },
   select:function(e){
     var typeId = e.currentTarget.dataset.id;
-    this.setData({ 'good.typeId': typeId, typeName: e.currentTarget.dataset.name});
+    this.setData({ 'good.typeId': typeId, 'good.typeName': e.currentTarget.dataset.name});
   },
   addGood:function(){
     if (!this.valid()) {
@@ -163,14 +168,18 @@ Page({
       "good.createTime": util.formatTime(new Date),
       "good.validTimeTrue": this.data.good.indate + ' ' +this.data.good.validTime
       });
-    db.add('goods', this.data.good).then(this.addGoodNext, this.addGoodNext);
+    if (this.data.eidt){
+      db.update('goods', this.data.good._id, this.data.good).then(this.addGoodNext, this.addGoodNext);
+    }else{
+      db.add('goods', this.data.good).then(this.addGoodNext, this.addGoodNext);
+    }
   },
   addGoodNext:function(_id){
     if(_id){
       wx.showModal({
         showCancel: false,
         title: '',
-        content: "新增商品成功。"
+        content: "商品编辑成功。"
       });
       this.setData({ hasAdd:true});
     }

@@ -1,25 +1,116 @@
-page{background-color: #f0f0f0;}
-.u{display: flex;padding:15px 0; flex-direction:row; background-color:#576b95}
-.u .logo{padding:0 20px;}
-.u .logo image{width: 60px; height: 60px; border-radius: 50%; border:2px solid #fff;}
+/**index.wxss**/
+#search{
+  font-size: 14px;
+  padding: 5px 10px;
+}
+#search input{
+  width: 580rpx;
+  float: left;
+}
+#search button{
+  height: 25px;
+}
 
-.des .uname{ color: #fff;font-weight:bold;font-size:15pt; padding: 2px 0;}
-.des .phone{ color: #fff;font-size:13pt;}
+#banner  image{
+  width: 750rpx;
+  height: 300rpx;
+}
+.goodlist {
+	clear: both;
+	background: #ddd;
+	font-size: 14px;
+  padding-bottom: 5px;
+}
 
+.good-head {
+	padding: 10rpx 10px;
+	font-size: 20px;
+  border-bottom: solid 1px #ccc;
+  background: #fff;
+}
 
-.ua{display: flex;flex-direction:row; background-color: #fff; }
-.ua .tab{padding:15px 0; }
-.ua .jzb{flex: 1;border-bottom:1rpx solid #ccc;}
-.ua .cpn{flex: 1;border-left:1rpx solid #ccc;border-right:1rpx solid #ccc;border-bottom:1rpx solid #ccc;}
-.ua .exp{flex: 1;border-bottom:1rpx solid #ccc;}
-.ua .amount{text-align: center;font-size: 8pt;}
-.ua .amount text{font-size: 15pt; font-weight: bold; padding: 0 3px;}
-.ua .nm{text-align: center;font-size: 10pt; color: #666;}
-.ua .jzb .amount{color: #f00;}
+.right {
+	float: right;
+}
 
-.ub{margin-top: 10px; border-top:1rpx solid #ccc;border-bottom:1rpx solid #ccc; background-color: #fff;}
-.ub .item{height:45px;line-height: 45px; display: flex;flex-direction:row;}
-.ub .item .icon{width: 50px;height: 30px;}
-.ub .item .tit{width: 300rpx; font-size: 13pt;}
-.ub .item .con{flex: 1; font-size: 12pt}
-.item-a .tit,.item-a .con{border-bottom: 1rpx solid #ddd;}
+.more{
+	display: block;
+	width: 150rpx;
+  font-size: 12px;
+  color: #aaa;
+  margin-top: 20rpx;
+  text-align: right;
+}
+.good-item{
+	padding: 10rpx 10px;
+  margin-bottom: 5px;
+  background: #fff;
+  display:flex;
+}
+
+.good-inAWord{
+  color:#999 ;
+}
+
+.good-pic image{
+	width: 110rpx;
+	height: 110rpx;
+}
+
+.good-title{
+	padding: 10rpx 0px;
+	font-size: 16px;
+}
+.good-desc{
+  font-size: 16px;
+}
+.good-price{
+	color: orangered;
+}
+
+.other-info{
+  font-size: 12px;
+  color: #aaa;
+}
+
+/*加减号主容器*/ 
+.stepper {  
+    width: 80px;  
+    height: 26px;  
+    /*给主容器设一个边框*/  
+    border: 1px solid #ccc;  
+    border-radius: 3px;  
+    margin:0 auto;  
+    float: right;
+}  
+  
+/*加号和减号*/  
+.stepper text {  
+    width: 19px;  
+    line-height: 26px;  
+    text-align: center;  
+    float: left;  
+}  
+  
+/*数值*/  
+.stepper input {  
+    width: 40px;  
+    height: 26px;  
+    float: left;  
+    margin: 0 auto;  
+    text-align: center;  
+    font-size: 12px;  
+    /*给中间的input设置左右边框即可*/  
+    border-left: 1px solid #ccc;  
+    border-right: 1px solid #ccc;  
+}  
+  
+/*普通样式*/  
+.stepper .normal{  
+    color: black;  
+}  
+  
+/*禁用样式*/  
+.stepper .disabled{  
+    color: #ccc;  
+}

@@ -30,7 +30,7 @@
     <view class="icon">
     </view>
     <view class="tit" >
-      <navigator url="../user/pendingOrder/pendingOrder" open-type="navigate" hover-class="navigator-hover">待处理订单</navigator>
+      <navigator url="../user/seller/pendingOrder/pendingOrder" open-type="navigate" hover-class="navigator-hover">待处理订单</navigator>
     </view>
     <view class="con"></view>
   </view>

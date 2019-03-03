@@ -1,91 +1,29 @@
-<view class="u" wx:if="{{loaded}}" >
-  <view class="logo" bindtap="changeimg">
-    <image src="{{base.user.avatarUrl}}"></image>
-  </view>
-  <view class="des">
-    <view class="uname">{{base.user.nickName}}</view>
-    <view class="phone">{{base.location.phone}}</view>
-  </view>
-</view>
-<view class="ua">
-  <view class="jzb tab">
-    <view class="amount">
-      <text>{{jzb}}</text>个订单</view>
-    <view class="nm">待处理</view>
-  </view>
-  <view class="cpn tab">
-    <view class="amount">
-      <text>2</text>个商品</view>
-    <view class="nm">在售</view>
-  </view>
-  <view class="exp tab">
-    <view class="amount">
-      <text>{{exp}}</text>元</view>
-    <view class="nm">累计收入</view>
-  </view>
-</view>
-<!--卖方菜单-->
-<view class="ub">
-  <view class="item item-a" >
-    <view class="icon">
+<!--早餐、蔬菜、土特产，前面是最热卖的类型，后面三个是最新出现的类型-->
+<!--内容区
+<block wx:for="{{typeList}}" wx:key="id">
+  <view class='goodlist'>
+    <view class='good-head'>
+      <text>{{item.name}}</text>
+      <text class='right more' bindtap="navigateToShop" data-id="{{item.id}}">更多>></text>
+    </view>-->
+    <view class='good-body'>
+      <block wx:for="{{goods}}" wx:key="id" wx:for-item="good">
+        <view class='good-item' catchtap="goDetail" data-id="{{good.id}}"><!--catchtap 会阻止冒泡事件，父容器的不执行-->
+          <view class='good-title'>{{good.title}}</view>
+            <view class='good-pic'>
+              <image src="{{good.pic}}" mode="aspectFill"></image>
+            </view>
+            <view class='good-desc'>
+              <view class='good-inAWord'>{{good.inAWord}}</view>
+              <text class='good-price'>{{good.price}}</text><text>元/{{good.unit}}</text>
+              <text wx:if="{{good.lineOrder == 'true'}}"> 在线下单</text>
+              <text wx:if="{{good.takeOut == 'true'}}"> 可送货</text>
+              <view class='other-info'>共{{good.total}}{{good.unit}}，剩余{{good.surplus}}{{good.unit}}，
+              {{good.promulgator}}发布
+              </view>
+            </view>
+        </view>
+      </block>
     </view>
-    <view class="tit" >
-      <navigator url="../user/seller/goods/goodEdit/goodEdit" open-type="navigate" hover-class="navigator-hover">新增商品</navigator>
-    </view>
-    <view class="con"></view>
-  </view>
-  <view class="item item-a">
-    <view class="icon">
-    </view>
-    <view class="tit" >
-      <navigator url="../user/myaddress/myaddress" open-type="navigate" hover-class="navigator-hover">新增商品</navigator>
-    </view>
-    <view class="con"></view>
-  </view>
-    <view class="item item-a">
-    <view class="icon">
-    </view>
-    <view class="tit" >
-      <navigator url="../user/mycoupons/mycoupons" open-type="navigate" hover-class="navigator-hover">商品管理</navigator>
-    </view>
-    <view class="con"></view>
-  </view>
-</view>
-<!--买方菜单和个人信息-->
-<view class="ub">
-  <view class="item item-a" >
-    <view class="icon">
-    </view>
-    <view class="tit" >
-      <navigator url="../user/myorder/myorder" open-type="navigate" hover-class="navigator-hover">我的订单</navigator>
-    </view>
-    <view class="con"></view>
-  </view>
-  <view class="item item-a">
-    <view class="icon">
-    </view>
-    <view class="tit" >
-      <navigator url="../user/userInfo/userInfo" open-type="navigate" hover-class="navigator-hover">个人信息</navigator>
-    </view>
-    <view class="con"></view>
-  </view>
-    <view class="item item-a">
-    <view class="icon">
-    </view>
-    <view class="tit" >
-      <navigator url="../user/mycoupons/mycoupons" open-type="navigate" hover-class="navigator-hover">咨询投诉</navigator>
-    </view>
-    <view class="con"></view>
-  </view>
-</view>
-<!---退出登录-->
-<view class="ub">
-  <view class="item  ">
-    <view class="icon">
-    </view>
-    <view class="tit"  bindtap="exist">
-      退出登录
-    </view>
-    <view class="con"></view>
-  </view>
-</view>
+  <!--</view>
+</block>-->
