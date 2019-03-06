@@ -16,14 +16,16 @@ Page({
     onLoad: function (e) {
       var id = e && e.id ? e.id : 0;
       var _this = this;
-      good.getGood(id, this.initGood);
-      _this.setData({ openId: base.openId })
+      var g = base.cart.getGood(id);
+      if (g != null) {//购物车里存在，则拿购物车的，可以简化很多操作
+        this.setData({good: g });
+      } else {//初始化
+        good.getGood(id, this.initGood);//从数据库拿
+      }
+      _this.setData({ id: id,openId: base.openId })
     },
   initGood:function(good){
       if (good){//购物车里存在，则拿购物车的，可以简化很多操作
-        this.setData({good:good});
-      }else{//初始化
-        good = base.getGoodById(id);
         var time = null;
         var arrTimeT = new Array("请选择时间");
         if (good.chooseTime){//允许选择送货/取货时间
@@ -36,8 +38,13 @@ Page({
             arrTimeT.push(t + ":00-" + (t + 1) + ":00");
           }
         }
-        //初始化数值
-        this.setData({good: good, "good.arrTime": arrTimeT,"good.arrTimeIndex":0,"good.num":0});
+        good.deliveryTime = arrTimeT[0];
+        good.arrTime = arrTimeT;
+        good.arrTimeIndex = 0;
+        good.num = 0;
+        this.setData({good: good});
+      }else{//没找到这个商品
+
       }
   },
     onShow: function () {

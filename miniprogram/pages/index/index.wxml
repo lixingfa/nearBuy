@@ -1,12 +1,14 @@
 <view id='search'>
+    <!--<image src="" mode="scaleToFill" class=''></image><!--消息图标-->
     <input name='keyword' placeholder="输入商品信息" type="text" maxlength="50"/>
+    <button catchtap="search" size="mini" >搜索</button>
 </view>
 <swiper id="banner" interval="5000" duration="2000" autoplay circular indicator-dots>
   <swiper-item>
-    <image src="../../image/swiper/zhuniankuaile.png" mode="scaleToFill" ></image>
+    <image src="../../image/swiper/zhuniankuaile.png" mode="scaleToFill"></image>
   </swiper-item>
   <swiper-item>
-    <image src="../../image/swiper/jinzhu.jpg" mode="scaleToFill" ></image>
+    <image src="../../image/swiper/jinzhu.jpg" mode="scaleToFill"></image>
   </swiper-item>
 </swiper>
 <!--早餐、蔬菜、土特产，前面是最热卖的类型，后面三个是最新出现的类型-->

@@ -18,6 +18,9 @@ Page({
         for (var i = 0; i < l.length; i++) {
             //l[i].img = base.path.res + 'images/ksk/item/w_127/' + l[i].name + '.jpg';
             l[i].index = i;
+            if (typeof (l[i].select) == "undefined"){
+              l[i].select = true;
+            }
         }
         this.setData({ plist: l });
         this.changeTotal();
@@ -32,7 +35,7 @@ Page({
         var l = this.data.plist;
         var t = 0;
         for (var i = 0; i < l.length; i++) {
-            if (!l[i].del) {//排除删除选项
+          if (!l[i].del && l[i].select) {//排除删除选项
                 t += l[i].price * l[i].num;
             }
         }
@@ -57,6 +60,19 @@ Page({
             obj[key] = this.data.plist[index].surplus + -t;
             this.setData(obj);
         }
+    },
+    select:function(e){
+      var index = e.currentTarget.dataset.index;
+      var id = this.data.plist[index].id;
+      var key1 = "plist[" + index + "].select";
+      var obj = {};
+      if (this.data.plist[index].select){
+        obj[key1] = false;
+      }else{
+        obj[key1] = true;
+      }
+      this.setData(obj);
+      this.changeTotal();
     },
     del: function (e) {
         var index = e.currentTarget.dataset.index;

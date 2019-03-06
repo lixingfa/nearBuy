@@ -1,6 +1,7 @@
 var base = getApp();
 var util = require('../../utils/util.js');
 var db = require('../../utils/db.js');
+var user = require('../../utils/user.js');
 Page({
     data: {
       //下单数据
@@ -13,13 +14,23 @@ Page({
       longitude:"0",
       latitude:"0",
       selectedID: -1,
+      user:null
+    },
+    onLoad: function (e) {
+      var _this = this;
+      user.getThisUser(base.openId,function(u){
+        var totalPrice = e && e.totalPrice ? e.totalPrice : 0;
+        _this.setData({ plist: base.cart.getList(), totalPrice: totalPrice,user:u,phone:u.phone});
+      });
     },
     addrSelect: function () {//选择地址
       var _this = this;
-      if (_this.data.myAddress.length > 0){
-        _this.setData({ addrShow: true });//选地址
+      if (_this.data.myAddress.length == 0){
+        var where = {};
+        where.user = base.openId;
+        db.where('address', where, 'createTime', 'desc').then(this.initAddress, this.initAddress);
       }else{
-        _this.chooseAddrInMap();//都没有地址，就在地图上选
+        _this.setData({ addrShow: true });//选地址
       }
     },
     myaddrCancel: function () {//点击地址簿中取消按钮
@@ -28,11 +39,22 @@ Page({
     closeaddr:function(){//触摸遮罩层关闭地址选项
           this.setData({ addrShow: false });
     },
-    onLoad: function (e) {
-      var totalPrice = e && e.totalPrice ? e.totalPrice : 0;
-      this.setData({ plist: base.cart.getList(), totalPrice: totalPrice, myAddress: base.myAddress});
-      if (!this.data.addr || !this.data.phone){//为空表示没有地址（操作地址时，电话是必须的），可能需要选取地址
-        this.setData({ addr: base.location.address, phone: base.location.phone, longitude: base.location.longitude, latitude: base.location.latitude, selectedID:base.location.id});
+    initAddress: function (myAddress){
+      if (myAddress){
+        if (myAddress.length == 0){//数据库里也没有
+          if (!this.data.addr && !this.data.phone){//为空表示没有地址（操作地址时，电话是必须的），可能需要选取地址
+            this.setData({ 
+              addr: base.location.address, 
+              phone: base.location.phone,
+              longitude: base.location.longitude,
+              latitude: base.location.latitude,
+              selectedID:base.location.id
+            });
+          }
+          this.chooseAddrInMap();//都没有地址，就在地图上选
+        }else{
+          this.setData({ myAddress: myAddress});
+        }
       }
     },
     valid: function () {
@@ -61,38 +83,11 @@ Page({
       if (!_this.valid()) {
         return;
       }
-      if (base.user.nickName == null){
-        //获取个人信息
-        wx.getUserInfo({
-          success(res) {
-            var userInfo = res.userInfo
-            base.user.nickName = userInfo.nickName
-            base.user.avatarUrl = userInfo.avatarUrl
-            //user.gender = userInfo.gender // 性别 0：未知、1：男、2：女
-            //user.province = userInfo.province //省
-            //user.city = userInfo.city //市
-            //user.country = userInfo.country //国家
-            //encryptedData openId//微信号需要另外处理，但这里使用云端直接获取
-            wx.cloud.callFunction({
-              // 云函数名称
-              name: 'login',
-              // 传给云函数的参数
-              data: {},
-              success(res) {
-                console.log(res.result.openid + " " + res.result.appid + " " + res.result.unionid);
-                base.user.openId = res.result.openid;
-                _this.creatOrder();
-              },
-              fail: console.error()
-            })
-          }
-        });
-      }else{
-        _this.creatOrder();
-      }
-      
+      //查库存，要正确提示哪种商品没有了
+
+      _this.creatOrder();
     },
-    creatOrder:function(){
+  creatOrder: function (){
       var _this = this;
       if (_this.data.selectedID == -1) {//不是从列表里选的地址
         var addr = {};
@@ -101,23 +96,34 @@ Page({
         addr.longitude = _this.data.longitude;
         addr.latitude = _this.data.latitude;
         addr.id = util.getUUID('addr');
-        base.myAddress.push(addr);
+        addr.createTime = util.formatTime(new Date());
+        addr.user = this.data.user.id;
+        db.add('address', addr);
       }
       var order = {};
       order.id = util.getUUID('order');
       order.status = 0;//未支付
-      order.user = base.user;
+      order.user = {};
+      order.user.nickName = this.data.user.nickName;
+      order.user.id = this.data.user.id;
       order.user.addr = _this.data.addr;
       order.user.phone = _this.data.phone;
-      order.plist = _this.data.plist;
+      order.plist = _this.data.plist;//里面有关键字
       order.totalPrice = _this.data.totalPrice;
-      order.date = util.formatTime(new Date());
-      db.add('order', order);
-      base.cart.clear();
-
-      wx.navigateTo({
-        url: "../success/success"
-      })
+      order.createTime = util.formatTime(new Date());
+      db.add('orders', order).then(function(d){
+        //更新库存
+        base.cart.clear();
+        wx.navigateTo({
+          url: "../success/success"
+        });
+      },function(d){
+        wx.showModal({
+          showCancel: false,
+          title: '',
+          content: "下单时出现错误。"
+        });
+      });
     },
     bindAddrBlur: function (e) {
         this.setData({
