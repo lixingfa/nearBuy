@@ -28,9 +28,6 @@ Page({
             url: _this.data.his
         })
     },
-    previewImg: function (e) {
-        preview.show(e.currentTarget.dataset.name,e.currentTarget.dataset.brand,e.currentTarget.dataset.index)
-    },
     changeTotal: function () {
         var l = this.data.plist;
         var t = 0;

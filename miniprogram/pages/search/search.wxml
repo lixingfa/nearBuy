@@ -1,0 +1,3 @@
+<view id='search'>
+    <input name='keyword' placeholder="输入商品信息" type="text" maxlength="50"/>
+</view>

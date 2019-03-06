@@ -1,5 +1,6 @@
 var base = getApp();
 var util = require('../../utils/util.js');
+var db = require('../../utils/db.js');
 Page({
     data: {
       //下单数据
@@ -99,11 +100,11 @@ Page({
         addr.phone = _this.data.phone;
         addr.longitude = _this.data.longitude;
         addr.latitude = _this.data.latitude;
-        addr.id = Math.random() * 10000 + '';
+        addr.id = util.getUUID('addr');
         base.myAddress.push(addr);
       }
       var order = {};
-      order.id = Math.random() * 10000 + '';
+      order.id = util.getUUID('order');
       order.status = 0;//未支付
       order.user = base.user;
       order.user.addr = _this.data.addr;
@@ -111,8 +112,7 @@ Page({
       order.plist = _this.data.plist;
       order.totalPrice = _this.data.totalPrice;
       order.date = util.formatTime(new Date());
-
-      base.myOrder.add(order);
+      db.add('order', order);
       base.cart.clear();
 
       wx.navigateTo({

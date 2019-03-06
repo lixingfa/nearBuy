@@ -27,8 +27,9 @@
 </view>
 <button catchtap="answerShow">向{{good.promulgator}}咨询</button>
 
-<view class="tool">
-  <view wx:if="{{good.surplus > 0 && good.lineOrder == 'true'}}" class="tbtn add" catchtap="addCart">加入购物车(<text class="cart-num">{{good.num}}</text>)</view>
+<view class="tool"><!--还有库存，允许在线下单，不是自己-->
+  <view wx:if="{{good.surplus > 0 && good.lineOrder == 'true' && good.promulgatorId != openId}}" class="tbtn add" catchtap="addCart">
+  加入购物车(<text class="cart-num">{{good.num}}</text>)</view>
   <view class="tbtn add" catchtap="goCart" wx:if="{{good.lineOrder == 'true'}}">前往购物车</view>
   <view class="tbtn add" wx:if="{{good.lineOrder == 'false'}}"><navigator delta='1'
       open-type="navigateBack" 

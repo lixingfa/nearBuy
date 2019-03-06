@@ -1,8 +1,5 @@
 <view id='search'>
-  <form bindsubmit="searchGood">
     <input name='keyword' placeholder="输入商品信息" type="text" maxlength="50"/>
-    <button form-type="submit" size="mini" >搜索</button>
-  </form>
 </view>
 <swiper id="banner" interval="5000" duration="2000" autoplay circular indicator-dots>
   <swiper-item>
