@@ -6,7 +6,7 @@ function getNewGoods(fn){
   var where = {};
   //在有效期内
   where.validTimeTrue = wx.cloud.database().command.gte(util.formatTime(new Date()));
-  where.status = 'true';//上架
+  where.status = 'true';//上架，拉黑某人时，将其商品全部下架，非关系型数据库的限制
   db.where('goods', where, 'createTime', 'desc').then(fn);
 }
 

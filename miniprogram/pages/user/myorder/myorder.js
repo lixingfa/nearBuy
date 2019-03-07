@@ -1,3 +1,4 @@
+var db = require('../../../utils/db.js');
 var base = getApp();
 Page({
   data: {
@@ -10,9 +11,14 @@ Page({
     price:""
   },
   onShow: function () {//加载过又不关闭的话，onLoad不会再执行
-    console.log(base.user.nickName);
-    this.setData({
-      myOrder: base.myOrder.getList()
+    var _this = this;
+    var where = {};
+    where.user = {};
+    where.user.id = base.openId;
+    db.where('orders', where,"createTime","desc").then(function(orders){
+      _this.setData({
+        myOrder: orders
+      });
     });
   },
   pay:function(e){
