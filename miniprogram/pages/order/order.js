@@ -2,6 +2,7 @@ var base = getApp();
 var util = require('../../utils/util.js');
 var db = require('../../utils/db.js');
 var user = require('../../utils/user.js');
+var good = require('../../utils/good.js');
 Page({
     data: {
       //下单数据
@@ -42,111 +43,9 @@ Page({
     initAddress: function (myAddress){
       if (myAddress){
         if (myAddress.length == 0){//数据库里也没有
-          if (!this.data.addr && !this.data.phone){//为空表示没有地址（操作地址时，电话是必须的），可能需要选取地址
-            this.setData({ 
-              addr: base.location.address, 
-              phone: base.location.phone,
-              longitude: base.location.longitude,
-              latitude: base.location.latitude,
-              selectedID:base.location.id
-            });
-          }
           this.chooseAddrInMap();//都没有地址，就在地图上选
         }else{
-          this.setData({ myAddress: myAddress});
-        }
-      }
-    },
-    valid: function () {
-        var _this = this;
-        var err = "";
-        if (!_this.data.addr) {
-              wx.showModal({
-                  showCancel: false,
-                  title: '',
-                content: "您还没完善收件地址，请点击顶部的选择按钮进行完善。"
-              })
-              return false;
-          }
-          if (!_this.data.phone) {
-            wx.showModal({
-              showCancel: false,
-              title: '',
-              content: "请填写您的联系电话。"
-            })
-            return false;
-          }
-        return true;
-    },
-    submit: function (e) {
-      var _this = this;
-      if (!_this.valid()) {
-        return;
-      }
-      //查库存，要正确提示哪种商品没有了
-
-      _this.creatOrder();
-    },
-  creatOrder: function (){
-      var _this = this;
-      if (_this.data.selectedID == -1) {//不是从列表里选的地址
-        var addr = {};
-        addr.addr = _this.data.addr;
-        addr.phone = _this.data.phone;
-        addr.longitude = _this.data.longitude;
-        addr.latitude = _this.data.latitude;
-        addr.id = util.getUUID('addr');
-        addr.createTime = util.formatTime(new Date());
-        addr.user = this.data.user.id;
-        db.add('address', addr);
-      }
-      var order = {};
-      order.id = util.getUUID('order');
-      order.status = 0;//未支付
-      order.user = {};
-      order.user.nickName = this.data.user.nickName;
-      order.user.id = this.data.user.id;
-      order.user.addr = _this.data.addr;
-      order.user.phone = _this.data.phone;
-      order.plist = _this.data.plist;//里面有关键字
-      order.totalPrice = _this.data.totalPrice;
-      order.createTime = util.formatTime(new Date());
-      db.add('orders', order).then(function(d){
-        //更新库存
-        base.cart.clear();
-        wx.navigateTo({
-          url: "../success/success"
-        });
-      },function(d){
-        wx.showModal({
-          showCancel: false,
-          title: '',
-          content: "下单时出现错误。"
-        });
-      });
-    },
-    bindAddrBlur: function (e) {
-        this.setData({
-          addr: e.detail.value
-        });
-      },
-    bindPhoneBlur: function (e) {
-      this.setData({
-        phone: e.detail.value
-      });
-    },
-    toSelect: function (e) {//选中地址
-      var _this = this;
-      var id = e.currentTarget.dataset.id;
-      _this.setData({ selectedID: id });
-      for (var i = 0; i < _this.data.myAddress.length; i++) {
-        if (_this.data.myAddress[i].id == id) {
-          _this.setData({
-            phone: _this.data.myAddress[i].phone,
-            addr: _this.data.myAddress[i].address,
-            //addrShow: false
-          });
-          break;
+          this.setData({ myAddress: myAddress, addrShow: true});
         }
       }
     },
@@ -193,6 +92,114 @@ Page({
         }
       });
     },
+    valid: function () {
+        var _this = this;
+        var err = "";
+        if (!_this.data.addr) {
+              wx.showModal({
+                  showCancel: false,
+                  title: '',
+                content: "您还没完善收件地址，请点击顶部的选择按钮进行完善。"
+              })
+              return false;
+          }
+          if (!_this.data.phone) {
+            wx.showModal({
+              showCancel: false,
+              title: '',
+              content: "请填写您的联系电话。"
+            })
+            return false;
+          }
+        return true;
+    },
+    submit: function (e) {
+      var _this = this;
+      if (!_this.valid()) {
+        return;
+      }
+      //检查库存
+      good.checkOrderGoods(_this.data.plist).then(function (goOrder) {
+        if (goOrder) {
+          _this.creatOrder();
+        }
+      });
+    },
+    creatOrder:function(){
+      var _this = this;
+      if (_this.data.selectedID == -1) {//不是从列表里选的地址
+        var addr = {};
+        addr.addr = _this.data.addr;
+        addr.phone = _this.data.phone;
+        addr.longitude = _this.data.longitude;
+        addr.latitude = _this.data.latitude;
+        addr.id = util.getUUID('addr');
+        addr.createTime = util.formatTime(new Date());
+        addr.user = this.data.user.id;
+        db.add('address', addr);
+      }
+      var order = {};
+      order.id = util.getUUID('order');
+      order.status = 0;//未支付
+      order.user = {};
+      order.user.nickName = this.data.user.nickName;
+      order.user.id = this.data.user.id;
+      order.user.addr = _this.data.addr;
+      order.user.phone = _this.data.phone;
+      var _ids = [];
+      for (var i in _this.data.plist) {//去除关键字
+        _ids.push(_this.data.plist[i]._id);
+        delete _this.data.plist[i]._id;
+        delete _this.data.plist[i]._openid;//待处理订单要嵌套查询了
+      }
+      order.plist = _this.data.plist;
+      order.totalPrice = _this.data.totalPrice;
+      order.createTime = util.formatTime(new Date());
+      db.add('orders', order).then(function(d){
+        //更新库存
+        for (var i in _this.data.plist){
+          var good = {};
+          good.surplus = _this.data.plist[i].surplus;
+          db.update('goods',_ids[i],good);
+        }
+        //清空购物车
+        base.cart.clear();
+        wx.redirectTo({//不允许退回下单页
+          url: "../success/success"
+        });
+      },function(d){
+        wx.showModal({
+          showCancel: false,
+          title: '',
+          content: "下单时出现错误。"
+        });
+      });
+    },
+    bindAddrBlur: function (e) {
+        this.setData({
+          addr: e.detail.value
+        });
+      },
+    bindPhoneBlur: function (e) {
+      this.setData({
+        phone: e.detail.value
+      });
+    },
+    toSelect: function (e) {//选中地址
+      var _this = this;
+      var id = e.currentTarget.dataset.id;
+      _this.setData({ selectedID: id });
+      for (var i = 0; i < _this.data.myAddress.length; i++) {
+        if (_this.data.myAddress[i].id == id) {
+          _this.setData({
+            phone: _this.data.myAddress[i].phone,
+            addr: _this.data.myAddress[i].addr,
+            //addrShow: false
+          });
+          break;
+        }
+      }
+    },
     toDeleteAddr:function(e){
       var _this = this;
       var id = e.currentTarget.dataset.id;
@@ -203,6 +210,7 @@ Page({
           if (res.confirm) {
             for (var i = 0; i < _this.data.myAddress.length; i++) {
               if (_this.data.myAddress[i].id == id) {
+                db.remove('address', _this.data.myAddress[i]._id);
                 _this.data.myAddress.splice(i, 1);
                 _this.setData({
                   myAddress: _this.data.myAddress

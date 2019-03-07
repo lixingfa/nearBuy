@@ -1,5 +1,5 @@
 var base = getApp();
-var preview=require('../../utils/preview.js');
+var good=require('../../utils/good.js');
 Page({
     data: {
         plist: [],
@@ -99,9 +99,16 @@ Page({
     },
     goOrder: function () {
         if (this.data.plist.length > 0 && this.data.total > 0) {
-            wx.navigateTo({//保留当前页面，到新页面，可以返回
-              url: '../order/order?totalPrice=' + this.data.total
-            })
+          var _this = this;
+            //检查库存
+          good.checkOrderGoods(this.data.plist).then(function(goOrder){
+              if(goOrder){
+                base.setCache('cart', _this.data.plist);
+                wx.navigateTo({//保留当前页面，到新页面，可以返回
+                  url: '../order/order?totalPrice=' + _this.data.total
+                });
+              }
+            });
         } else {
             base.modal({
                 title: '购物车无商品',

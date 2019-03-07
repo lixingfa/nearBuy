@@ -6,7 +6,7 @@
   <view class='good-desc'>
     <text class='good-price'>{{good.price}}</text><text>元/{{good.unit}}</text>
     <view class='good-inAWord'>共{{good.total}}{{good.unit}}，剩余{{good.surplus}}{{good.unit}}，
-                            {{good.promulgator}}发布，距您{{good.distance}}</view>
+                            {{good.promulgator}}发布</view>
                         </view>
 
 <view class="date tab" wx:if="{{good.chooseTime == 'true'}}">
@@ -17,7 +17,7 @@
       {{good.deliveryDate?good.deliveryDate:'选择日期'}}
     </picker>
     <picker mode="selector" value="{{good.deliveryTime}}" range="{{good.arrTime}}" class="dt-item pos" bindchange="input" data-param="deliveryTime">
-      {{good.deliveryTime}}
+      {{good.deliveryTime?good.deliveryTime:'请选择时间'}}
     </picker>
   </view>
 </view>

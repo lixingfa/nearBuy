@@ -5,6 +5,7 @@ var util = require('/utils/util.js');
 var user = require('/utils/user.js');
 var db = require('/utils/db.js');
 App({
+  https:'https://6e65-nearbuy-test-1258692926.tcb.qcloud.la/',
   distan: 3000,//与默认地址距离多少米就认为是新的地址
   openId : '',
   arrTime: ['选择时间', '6:00', '7:00', '8:00', '9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00'],

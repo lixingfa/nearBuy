@@ -55,7 +55,6 @@
       {{good.validTime}}
     </picker>
   </view>
-  类型
 <view class='tab'>商品上架：
   <radio-group class="radio-group" bindchange="input" data-param="good.status">
     <label class="radio" wx:for="{{items}}" wx:key="value">

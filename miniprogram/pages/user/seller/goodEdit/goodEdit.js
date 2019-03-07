@@ -84,7 +84,7 @@ Page({
             success: res => {
               // 返回文件 ID
               var fileID = res.fileID;
-              _this.setData({ "good.fileID": fileID, "good.pic": tempFilePath, "good.id": id});
+              _this.setData({ "good.fileID": fileID, "good.pic": base.https + cloudPath, "good.id": id});
             },
             fail: console.error
           });

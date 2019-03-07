@@ -22,8 +22,11 @@ function doc(table,id){
 function where(table,where,orderBy,order){
   return new Promise(function (resolve, reject) {
     var db = wx.cloud.database();//默认环境的数据库引用
-    db.collection(table).where(where)
-      .orderBy(orderBy, order).get({
+    var query = db.collection(table).where(where);
+      if(orderBy != null){
+        query.orderBy(orderBy, order);
+      }
+      query.get({
         success(res) {
           resolve(res.data);// res.data 是包含以上定义的两条记录的数组
           for (var i in res.data){
@@ -38,6 +41,10 @@ function where(table,where,orderBy,order){
       })
   });
 }
+function whereOnly(table, whereData){
+  return where(table, whereData,null,null);
+}
+
 //只取一条数据
 function whereSingle(table, where) {
   return new Promise(function (resolve, reject) {
@@ -96,15 +103,24 @@ function update(table,_id,data){
     });
   });
 }
-//不提供删除，一切数据都逻辑删，为后面积累数据和找回。提供历史商品、历史订单的功能
-  //function remove()
+
+//复杂业务不应物理删，为后面积累数据和找回。提供历史商品、历史订单的功能
+function remove(table,_id){
+  var db = wx.cloud.database();
+  db.collection(table).doc(_id).remove({
+    success: console.log,
+    fail: console.error
+  });
+}
 
 module.exports = {
   doc: doc,
   where: where,
   add: add,
   update: update,
-  whereSingle: whereSingle
+  whereSingle: whereSingle,
+  remove: remove,
+  whereOnly: whereOnly
 }
 /*Node应用由模块组成，采用CommonJS模块规范。
 根据这个规范，每个文件就是一个模块，有自己的作用域。在一个文件里面定义的变量、函数、类，都是私有的，对其他文件不可见。所以需要加上exports*/

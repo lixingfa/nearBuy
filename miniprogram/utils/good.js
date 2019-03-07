@@ -44,9 +44,47 @@ function getGoodAnswers(goodId, all,openId,fn){
   db.where('answers', where, 'createTime', 'desc').then(fn, fn);
 }
 
+//检查订单商品信息
+function checkOrderGoods(goods){
+  return new Promise(function (resolve) {
+    var goodIds = [];
+    for(var i in goods){
+      goodIds.push(goods[i].id);
+    }
+    var _ = wx.cloud.database().command;
+    var where = {id:_.in(goodIds)};
+    db.whereOnly('goods', where).then(function(data){
+      var goOrder = true;
+      for(var i in data){
+        var now = data[i];
+        var o = goods[i];
+        if (now.status == 'false') {
+          wx.showModal({
+            showCancel: false,
+            title: '',
+            content: now.title + "已经下架了，请不要勾选它。"
+          });
+          goOrder = false;
+        }else if (parseInt(now.surplus) >= o.num){
+          continue;
+        }else{
+          wx.showModal({
+            showCancel: false,
+            title: '',
+            content: now.title + "只剩" + now.surplus + now.unit + "了，请修改购买量。"
+          });
+          goOrder = false;
+        }
+      }
+      resolve(goOrder);
+    }, function(res){});//查询出错
+  });
+}
+
 module.exports = {
   getNewGoods: getNewGoods,
   getGood: getGood,
   getGoodAnswers: getGoodAnswers,
-  getGoodsByUser: getGoodsByUser
+  getGoodsByUser: getGoodsByUser,
+  checkOrderGoods: checkOrderGoods
 }
