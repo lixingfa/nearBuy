@@ -151,6 +151,10 @@ Page({
         _ids.push(_this.data.plist[i]._id);
         delete _this.data.plist[i]._id;
         delete _this.data.plist[i]._openid;//待处理订单要嵌套查询了
+        if (_this.data.plist[i].select){
+          //从购物车中删除成功下单的
+          base.cart.remove(_this.data.plist[i].id);
+        }
       }
       order.plist = _this.data.plist;
       order.totalPrice = _this.data.totalPrice;
@@ -162,8 +166,6 @@ Page({
           good.surplus = _this.data.plist[i].surplus;
           db.update('goods',_ids[i],good);
         }
-        //清空购物车
-        base.cart.clear();
         wx.redirectTo({//不允许退回下单页
           url: "../success/success"
         });

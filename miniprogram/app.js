@@ -121,16 +121,14 @@ App({
       }
     },
     getList: function () {//获取购物车中的商品列表
-      var list = [];
       var dic = wx.getStorageSync(this.key);
       for (var p in dic) {
-        if (dic[p].num != 0) {//过滤掉在购物车里弄成0，又出去的，否则感觉上会很奇怪
-          list.push(dic[p]);
-        } else {
+        if (dic[p].num == 0) {//过滤掉在购物车里弄成0，又出去的，否则感觉上会很奇怪
           delete dic[p];
         }
       }
-      return list;
+      wx.setStorageSync(this.key, dic);
+      return dic;
     },
     clear: function () {//清除购物车
       wx.removeStorageSync(this.key);

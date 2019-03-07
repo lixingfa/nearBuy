@@ -5,9 +5,9 @@
 </view>
 
 <view class="pro" animation="{{p._ani}}" wx:if="{{!p.del}}" wx:for="{{plist}}" wx:for-item="p" wx:key="id"><!--animation动画相关的属性-->
-  <view class="pro-con" animation="{{p.ani}}" bindtouchstart="ptouchsatrt" data-index="{{p.index}}" bindtouchend="ptouchend"><!--bindtouchs触控事件-->
-    <checkbox catchtap='select' data-id='{{p.id}}' data-index="{{p.index}}" checked='{{p.select?true:false}}'></checkbox>
-    <view class="pimg" data-index="{{p.index}}" data-name="{{p.title}}" data-brand="{{p.brand}}">
+  <view class="pro-con" animation="{{p.ani}}" bindtouchstart="ptouchsatrt" data-id="{{p.id}}" bindtouchend="ptouchend"><!--bindtouchs触控事件-->
+    <checkbox catchtap='select' data-id='{{p.id}}' data-id="{{p.id}}" checked='{{p.select?true:false}}'></checkbox>
+    <view class="pimg" data-id="{{p.id}}" data-name="{{p.title}}" data-brand="{{p.brand}}">
       <image src="{{p.pic}}" mode="aspectFill"></image>
     </view>
     <view class="pname" catchtap="goDetail" data-id="{{p.id}}">
@@ -16,12 +16,12 @@
     </view>
     <view class="ptprice">￥{{p.price*p.num}}</view>
     <view class="pnum">
-      <view wx:if="{{p.num > 0}}" class="num num-a" data-type="-1" data-index="{{p.index}}" catchtouchstart="changeNum"><text>-</text></view>
+      <view wx:if="{{p.num > 0}}" class="num num-a" data-type="-1" data-id="{{p.id}}" catchtouchstart="changeNum"><text>-</text></view>
       <text class="num-text">{{p.num}}</text>
-      <view wx:if="{{p.surplus > 0}}" class="num num-b" data-type="1" data-index="{{p.index}}" catchtouchstart="changeNum"><text>+</text></view>
+      <view wx:if="{{p.surplus > 0}}" class="num num-b" data-type="1" data-id="{{p.id}}" catchtouchstart="changeNum"><text>+</text></view>
     </view>
   </view>
-  <view class="del" data-id="{{p.id}}" data-index="{{p.index}}" catchtap="del">
+  <view class="del" data-id="{{p.id}}" data-id="{{p.id}}" catchtap="del">
     <text>删除</text>
   </view>
 </view>

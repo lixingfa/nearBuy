@@ -14,15 +14,13 @@ Page({
             this.setData({ his: base.cart.ref });
             base.cart.ref = "";
         }
-        var l = base.cart.getList();//获取购物车列表里的
-        for (var i = 0; i < l.length; i++) {
-            //l[i].img = base.path.res + 'images/ksk/item/w_127/' + l[i].name + '.jpg';
-            l[i].index = i;
-            if (typeof (l[i].select) == "undefined"){
-              l[i].select = true;
-            }
+        var list = base.cart.getList();//获取购物车列表里的
+        for(var l in list){
+          if (typeof (list[l].select) == "undefined"){
+            list[l].select = true;
+          }
         }
-        this.setData({ plist: l });
+        this.setData({ plist: list });
         this.changeTotal();
     },
     goBack: function () {
@@ -32,57 +30,42 @@ Page({
         })
     },
     changeTotal: function () {
-        var l = this.data.plist;
+        var list = this.data.plist;
         var t = 0;
-        for (var i = 0; i < l.length; i++) {
-          if (!l[i].del && l[i].select) {//排除删除选项
-                t += l[i].price * l[i].num;
-            }
+        for (var l in list) {
+          if (!list[l].del && list[l].select) {//排除删除选项
+            t += list[l].price * list[l].num;
+          }
         }
         this.setData({ total: t });
     },
     changeNum: function (e) {
-        var index = e.currentTarget.dataset.index;
-        var t = e.currentTarget.dataset.type;//这次的数值
-        var surplus = this.data.plist[index].surplus;//剩余
-        t = parseInt(t);
-        var re = this.data.plist[index].num + t;
-
-        if ((surplus > 0 && t == 1) || (t == -1 && re >= 0)) {
-            var id = this.data.plist[index].id;
-            var key = "plist[" + index + "].num";
-            var obj = {}; obj[key] = re;
-            base.cart.num(id, obj[key]);//id,num
-            this.setData(obj);
-            this.changeTotal();
-            //局部更新就用这个？
-            key = "plist[" + index + "].surplus";
-            obj[key] = this.data.plist[index].surplus + -t;
-            this.setData(obj);
-        }
+      var id = e.currentTarget.dataset.id;
+      var t = e.currentTarget.dataset.type;//这次的数值
+      t = parseInt(t);
+      this.data.plist[id].num = this.data.plist[id].num + t;
+      this.data.plist[id].surplus = this.data.plist[id].surplus - t;
+      if (this.data.plist[id].surplus >= 0) {
+        this.changeTotal();
+        this.setData({plist: this.data.plist});
+      }
     },
     select:function(e){
-      var index = e.currentTarget.dataset.index;
-      var id = this.data.plist[index].id;
-      var key1 = "plist[" + index + "].select";
-      var obj = {};
-      if (this.data.plist[index].select){
-        obj[key1] = false;
+      var id = e.currentTarget.dataset.id;
+      if (this.data.plist[id].select){
+        this.data.plist[id].select = false;
       }else{
-        obj[key1] = true;
+        this.data.plist[id].select = true;
       }
-      this.setData(obj);
+      this.setData({ plist: this.data.plist });
       this.changeTotal();
     },
     del: function (e) {
-        var index = e.currentTarget.dataset.index;
-        var id = this.data.plist[index].id;
-        var key1 = "plist[" + index + "].del";
-        var obj = {};
-        obj[key1] = true;
-        this.setData(obj);
-        this.changeTotal();
-        base.cart.remove(id);
+      var id = e.currentTarget.dataset.id;
+      this.data.plist[id].del = true;
+      this.setData({ plist: this.data.plist });
+      this.changeTotal();
+      base.cart.remove(id);
     },
     clearCart: function () {
         var _this = this;
@@ -98,7 +81,7 @@ Page({
         }
     },
     goOrder: function () {
-        if (this.data.plist.length > 0 && this.data.total > 0) {
+        if (this.data.total > 0) {
           var _this = this;
             //检查库存
           good.checkOrderGoods(this.data.plist).then(function(goOrder){
@@ -110,10 +93,11 @@ Page({
               }
             });
         } else {
-            base.modal({
-                title: '购物车无商品',
-                showCancel: false
-            })
+          wx.showModal({
+            showCancel: false,
+            title: '',
+            content: "购物车无商品。"
+          });
         }
     }, 
     goDetail: function (e) {
@@ -123,7 +107,7 @@ Page({
       })
     },
     p: {
-        currentIndex: -1,
+        currentid: -1,
         eventOk: true,
         eventStartOk: true,
         aniOk: true,
@@ -136,10 +120,10 @@ Page({
         max: 80,
         size: 40
     },
-    moveTo: function (index, x) {
+    moveTo: function (id, x) {
         this.p.eventOk = false;//停止事件
         if (x == 0) {
-            this.p.currentIndex = -1;
+            this.p.currentid = -1;
             if (this.p.len > 0 - this.p.max / 2) {
                 if (this.p.len > 0) {
                     this.p.ani.translateX(this.p.size).step({
@@ -155,7 +139,7 @@ Page({
             }
         }
         if (x == 0 - this.p.max) {
-            this.p.currentIndex = index;
+            this.p.currentid = id;
             this.p.ani.translateX(x - this.p.size).step({
                 duration: 200,
                 timingFunction: 'ease'
@@ -165,16 +149,14 @@ Page({
             duration: 200,
             timingFunction: 'ease-out'
         });
-        var obj = {};
-        var key = "plist[" + index + "].ani";
-        obj[key] = this.p.ani.export();
-        this.setData(obj);
+      this.data.plist[id].ani = this.p.ani.export();
+      this.setData({ plist: this.data.plist });
     },
     ptouchsatrt: function (e) {
 
-        var index = e.currentTarget.dataset.index;
-        if (this.p.currentIndex >= 0) {
-            this.moveTo(this.p.currentIndex, 0);
+        var id = e.currentTarget.dataset.id;
+        if (this.p.currentid >= 0) {
+            this.moveTo(this.p.currentid, 0);
             return;
         }
         if (this.p.eventStartOk) {
@@ -194,11 +176,11 @@ Page({
             var ht = pt.pageY - this.p.y;
             if (len != 0 && Math.abs(ht) / Math.abs(len) < 0.3) {//滑动倾斜度限制
                 this.p.len = len;
-                var index = e.currentTarget.dataset.index;
+                var id = e.currentTarget.dataset.id;
                 if (len > 0 - this.p.max / 2) {
-                    this.moveTo(index, 0);
+                    this.moveTo(id, 0);
                 } else {
-                    this.moveTo(index, 0 - this.p.max);
+                    this.moveTo(id, 0 - this.p.max);
                 }
             }
         }

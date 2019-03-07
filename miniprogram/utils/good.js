@@ -57,7 +57,7 @@ function checkOrderGoods(goods){
       var goOrder = true;
       for(var i in data){
         var now = data[i];
-        var o = goods[i];
+        var o = goods[now.id];
         if (now.status == 'false') {
           wx.showModal({
             showCancel: false,
