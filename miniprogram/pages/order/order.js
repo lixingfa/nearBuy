@@ -147,16 +147,49 @@ Page({
       order.user.addr = _this.data.addr;
       order.user.phone = _this.data.phone;
       var _ids = [];
-      for (var i in _this.data.plist) {//去除关键字
+      var plist = {};
+      for (var i in _this.data.plist) {//去除关键字和辅助数据，只保留有显示和分析价值的数据
         _ids.push(_this.data.plist[i]._id);
-        delete _this.data.plist[i]._id;
-        delete _this.data.plist[i]._openid;//待处理订单要嵌套查询了
         if (_this.data.plist[i].select){
           //从购物车中删除成功下单的
           base.cart.remove(_this.data.plist[i].id);
-        }
+          var g = {};
+          g.chooseTime = _this.data.plist[i].chooseTime;
+          g.createTime = _this.data.plist[i].createTime;
+          g.deliveryTime = _this.data.plist[i].deliveryTime;
+          g.id = _this.data.plist[i].id;
+          g.lineOrder = _this.data.plist[i].lineOrder;
+          g.needPay = _this.data.plist[i].needPay;
+          g.num = _this.data.plist[i].num;
+          g.price = _this.data.plist[i].price;
+          g.promulgator = _this.data.plist[i].promulgator;
+          g.promulgatorId = _this.data.plist[i].promulgatorId;
+          g.surplus = _this.data.plist[i].surplus;
+          g.takeOut = _this.data.plist[i].takeOut;
+          g.title = _this.data.plist[i].title;
+          plist[_this.data.plist[i].id] = g;
+        }        
+        /*delete _this.data.plist[i]._id;
+        delete _this.data.plist[i]._openid;//关键字
+        delete _this.data.plist[i].arrTime;//送货/取货时间
+        delete _this.data.plist[i].arrTimeIndex;
+        delete _this.data.plist[i].editTotal;
+        delete _this.data.plist[i].indate;//有效期
+        delete _this.data.plist[i].validTime;
+        delete _this.data.plist[i].latitude;//以最新的为准即可
+        delete _this.data.plist[i].longitude;
+        delete _this.data.plist[i].fileID;
+        delete _this.data.plist[i].inAWord;
+        delete _this.data.plist[i].select;//是否在购物车里被选择了，肯定是被选才进订单的
+        delete _this.data.plist[i].status;//商品状态，肯定是上架了的
+        delete _this.data.plist[i].total;//商品生成时就定死了，即使能改，利用价值也不大
+        delete _this.data.plist[i].typeId;
+        delete _this.data.plist[i].typeName;//用来检索的，一般不会变，后期分析以最新的为准
+        delete _this.data.plist[i].unit;
+        delete _this.data.plist[i].workTimeEnd;
+        delete _this.data.plist[i].workTimeStart;//虽然可以分析出卖家的营业时间变化，但价值不大*/
       }
-      order.plist = _this.data.plist;
+      order.plist = plist;
       order.totalPrice = _this.data.totalPrice;
       order.createTime = util.formatTime(new Date());
       db.add('orders', order).then(function(d){

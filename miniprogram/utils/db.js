@@ -24,7 +24,7 @@ function where(table,where,orderBy,order){
     var db = wx.cloud.database();//默认环境的数据库引用
     var query = db.collection(table).where(where);
       if(orderBy != null){
-        query.orderBy(orderBy, order);
+        query = query.orderBy(orderBy, order);//注意
       }
       query.get({
         success(res) {

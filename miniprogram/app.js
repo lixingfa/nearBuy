@@ -263,41 +263,6 @@ App({
     //地址放入缓存
     wx.setStorageSync("location", _this.location);
   },
-  myOrder:{
-    key: "order",
-    ref: "",
-    add: function (p) {//加入购物车
-        var dic = wx.getStorageSync(this.key) || {};
-        dic[p.id] = p;
-        wx.setStorageSync(this.key, dic);
-    },
-    getList: function () {//获取购物车中的商品列表
-      var list = [];
-      var dic = wx.getStorageSync(this.key);
-      for (var p in dic) {
-        list.push(dic[p]);
-      }
-      return list;
-    },
-    changeGood: function (id,oid) {//获取购物车中的数量
-      var dic = wx.getStorageSync(this.key) || {};
-      if (oid in dic) {
-        var plist = dic[oid].plist;
-        for(var p in plist){
-          if(plist[p].id == id){
-            var good = plist[p];
-            good.needPay = false;
-            plist[p] = good;
-            dic[oid].plist = plist;
-
-            wx.setStorageSync(this.key, dic);
-            break;
-          }
-        }
-      }
-
-    }
-  },
   goodTypes:[{//分类，每个商品必须只能属于一个分类，最多两层？可以有三个标签
     id: '0', name: '房屋租售', sub: [{ id: '00', name: '出租' }, { id: '01', name: '出售' }]
   },{
