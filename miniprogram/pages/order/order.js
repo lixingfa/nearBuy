@@ -188,7 +188,7 @@ Page({
           n.goodId = g.id;
           n.content = order.user.nickName + ' 购买了 ' + g.title + ' ，数量' + g.num + '。';
           if (g.time != ''){
-            n.content = n.content +  + g.time + g.how + '。';
+            n.content = n.content + '希望' + g.time + g.how + '。';
           }
           if(g.how != '取货'){
             n.content = n.content + '地址：' + order.user.addr + order.user.phone;

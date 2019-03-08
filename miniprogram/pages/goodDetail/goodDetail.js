@@ -26,10 +26,9 @@ Page({
     },
   initGood:function(good){
       if (good){//购物车里存在，则拿购物车的，可以简化很多操作
-        var time = null;
         var arrTimeT = new Array();
         if (good.chooseTime){//允许选择送货/取货时间
-          time = util.formatTime(new Date());//返回当前日期和时间，使日期默认显示在今天
+          var date = new Date();
           var start = good.workTimeStart;//可选择的时间，是根据店铺的营业时间，或者个人提供服务的时间确定的
           start = start.substring(0,start.indexOf(":"));
           var end = good.workTimeEnd;
@@ -37,10 +36,23 @@ Page({
           for (var t = parseInt(start); t < parseInt(end); t++){//每次增加1小时
             arrTimeT.push(t + ":00-" + (t + 1) + ":00");
           }
+          good.arrTime = arrTimeT;
+          good.arrTimeIndex = 0;
+          var nextHour = date.getHours();
+          if (nextHour + 1 > end){//大于工作时间，选后一天，不选时间
+            date = new Date(new Date().getTime() + 24 * 60 * 60 * 1000); //后一天
+          }else{
+            if (nextHour < start){
+              good.deliveryTime = arrTimeT[0];
+            }else{
+              good.deliveryTime = nextHour + ":00-" + (nextHour + 1) + ":00";
+            }
+          }
+          good.deliveryDate = util.formatTime(date);
+          good.deliveryDate = good.deliveryDate.substring(0, good.deliveryDate.indexOf(' '));
+        }else{
+          good.deliveryTime = '';
         }
-        good.deliveryTime = '';
-        good.arrTime = arrTimeT;
-        good.arrTimeIndex = 0;
         good.num = 0;
         this.setData({good: good});
       }else{//没找到这个商品
