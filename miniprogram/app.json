@@ -5,8 +5,6 @@
     "pages/success/success",
     "pages/order/order",
     "pages/goodDetail/goodDetail",
-    "pages/buy/buy",
-    "pages/phone/phone",
     "pages/cart/cart",
     "pages/user/user",
     "pages/user/myorder/myorder",
@@ -38,7 +36,7 @@
       },
       {
         "pagePath": "pages/user/user",
-        "text": "个人信息",
+        "text": "我的",
         "iconPath": "icon/my-1.png",
         "selectedIconPath": "icon/my-2.png"
       }

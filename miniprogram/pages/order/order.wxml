@@ -14,12 +14,12 @@
     <text class="pname">{{p.title}}</text>
     <text class="pdeliveryTime">{{p.deliveryDate}} {{p.deliveryTime}}
     </text>
-    <text class="chooseTime" wx:if="{{p.deliveryTime !='' && p.takeOut}}">配送</text>
-    <text class="chooseTime lineOrder" wx:if="{{p.deliveryTime != '' && p.lineOrder && !p.takeOut}}">取货</text>
+    <text class="chooseTime" wx:if="{{p.deliveryTime !='' && p.takeOut == 'true'}}">配送</text>
+    <text class="chooseTime lineOrder" wx:if="{{p.deliveryTime != '' && p.lineOrder == 'true' && p.takeOut == 'false'}}">取货</text>
     <text class="pprice">{{p.price}} x {{p.num}}</text>
     <text class="ptprice">{{p.price*p.num}}</text>
     </view>
-    <view class="remarks" wx:if="{{p.remarks != null}}">留言：{{p.remarks}}</view>
+    <view class="remarks" wx:if="{{p.remarks && p.remarks != ''}}">留言：{{p.remarks}}</view>
   </view>
 </view>
 <view class="tool">

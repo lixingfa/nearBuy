@@ -14,7 +14,7 @@ Page({
     var _this = this;
     var where = {};
     where.user = {};
-    where.user.id = base.openId;
+    where.user.id = base.openId;//按时间倒序
     db.where('orders', where,"createTime","desc").then(function(orders){
       _this.setData({ myOrder: orders, qrcodeShow: false});
     });

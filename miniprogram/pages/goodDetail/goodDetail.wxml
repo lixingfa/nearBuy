@@ -9,7 +9,7 @@
                             {{good.promulgator}}发布</view>
                         </view>
 
-<view class="date tab" wx:if="{{good.chooseTime == 'true'}}">
+<view class="date tab" wx:if="{{good.chooseTime == 'true' && good.promulgatorId != openId}}">
   <view class="tit" wx:if="{{good.takeOut == 'true'}}">您希望的送货时间</view>
   <view class="tit" wx:if="{{good.lineOrder == 'true' && good.takeOut != 'true'}}">您预计的取货时间</view>
   <view class="dt">
@@ -21,7 +21,7 @@
     </picker>
   </view>
 </view>
-<view class="date tab" wx:if="{{good.lineOrder == 'true'}}">
+<view class="date tab" wx:if="{{good.lineOrder == 'true' && good.promulgatorId != openId}}">
   <view class="tit">下单留言</view>
   <textarea value='您的下单留言' bindblur="input" bindinput="input" placeholder="您的留言信息" value="{{good.remarks}}" maxlength="200" class='remark' data-param="good.remarks"/>
 </view>
@@ -32,8 +32,8 @@
     <text wx:if="{{good.promulgatorId != openId}}">向{{good.promulgator}}咨询</text>
   </view>
 </view>
-<view class="tool"><!--还有库存，允许在线下单，不是自己-->
-  <view wx:if="{{good.surplus > 0 && good.lineOrder == 'true' && good.promulgatorId != openId}}" class="tbtn add" catchtap="addCart">
+<view class="tool" wx:if="{{good.promulgatorId != openId}}"><!--还有库存，允许在线下单，不是自己-->
+  <view wx:if="{{good.surplus > 0 && good.lineOrder == 'true'}}" class="tbtn add" catchtap="addCart">
   加入购物车(<text class="cart-num">{{good.num}}</text>)</view>
   <view class="tbtn add" catchtap="goCart" wx:if="{{good.lineOrder == 'true'}}">前往购物车</view>
   <view class="tbtn add" wx:if="{{good.lineOrder == 'false'}}"><navigator delta='1'

@@ -10,10 +10,8 @@
         <view class="info">
         <!--<image src="{{p.user.avatarUrl}}" class="pimg"></image>-->
         <text class="pname">{{g.title}} - {{g.promulgator}}</text>
-        <text class="pdeliveryTime">{{g.deliveryDate}} {{g.deliveryTime}}
-        </text>
-        <text class="chooseTime" wx:if="{{g.deliveryTime !='' && g.takeOut}}">配送</text>
-        <text class="chooseTime lineOrder" wx:if="{{g.deliveryTime != '' && g.lineOrder && !g.takeOut}}">取货</text>
+        <text class="pdeliveryTime">{{g.time}}</text>
+        <text class="chooseTime">{{g.how}}</text>
         <text class="pprice">{{g.price}} x {{g.num}}</text>
         <text class="ptprice">{{g.price*g.num}}</text>
         <text class="pprice" wx:if="{{g.needPay}}" data-id="{{g.id}}" data-oid="{{p._id}}" data-promulgator="{{g.promulgator}}" data-price="{{g.price}}" data-num="{{g.num}}" catchtap="pay">确认收货</text>

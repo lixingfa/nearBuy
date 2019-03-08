@@ -26,66 +26,70 @@
 </view>
 <!--卖方菜单-->
 <view class="ub">
-  <view class="item item-a" >
-    <view class="icon">
-    </view>
-    <view class="tit" >
-      <navigator url="../user/seller/pendingOrder/pendingOrder" open-type="navigate" hover-class="navigator-hover">待处理订单</navigator>
-    </view>
-    <view class="con"></view>
-  </view>
+  <navigator url="../user/seller/goodEdit/goodEdit" open-type="navigate" hover-class="navigator-hover">
   <view class="item item-a">
     <view class="icon">
     </view>
     <view class="tit" >
-      <navigator url="../user/seller/goodEdit/goodEdit" open-type="navigate" hover-class="navigator-hover">新增商品</navigator>
+      新增商品
     </view>
     <view class="con"></view>
   </view>
+  </navigator>
+  <navigator url="../user/seller/goods/goods" open-type="navigate" hover-class="navigator-hover">
     <view class="item item-a">
     <view class="icon">
     </view>
     <view class="tit" >
-      <navigator url="../user/seller/goods/goods" open-type="navigate" hover-class="navigator-hover">商品管理</navigator>
+      商品管理
     </view>
     <view class="con"></view>
   </view>
+  </navigator>
+  <navigator url="../user/seller/pendingOrder/pendingOrder" open-type="navigate" hover-class="navigator-hover">
+  <view class="item item-a" >
+    <view class="icon">
+    </view>
+    <view class="tit" >
+      待处理订单
+    </view>
+    <view class="con"></view>
+  </view>
+  </navigator>
 </view>
 <!--买方菜单和个人信息-->
 <view class="ub">
-  <view class="item item-a" >
-    <view class="icon">
-    </view>
-    <view class="tit" >
-      <navigator url="../user/myorder/myorder" open-type="navigate" hover-class="navigator-hover">我的订单</navigator>
-    </view>
-    <view class="con"></view>
-  </view>
+  <navigator url="../user/userInfo/userInfo" open-type="navigate" hover-class="navigator-hover">
   <view class="item item-a">
     <view class="icon">
     </view>
     <view class="tit" >
-      <navigator url="../user/userInfo/userInfo" open-type="navigate" hover-class="navigator-hover">个人信息</navigator>
+      个人信息
     </view>
     <view class="con"></view>
   </view>
+  </navigator>
+  <navigator url="../user/myorder/myorder" open-type="navigate" hover-class="navigator-hover">
+  <view class="item item-a" >
+    <view class="icon">
+    </view>
+    <view class="tit" >
+      我的订单
+    </view>
+    <view class="con"></view>
+  </view>
+  </navigator>
+</view>
+
+<view class="ub">
+  <navigator url="../user/mycoupons/mycoupons" open-type="navigate" hover-class="navigator-hover">
     <view class="item item-a">
     <view class="icon">
     </view>
     <view class="tit" >
-      <navigator url="../user/mycoupons/mycoupons" open-type="navigate" hover-class="navigator-hover">咨询投诉</navigator>
+      咨询投诉
     </view>
     <view class="con"></view>
   </view>
-</view>
-<!---退出登录-->
-<view class="ub">
-  <view class="item  ">
-    <view class="icon">
-    </view>
-    <view class="tit"  bindtap="exist">
-      退出登录
-    </view>
-    <view class="con"></view>
-  </view>
+  </navigator>
 </view>

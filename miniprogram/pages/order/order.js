@@ -148,26 +148,57 @@ Page({
       order.user.phone = _this.data.phone;
       var _ids = [];
       var plist = {};
+      var news = [];//数据库无法联查，只能另辟蹊径了，搞死个人
       for (var i in _this.data.plist) {//去除关键字和辅助数据，只保留有显示和分析价值的数据
         _ids.push(_this.data.plist[i]._id);
         if (_this.data.plist[i].select){
           //从购物车中删除成功下单的
           base.cart.remove(_this.data.plist[i].id);
+          //商品放入订单清单
           var g = {};
-          g.chooseTime = _this.data.plist[i].chooseTime;
+          //g.chooseTime = _this.data.plist[i].chooseTime;
           g.createTime = _this.data.plist[i].createTime;
-          g.deliveryTime = _this.data.plist[i].deliveryTime;
           g.id = _this.data.plist[i].id;
-          g.lineOrder = _this.data.plist[i].lineOrder;
           g.needPay = _this.data.plist[i].needPay;
           g.num = _this.data.plist[i].num;
           g.price = _this.data.plist[i].price;
           g.promulgator = _this.data.plist[i].promulgator;
           g.promulgatorId = _this.data.plist[i].promulgatorId;
           g.surplus = _this.data.plist[i].surplus;
-          g.takeOut = _this.data.plist[i].takeOut;
+          g.remarks = _this.data.plist[i].remarks;
+
+          g.time = '';
+          if (_this.data.plist[i].chooseTime == 'true' && _this.data.plist[i].deliveryTime != ''){
+            g.time = _this.data.plist[i].deliveryDate + ' ' + _this.data.plist[i].deliveryTime;
+          }
+          g.how = '';
+          if (g.time != '' && _this.data.plist[i].takeOut == 'true'){
+            g.how = '配送';
+          } else if (g.time != '' && _this.data.plist[i].takeOut == 'false'){
+            g.how = '取货';
+          }
           g.title = _this.data.plist[i].title;
-          plist[_this.data.plist[i].id] = g;
+          plist[g.id] = g;
+          //构建消息通知卖家
+          var n = {};
+          n.id = util.getUUID('news');
+          n.receiver = g.promulgatorId;//卖家
+          n.newsType = 'order';//下单
+          n.orderId = order.id;
+          n.goodId = g.id;
+          n.content = order.user.nickName + ' 购买了 ' + g.title + ' ，数量' + g.num + '。';
+          if (g.time != ''){
+            n.content = n.content +  + g.time + g.how + '。';
+          }
+          if(g.how != '取货'){
+            n.content = n.content + '地址：' + order.user.addr + order.user.phone;
+          }
+          if (g.remarks && g.remarks != ''){
+            n.content = n.content + '。留言：' + g.remarks;
+          }
+          n.status = 0;//未处理
+          n.createTime = util.formatTime(new Date());
+          news.push(n);
         }        
         /*delete _this.data.plist[i]._id;
         delete _this.data.plist[i]._openid;//关键字
@@ -199,6 +230,11 @@ Page({
           good.surplus = _this.data.plist[i].surplus;
           db.update('goods',_ids[i],good);
         }
+        //增加消息
+        for (var i in news){
+          db.add('news',news[i]);
+        }
+
         wx.redirectTo({//不允许退回下单页
           url: "../success/success"
         });

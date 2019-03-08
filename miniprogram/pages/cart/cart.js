@@ -2,7 +2,7 @@ var base = getApp();
 var good=require('../../utils/good.js');
 Page({
     data: {
-        plist: [],
+        plist: null,
         total: 0,
         his: ""
     },

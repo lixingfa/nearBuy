@@ -70,7 +70,7 @@ App({
             _this.distan = user.distan;//更新搜索范围
             db.where('address', where).then(_this.updataLocation, _this.updataLocation);
           }else{//新用户
-
+            
           }
         });
     });
@@ -270,6 +270,6 @@ App({
   }, {
       id: '2', name: '生活服务', sub: [{ id: '20', name: '家政' }, { id: '21', name: '家教' }, { id: '21', name: '活动公益' }]
     }, {
-      id: '3', name: '二手闲置', sub: [{ id: '30', name: '数码家电' }, { id: '31', name: '儿童玩具' }, { id: '32', name: '书籍杂物' }]
+      id: '3', name: '二手闲置', sub: [{ id: '30', name: '数码家电' }, { id: '31', name: '儿童玩具' }, { id: '32', name: '书籍杂物' }, { id: '33', name: '其他' }]
     }]
 });

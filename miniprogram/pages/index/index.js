@@ -16,7 +16,7 @@ Page({
     var _this = this;
     good.getNewGoods(function(goods){
       for(var i in goods){
-        var distance = base.getDistance(base.location.latitude, base.location.longitude, goods[i].latitude, goods[i].latilongitudetude);
+        var distance = base.getDistance(base.location.latitude, base.location.longitude, goods[i].latitude, goods[i].longitude);
         goods[i].distance = distance;
       }
       _this.setData({goods:goods});
