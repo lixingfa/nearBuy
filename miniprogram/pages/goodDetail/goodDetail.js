@@ -64,7 +64,10 @@ Page({
     },
     addCart: function () {
         if (this.data.good.price > 0){
-          this.setData({"good.needPay":true});
+          this.setData({"good.status":0});
+        }
+        else{
+          this.setData({ "good.status": 2 });//直接收货，没有价格就没有确认契约
         }
         base.cart.add(this.data.good);//直接整个对象放进去，并做一些操作
         var good = base.cart.getGood(this.data.id);        
@@ -72,7 +75,10 @@ Page({
     },
     goCart: function (e) {
       if (this.data.good.price > 0) {
-        this.setData({ "good.needPay": true });
+        this.setData({ "good.status": 0 });
+      }
+      else {
+        this.setData({ "good.status": 2 });//直接收货，没有价格就没有确认契约
       }
       base.cart.updateGood(this.data.good);//加入购物车按钮会消失，或者是留言后就去购物车。
       wx.switchTab({//wx.navigateTo和wx.redirectTo,不能跳转tabBar里的页面

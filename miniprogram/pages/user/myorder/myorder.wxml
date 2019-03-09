@@ -9,15 +9,19 @@
       <view class="pro" wx:for="{{p.sellers}}" wx:for-item="s" wx:key="id">
         <view wx:for="{{s.goods}}" wx:for-item="g" wx:key="id">
           <view class="info">
-            <text class="pname">{{g.title}}</text>
-            <text class="pdeliveryTime">{{g.time}}</text>
-            <text class="chooseTime">自取</text>
+            <text class="pname">(自取){{g.title}}</text>
             <text class="pprice">{{g.price}} x {{g.num}}</text>
             <text class="ptprice">{{g.price*g.num}}</text>
-            <text class="pprice" wx:if="{{g.needPay}}" data-id="{{g.id}}" data-oid="{{p._id}}" data-sellers="{{g.promulgatorId}}"
+            <text class="chooseTime" wx:if="{{g.status == 0}}">准备中</text>
+            <text class="chooseTime" wx:if="{{g.status == 1}}">可取货</text>
+            <text class="chooseTime" wx:if="{{g.status == 2}}">已收货</text>
+            <text class="pprice" wx:if="{{g.status == 1}}" data-id="{{g.id}}" data-oid="{{p._id}}" data-sellers="{{g.promulgatorId}}"
               catchtap="pay">确认收货</text>
           </view>
-          <view class="remarks" wx:if="{{g.remarks}}">留言：{{g.remarks}}</view>
+          <view class="remarks">
+            {{g.time}} 
+            <text wx:if="{{g.remarks}}">留言：{{g.remarks}}</text>
+          </view>
         </view>
         <view>卖家：{{s.promulgator}} 
           <text data-promulgatorid="{{s.promulgatorId}}" data-oid="{{p._id}}" data-index="{{pindex}}" catchtap="getAddr">
@@ -28,15 +32,19 @@
       <view class="pro">
         <view wx:for="{{p.takeOut.goods}}" wx:for-item="g" wx:key="id">
           <view class="info">
-            <text class="pname">{{g.title}}</text>
-            <text class="pdeliveryTime">{{g.time}}</text>
-            <text class="chooseTime">配送</text>
+            <text class="pname">(配送){{g.title}}</text>
             <text class="pprice">{{g.price}} x {{g.num}}</text>
             <text class="ptprice">{{g.price*g.num}}</text>
-            <text class="pprice" wx:if="{{g.needPay}}" data-id="{{g.id}}" data-oid="{{p._id}}" data-sellers="takeOut"
+            <text class="chooseTime" wx:if="{{g.status == 0}}">准备中</text>
+            <text class="chooseTime" wx:if="{{g.status == 1}}">配送中</text>
+            <text class="chooseTime" wx:if="{{g.status == 2}}">已收货</text>
+            <text class="pprice" wx:if="{{g.status == 1}}" data-id="{{g.id}}" data-oid="{{p._id}}" data-sellers="takeOut"
               catchtap="pay">确认收货</text>
           </view>
-          <view class="remarks" wx:if="{{g.remarks != ''}}">留言：{{g.remarks}}</view>
+          <view class="remarks">
+            {{g.time}} 
+            <text wx:if="{{g.remarks}}">留言：{{g.remarks}}</text>
+          </view>
         </view>
         <view wx:if="{{p.takeOut.user.addr}}">送到：{{p.takeOut.user.addr}}</view>
       </view>

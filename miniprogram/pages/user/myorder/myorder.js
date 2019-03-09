@@ -30,17 +30,18 @@ Page({
   hasPay:function(){
     var _this = this;
     var data = {};
+    var _ = wx.cloud.database().command;
     if (this.data.sellers == 'takeOut'){
       data.takeOut = {};
       data.takeOut.goods = {};
       data.takeOut.goods[this.data.goodId] = {};
-      data.takeOut.goods[this.data.goodId].needPay = false;
+      data.takeOut.goods[this.data.goodId].status = _.inc(1);//自增1
     }else{
       data.sellers = {};
       data.sellers[this.data.sellers] = {};
       data.sellers[this.data.sellers].goods = {};
       data.sellers[this.data.sellers].goods[this.data.goodId] = {};
-      data.sellers[this.data.sellers].goods[this.data.goodId].needPay = false;
+      data.sellers[this.data.sellers].goods[this.data.goodId].status = _.inc(1);//自增1
     }
     db.update('orders', this.data.orderId,data).then(function(d){
       _this.onShow();

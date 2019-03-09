@@ -4,6 +4,7 @@ Page({
     data: {
         plist: null,
         total: 0,
+        totalNum:0,
         his: ""
     },
     onLoad: function (e) {
@@ -32,12 +33,14 @@ Page({
     changeTotal: function () {
         var list = this.data.plist;
         var t = 0;
+      var totalNum = 0;
         for (var l in list) {
           if (!list[l].del && list[l].select) {//排除删除选项
             t += list[l].price * list[l].num;
+            totalNum += list[l].num;
           }
         }
-        this.setData({ total: t });
+      this.setData({ total: t, totalNum: totalNum });
     },
     changeNum: function (e) {
       var id = e.currentTarget.dataset.id;
@@ -83,7 +86,7 @@ Page({
         }
     },
     goOrder: function () {
-        if (this.data.total > 0) {
+      if (this.data.totalNum > 0) {
           var _this = this;
             //检查库存
           good.checkOrderGoods(this.data.plist).then(function(goOrder){

@@ -126,7 +126,7 @@ Page({
     },
     creatOrder:function(){
       var _this = this;
-      if (_this.data.selectedID == -1) {//不是从列表里选的地址
+      if (_this.data.selectedID == -1 && _this.data.hasTakeOut) {//不是从列表里选的地址，并且需要地址
         var addr = {};
         addr.addr = _this.data.addr;
         addr.phone = _this.data.phone;
@@ -153,7 +153,7 @@ Page({
           var g = {};
           g.id = _this.data.plist[i].id;
           g.title = _this.data.plist[i].title;
-          g.needPay = _this.data.plist[i].needPay;
+          g.status = _this.data.plist[i].status;
           g.num = _this.data.plist[i].num;
           g.price = _this.data.plist[i].price;
           g.promulgator = _this.data.plist[i].promulgator;
@@ -162,8 +162,11 @@ Page({
           g.remarks = _this.data.plist[i].remarks;
 
           g.time = '';
-          if (_this.data.plist[i].chooseTime == 'true' && _this.data.plist[i].deliveryTime != ''){
-            g.time = _this.data.plist[i].deliveryDate + ' ' + _this.data.plist[i].deliveryTime;
+          if (_this.data.plist[i].chooseTime == 'true'){
+            g.time = _this.data.plist[i].deliveryDate;
+            if(_this.data.plist[i].deliveryTime != ''){
+              g.time = g.time + ' ' + _this.data.plist[i].deliveryTime;
+            }
           }
           g.how = '0';//能够在线下单，都是配送或自取之一，默认配送
           if (_this.data.plist[i].takeOut == 'false'){//卖家不配送，那就是自取
@@ -187,14 +190,15 @@ Page({
           n.newsType = 'order';//下单
           n.orderId = order.id;
           n.goodId = g.id;
+          n.how = g.how;
           n.content = this.data.user.nickName + ' 购买了 ' + g.title + ' ，数量' + g.num + '。';
           if (g.time != ''){
             n.content = n.content + '希望' + g.time + (g.how == '0'?'配送':'取货') + '。';
           }
           if (g.how == '0'){//配送
-            n.content = n.content + '送到：' + this.data.user.addr + ' ' + this.data.user.phone + '。';
-          }else{
-            n.content = n.content + '自取。'
+            n.content = n.content + '送到：' + this.data.addr + ' ' + this.data.phone + '。';
+          } else if (g.time == ''){
+            n.content = n.content + '自取，电话：' + this.data.phone;
           }
           if (g.remarks && g.remarks != ''){
             n.content = n.content + '留言：' + g.remarks;
@@ -246,6 +250,7 @@ Page({
         }
         //增加消息
         for (var i in news){
+          news[i].oid = d;//订单_id
           db.add('news',news[i]);
         }
 

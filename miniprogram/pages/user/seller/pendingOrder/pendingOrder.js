@@ -2,48 +2,46 @@ var db = require('../../../../utils/db.js');
 var base = getApp();
 Page({
   data: {
-    myOrder: [],
-    qrcode: "",
-    goodId: -1,
-    orderId: -1,
-    qrcodeShow: false,
-    promulgator: "",
-    price: ""
+    news: []
   },
   onShow: function () {//加载过又不关闭的话，onLoad不会再执行
     var _this = this;
     var where = {};
-    where.plist = {};//也是一个对象
-    var good = {};
-    good.promulgatorId = base.openId;
-    where.plist.push(good);
-    db.where('orders', where, "createTime", "desc").then(function (orders) {
-      _this.setData({ myOrder: orders, qrcodeShow: false });
+    where.receiver = base.openId;
+    where.newsType = 'order';//订单
+    where.status = 0;
+    db.where('news', where, "createTime", "asc").then(function (news) {
+      _this.setData({ news: news});
     });
   },
-  pay: function (e) {
-    var oid = e.currentTarget.dataset.oid;
-    var id = e.currentTarget.dataset.id;
-    var promulgator = e.currentTarget.dataset.promulgator;
-    var price = e.currentTarget.dataset.price;
-    var num = e.currentTarget.dataset.num;
-    price = parseFloat(price) * parseInt(num);
-    this.setData({ qrcodeShow: true, goodId: id, orderId: oid, promulgator: promulgator, price: price });
-  },
-  cancel: function () {
-    this.setData({ qrcodeShow: false });
-  },
-  hasPay: function () {
+  doit:function(e){
     var _this = this;
-    var data = {};
-    data.plist = {};//也是一个对象
-    var good = {};
-    good.needPay = false;
-    data.plist[this.data.goodId] = good;
-    db.update('orders', this.data.orderId, data).then(function (d) {
-      _this.onShow();
-    }, function (d) {
-
-    });
+    var id = e.currentTarget.dataset.id;
+    var oid = e.currentTarget.dataset.oid;
+    var gid = e.currentTarget.dataset.gid;
+    var how = e.currentTarget.dataset.how;
+    var sellers = e.currentTarget.dataset.sellers;
+    var where = {};
+    where.status = 1;
+    db.update('news',id,where).then(
+      function(){
+        var data = {};
+        var _ = wx.cloud.database().command;
+        if (how == '0') {//配送
+          data.takeOut = {};
+          data.takeOut.goods = {};
+          data.takeOut.goods[gid] = {};
+          data.takeOut.goods[gid].status = _.inc(1);//自增1
+        } else {
+          data.sellers = {};
+          data.sellers[sellers] = {};
+          data.sellers[sellers].goods = {};
+          data.sellers[sellers].goods[gid] = {};
+          data.sellers[sellers].goods[gid].status = _.inc(1);//自增1
+        }
+        db.update('orders', oid, data);
+        _this.onShow();
+      },function(){}
+    );
   }
 })
