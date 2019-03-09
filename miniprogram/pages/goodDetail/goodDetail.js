@@ -41,6 +41,7 @@ Page({
           var nextHour = date.getHours();
           if (nextHour + 1 > end){//大于工作时间，选后一天，不选时间
             date = new Date(new Date().getTime() + 24 * 60 * 60 * 1000); //后一天
+            good.deliveryTime = '';
           }else{
             if (nextHour < start){
               good.deliveryTime = arrTimeT[0];

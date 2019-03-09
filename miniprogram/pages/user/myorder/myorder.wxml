@@ -1,6 +1,6 @@
 <view class="body">
     <view wx:if="{{myOrder.length==0}}" class="null">暂无订单</view>
-    <view class="item" data-poid="{{p.id}}" wx:for="{{myOrder}}" wx:key="id" wx:for-item="p">
+    <view class="item" data-poid="{{p.id}}" wx:for="{{myOrder}}" wx:key="id" wx:for-item="p" wx:for-index="pindex">
       <view class='title'>
         <!--<text>订单编号：{{p.id}} </text>-->
         <text>下单时间：{{p.createTime}}</text>
@@ -19,7 +19,11 @@
           </view>
           <view class="remarks" wx:if="{{g.remarks}}">留言：{{g.remarks}}</view>
         </view>
-        <view>{{s.promulgator}} <text data-promulgatorId="{{s.promulgatorId}}">查看详细地址>></text></view>
+        <view>卖家：{{s.promulgator}} 
+          <text data-promulgatorid="{{s.promulgatorId}}" data-oid="{{p._id}}" data-index="{{pindex}}" catchtap="getAddr">
+            <text wx:if="{{!s.addr}}">查看取货地址>></text><text wx:if="{{s.addr}}">取货地址：{{s.addr}}</text>
+          </text>
+        </view>
       </view>
       <view class="pro">
         <view wx:for="{{p.takeOut.goods}}" wx:for-item="g" wx:key="id">
@@ -34,7 +38,7 @@
           </view>
           <view class="remarks" wx:if="{{g.remarks != ''}}">留言：{{g.remarks}}</view>
         </view>
-        <view>送到：{{p.takeOut.user.addr}}</view>
+        <view wx:if="{{p.takeOut.user.addr}}">送到：{{p.takeOut.user.addr}}</view>
       </view>
     </view>
     

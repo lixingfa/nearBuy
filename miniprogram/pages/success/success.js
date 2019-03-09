@@ -26,7 +26,7 @@ Page({
 
   go: function () {
     var _this = this;
-    wx.navigateTo({
+    wx.redirectTo({
       url: "../user/myorder/myorder?oid=" + _this.data.oid
     })
 

@@ -15,13 +15,14 @@ Page({
       longitude:"0",
       latitude:"0",
       selectedID: -1,
-      user:null
+      user:null,
+      hasTakeOut:false
     },
     onLoad: function (e) {
       var _this = this;
       user.getThisUser(base.openId,function(u){
         var totalPrice = e && e.totalPrice ? e.totalPrice : 0;
-        _this.setData({ plist: base.cart.getList(), totalPrice: totalPrice,user:u,phone:u.phone});
+        _this.setData({ plist: base.cart.getList(), totalPrice: totalPrice, user: u, phone: u.phone, hasTakeOut: base.cart.hasTakeOut});
       });
     },
     addrSelect: function () {//选择地址
@@ -93,9 +94,7 @@ Page({
       });
     },
     valid: function () {
-        var _this = this;
-        var err = "";
-        if (!_this.data.addr) {
+        if (this.data.hasTakeOut && !this.data.addr) {
               wx.showModal({
                   showCancel: false,
                   title: '',
@@ -103,7 +102,7 @@ Page({
               })
               return false;
           }
-          if (!_this.data.phone) {
+          if (!this.data.phone) {
             wx.showModal({
               showCancel: false,
               title: '',

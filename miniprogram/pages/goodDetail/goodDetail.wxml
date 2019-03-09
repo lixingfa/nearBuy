@@ -1,6 +1,6 @@
   <view class='good-title'>{{good.title}}</view>
   <view class='good-pic'>
-    <image src="{{good.pic}}" mode="scaleToFill"></image>
+    <image src="{{good.pic}}" mode="aspectFill"></image>
   </view>
   <view class='good-inAWord'>{{good.inAWord}}</view>
   <view class='good-desc'>

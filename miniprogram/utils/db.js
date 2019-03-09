@@ -52,8 +52,12 @@ function whereSingle(table, where) {
     db.collection(table).where(where)
       .get({
         success(res) {
-          resolve(res.data[0]);// res.data 是包含以上定义的两条记录的数组
-          base.setCache(table + res.data[0]._id, res.data[0]);
+          if (res.data.length != 0){
+            resolve(res.data[0]);// res.data 是包含以上定义的两条记录的数组
+            base.setCache(table + res.data[0]._id, res.data[0]);
+          }else{
+            reject(false);
+          }
         },
         fail(res) {
           console.log(res);

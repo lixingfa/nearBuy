@@ -1,4 +1,5 @@
 var db = require('../../../utils/db.js');
+var user = require('../../../utils/user.js');
 var base = getApp();
 Page({
   data: {
@@ -45,6 +46,17 @@ Page({
       _this.onShow();
     },function(d){
 
+    });
+  },
+  getAddr:function(e){
+    var _this = this;
+    var promulgatorId = e.currentTarget.dataset.promulgatorid;
+    var index = e.currentTarget.dataset.index;
+    user.getUser(promulgatorId,function(u){
+      if(u){
+        _this.data.myOrder[index].sellers[promulgatorId].addr = u.addr + ' ' + u.phone;
+        _this.setData({ myOrder: _this.data.myOrder});
+      }
     });
   }
 })

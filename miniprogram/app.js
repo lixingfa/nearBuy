@@ -78,6 +78,7 @@ App({
   cart: {
     key: "cart",
     ref: "",
+    hasTakeOut:false,
     add: function (p) {//加入购物车
       if (p.id) {
         var dic = wx.getStorageSync(this.key) || {};
@@ -140,9 +141,13 @@ App({
     },
     getList: function () {//获取购物车中的商品列表
       var dic = wx.getStorageSync(this.key);
+      this.hasTakeOut = false;
       for (var p in dic) {
         if (dic[p].num == 0) {//过滤掉在购物车里弄成0，又出去的，否则感觉上会很奇怪
           delete dic[p];
+        }
+        if (dic[p].takeOut == 'true'){
+          this.hasTakeOut = true;
         }
       }
       wx.setStorageSync(this.key, dic);

@@ -1,17 +1,21 @@
-var base = getApp();
 var db = require('db.js');
 //拿到当前用户，或者false
 function getThisUser(openId,fn){
   var user = wx.getStorageSync('user');
   if (user == '') {
-    var where = {};
-    where.id = openId;//微信的openId就是本程序中的id
-    db.whereSingle('user', where,'id','desc').then(fn, fn);
+    getUser(openId, fn);
   } else {
     fn(user);
   }
 }
 
+function getUser(openId, fn) {
+    var where = {};
+    where.id = openId;
+    db.whereSingle('user', where).then(fn, fn);
+}
+
 module.exports = {
-  getThisUser: getThisUser
+  getThisUser: getThisUser,
+  getUser: getUser
 }

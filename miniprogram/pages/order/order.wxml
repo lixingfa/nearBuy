@@ -1,7 +1,8 @@
 <view class="tab">
-  <view class="tit">您的地址：<button class='select' catchtap="addrSelect">选择</button></view>
-  <!--地址永远都会有值的，只是可能不准确，点击对这个地址进行管理-->
-  <view>
+  <view class="tit" wx:if="{{hasTakeOut}}">您的地址：
+    <button class='select' catchtap="addrSelect">选择</button>
+  </view><!--地址永远都会有值的，只是可能不准确，点击对这个地址进行管理-->  
+  <view wx:if="{{hasTakeOut}}">
     <textarea bindinput="bindAddrBlur" placeholder="收货地址" value="{{addr}}" maxlength="200" class="phone addr"/>
   </view>
   <input value="{{phone==null?'':phone}}" bindblur="bindPhoneBlur" bindinput="bindPhoneBlur" placeholder="您的联系电话" maxlength="16" class='phone'></input>
