@@ -1,27 +1,43 @@
 <view class="body">
     <view wx:if="{{myOrder.length==0}}" class="null">暂无订单</view>
-     <view class="item" data-poid="{{p.id}}" wx:for="{{myOrder}}" wx:key="id" wx:for-item="p">
+    <view class="item" data-poid="{{p.id}}" wx:for="{{myOrder}}" wx:key="id" wx:for-item="p">
       <view class='title'>
-        <text>订单编号：{{p.id}} </text>
+        <!--<text>订单编号：{{p.id}} </text>-->
+        <text>下单时间：{{p.createTime}}</text>
         <text>总金额：￥<text class="ptprice">{{p.totalPrice}}</text></text>
-        <view>下单时间：{{p.createTime}}</view>
       </view>
-      <view class="pro" wx:for="{{p.plist}}" wx:for-item="g" wx:key="id">
-        <view class="info">
-        <!--<image src="{{p.user.avatarUrl}}" class="pimg"></image>-->
-        <text class="pname">{{g.title}} - {{g.promulgator}}</text>
-        <text class="pdeliveryTime">{{g.time}}</text>
-        <text class="chooseTime">{{g.how}}</text>
-        <text class="pprice">{{g.price}} x {{g.num}}</text>
-        <text class="ptprice">{{g.price*g.num}}</text>
-        <text class="pprice" wx:if="{{g.needPay}}" data-id="{{g.id}}" data-oid="{{p._id}}" data-promulgator="{{g.promulgator}}" data-price="{{g.price}}" data-num="{{g.num}}" catchtap="pay">确认收货</text>
-
+      <view class="pro" wx:for="{{p.sellers}}" wx:for-item="s" wx:key="id">
+        <view wx:for="{{s.goods}}" wx:for-item="g" wx:key="id">
+          <view class="info">
+            <text class="pname">{{g.title}}</text>
+            <text class="pdeliveryTime">{{g.time}}</text>
+            <text class="chooseTime">自取</text>
+            <text class="pprice">{{g.price}} x {{g.num}}</text>
+            <text class="ptprice">{{g.price*g.num}}</text>
+            <text class="pprice" wx:if="{{g.needPay}}" data-id="{{g.id}}" data-oid="{{p._id}}" data-sellers="{{g.promulgatorId}}"
+              catchtap="pay">确认收货</text>
+          </view>
+          <view class="remarks" wx:if="{{g.remarks}}">留言：{{g.remarks}}</view>
         </view>
-        <view class="remarks" wx:if="{{g.remarks != null}}">留言：{{g.remarks}}</view>
-        
+        <view>{{s.promulgator}} <text data-promulgatorId="{{s.promulgatorId}}">查看详细地址>></text></view>
       </view>
-      <view>地址：{{p.user.addr}} {{p.user.phone}}</view>
+      <view class="pro">
+        <view wx:for="{{p.takeOut.goods}}" wx:for-item="g" wx:key="id">
+          <view class="info">
+            <text class="pname">{{g.title}}</text>
+            <text class="pdeliveryTime">{{g.time}}</text>
+            <text class="chooseTime">配送</text>
+            <text class="pprice">{{g.price}} x {{g.num}}</text>
+            <text class="ptprice">{{g.price*g.num}}</text>
+            <text class="pprice" wx:if="{{g.needPay}}" data-id="{{g.id}}" data-oid="{{p._id}}" data-sellers="takeOut"
+              catchtap="pay">确认收货</text>
+          </view>
+          <view class="remarks" wx:if="{{g.remarks != ''}}">留言：{{g.remarks}}</view>
+        </view>
+        <view>送到：{{p.takeOut.user.addr}}</view>
+      </view>
     </view>
+    
 
     <view class="addr_box" wx:if="{{qrcodeShow}}">
       <!--<image src="{{qrcode}}" class="pimg"></image>-->

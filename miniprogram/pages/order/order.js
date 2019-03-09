@@ -140,25 +140,20 @@ Page({
       }
       var order = {};
       order.id = util.getUUID('order');
-      order.status = 0;//未支付
-      order.user = {};
-      order.user.nickName = this.data.user.nickName;
-      order.user.id = this.data.user.id;
-      order.user.addr = _this.data.addr;
-      order.user.phone = _this.data.phone;
+      order.status = 0;//未完成
+      order.owner = this.data.user.id;
+      order.takeOut = {};//卖家配送
+      order.takeOut.goods = {};//对象好操作，知道key就好，数组难办
+      order.sellers = {};//自取
+
       var _ids = [];
-      var plist = {};
       var news = [];//数据库无法联查，只能另辟蹊径了，搞死个人
       for (var i in _this.data.plist) {//去除关键字和辅助数据，只保留有显示和分析价值的数据
-        _ids.push(_this.data.plist[i]._id);
         if (_this.data.plist[i].select){
-          //从购物车中删除成功下单的
-          base.cart.remove(_this.data.plist[i].id);
           //商品放入订单清单
           var g = {};
-          //g.chooseTime = _this.data.plist[i].chooseTime;
-          g.createTime = _this.data.plist[i].createTime;
           g.id = _this.data.plist[i].id;
+          g.title = _this.data.plist[i].title;
           g.needPay = _this.data.plist[i].needPay;
           g.num = _this.data.plist[i].num;
           g.price = _this.data.plist[i].price;
@@ -171,14 +166,21 @@ Page({
           if (_this.data.plist[i].chooseTime == 'true' && _this.data.plist[i].deliveryTime != ''){
             g.time = _this.data.plist[i].deliveryDate + ' ' + _this.data.plist[i].deliveryTime;
           }
-          g.how = '';
-          if (g.time != '' && _this.data.plist[i].takeOut == 'true'){
-            g.how = '配送';
-          } else if (g.time != '' && _this.data.plist[i].takeOut == 'false'){
-            g.how = '取货';
+          g.how = '0';//能够在线下单，都是配送或自取之一，默认配送
+          if (_this.data.plist[i].takeOut == 'false'){//卖家不配送，那就是自取
+            g.how = '1';
           }
-          g.title = _this.data.plist[i].title;
-          plist[g.id] = g;
+          if (g.how == '1'){//自取
+            if (!(g.promulgatorId in order.sellers)){//取货的放在一起
+              order.sellers[g.promulgatorId] = {};
+              order.sellers[g.promulgatorId].goods = {};//对象好操作，知道key就好，数组难办
+              order.sellers[g.promulgatorId].promulgatorId = g.promulgatorId;//卖家id,地址和电话通过这个查
+              order.sellers[g.promulgatorId].promulgator = g.promulgator;
+            }
+            order.sellers[g.promulgatorId].goods[g.id] = g;
+          }else{
+            order.takeOut.goods[g.id] = g;
+          }
           //构建消息通知卖家
           var n = {};
           n.id = util.getUUID('news');
@@ -186,20 +188,27 @@ Page({
           n.newsType = 'order';//下单
           n.orderId = order.id;
           n.goodId = g.id;
-          n.content = order.user.nickName + ' 购买了 ' + g.title + ' ，数量' + g.num + '。';
+          n.content = this.data.user.nickName + ' 购买了 ' + g.title + ' ，数量' + g.num + '。';
           if (g.time != ''){
-            n.content = n.content + '希望' + g.time + g.how + '。';
+            n.content = n.content + '希望' + g.time + (g.how == '0'?'配送':'取货') + '。';
           }
-          if(g.how != '取货'){
-            n.content = n.content + '地址：' + order.user.addr + order.user.phone;
+          if (g.how == '0'){//配送
+            n.content = n.content + '送到：' + this.data.user.addr + ' ' + this.data.user.phone + '。';
+          }else{
+            n.content = n.content + '自取。'
           }
           if (g.remarks && g.remarks != ''){
-            n.content = n.content + '。留言：' + g.remarks;
+            n.content = n.content + '留言：' + g.remarks;
           }
           n.status = 0;//未处理
           n.createTime = util.formatTime(new Date());
           news.push(n);
-        }        
+          //构建消息通知买家
+          //放入更新库存列表
+          _ids.push(_this.data.plist[i]._id);
+          //从购物车中删除成功下单的
+          base.cart.remove(_this.data.plist[i].id);
+        }
         /*delete _this.data.plist[i]._id;
         delete _this.data.plist[i]._openid;//关键字
         delete _this.data.plist[i].arrTime;//送货/取货时间
@@ -220,7 +229,13 @@ Page({
         delete _this.data.plist[i].workTimeEnd;
         delete _this.data.plist[i].workTimeStart;//虽然可以分析出卖家的营业时间变化，但价值不大*/
       }
-      order.plist = plist;
+      if (JSON.stringify(order.takeOut.goods) != "{}"){//有外送的商品
+        order.takeOut.user = {};
+        order.takeOut.user.nickName = this.data.user.nickName;
+        order.takeOut.user.id = this.data.user.id;
+        order.takeOut.user.addr = _this.data.addr;
+        order.takeOut.user.phone = _this.data.phone;
+      }
       order.totalPrice = _this.data.totalPrice;
       order.createTime = util.formatTime(new Date());
       db.add('orders', order).then(function(d){

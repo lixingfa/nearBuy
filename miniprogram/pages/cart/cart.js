@@ -70,14 +70,16 @@ Page({
     clearCart: function () {
         var _this = this;
         if (this.data.total > 0) {
-            base.modal({
-                title: "确认清空所有商品？", confirmText: "清空", success: function (res) {
-                    if (res.confirm) {
-                        _this.setData({plist:[], total:0});
-                        base.cart.clear();
-                    }
-                }
-            })
+          wx.showModal({
+            title: '确认清空所有商品？',
+            //content: '清空',
+            success: function (res) {
+              if (res.confirm) {
+                _this.setData({ plist: [], total: 0 });
+                base.cart.clear();
+              }
+            }
+          });
         }
     },
     goOrder: function () {

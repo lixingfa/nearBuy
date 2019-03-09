@@ -27,7 +27,7 @@ Page({
   initGood:function(good){
       if (good){//购物车里存在，则拿购物车的，可以简化很多操作
         var arrTimeT = new Array();
-        if (good.chooseTime){//允许选择送货/取货时间
+        if (good.chooseTime == 'true'){//允许选择送货/取货时间
           var date = new Date();
           var start = good.workTimeStart;//可选择的时间，是根据店铺的营业时间，或者个人提供服务的时间确定的
           start = start.substring(0,start.indexOf(":"));

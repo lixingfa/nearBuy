@@ -7,7 +7,8 @@
     <text class='good-price'>{{good.price}}</text><text>元/{{good.unit}}</text>
     <view class='good-inAWord'>共{{good.total}}{{good.unit}}，剩余{{good.surplus}}{{good.unit}}，
                             {{good.promulgator}}发布</view>
-                        </view>
+    <view class='good-inAWord' wx:if="{{good.lineOrder == 'true' && good.takeOut != 'true'}}">该商品只支持自取。</view>
+    </view>
 
 <view class="date tab" wx:if="{{good.chooseTime == 'true' && good.promulgatorId != openId}}">
   <view class="tit" wx:if="{{good.takeOut == 'true'}}">您希望的送货时间</view>
@@ -31,14 +32,18 @@
     <text wx:if="{{good.promulgatorId == openId}}">咨询问答</text>
     <text wx:if="{{good.promulgatorId != openId}}">向{{good.promulgator}}咨询</text>
   </view>
+  <view class="tbtn add">
+    <navigator delta='1' open-type="navigateBack" hover-class="other-navigator-hover">
+      <text wx:if="{{good.promulgatorId == openId}}">返回</text>
+      <text wx:if="{{good.promulgatorId != openId}}">继续购物</text>
+    </navigator>
+  </view>
 </view>
 <view class="tool" wx:if="{{good.promulgatorId != openId}}"><!--还有库存，允许在线下单，不是自己-->
-  <view wx:if="{{good.surplus > 0 && good.lineOrder == 'true'}}" class="tbtn add" catchtap="addCart">
-  加入购物车(<text class="cart-num">{{good.num}}</text>)</view>
   <view class="tbtn add" catchtap="goCart" wx:if="{{good.lineOrder == 'true'}}">前往购物车</view>
-  <view class="tbtn add" wx:if="{{good.lineOrder == 'false'}}"><navigator delta='1'
-      open-type="navigateBack" hover-class="other-navigator-hover"
-  >返回</navigator></view>
+  <view wx:if="{{good.surplus > 0 && good.lineOrder == 'true'}}" class="tbtn add" catchtap="addCart">
+    加入购物车(<text class="cart-num">{{good.num}}</text>)
+  </view>
 </view>
 
 <!--咨询-->
