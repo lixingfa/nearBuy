@@ -39,8 +39,9 @@ Page({
           data.sellers[sellers].goods[gid] = {};
           data.sellers[sellers].goods[gid].status = _.inc(1);//自增1
         }
-        db.update('orders', oid, data);
-        _this.onShow();
+        db.update('orders', oid, data).then(function(){
+          _this.onShow();
+        });
       },function(){}
     );
   }

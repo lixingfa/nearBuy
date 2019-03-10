@@ -36,11 +36,12 @@ function getGood(id,fn){
 function getGoodAnswers(goodId, all,openId,fn){
   var where = {};
   //对于非所有者，只能看到公开的和自己的
-  if (!all){
+  if (all){
+    where.goodId = goodId;
+  }else{
     var _ = wx.cloud.database().command;
-    where = _.or([{ show: true }, { quizzerId:openId}]);
+    where = _.or([{ show: true }, { quizzerId: openId }]).and({ goodId: goodId});
   }
-  where.goodId = goodId;//这个商品下的咨询
   db.where('answers', where, 'createTime', 'desc').then(fn, fn);
 }
 

@@ -92,18 +92,19 @@ function update(table,_id,data){
   delete data._openid;//否则会更新失败
   delete data._id;//否则会更新失败
   return new Promise(function (resolve, reject) {
-    var db = wx.cloud.database();
-    db.collection(table).doc(_id).update({
-      // data 传入需要局部更新的数据
-      data: data,
+    wx.cloud.callFunction({
+      name: 'update',
+      data:{table:table,_id:_id,data:data},
       success(res) {
         resolve(_id);
-        base.clear(table + data.id);//删掉缓存，重新获取
       },
       fail(res) {
         console.log(res);
         reject(false);
-      }
+      }, 
+      complete: res => {
+        //console.log('callFunction test result: ', res);
+      },
     });
   });
 }

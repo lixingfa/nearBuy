@@ -56,7 +56,7 @@
       <textarea bindblur="input" bindinput="input" placeholder="您的咨询内容" data-param="answer.content" maxlength="200" class='remark'/>
       <button catchtap="quiz">提交</button>
     </view>
-  <scroll-view scroll-y="true" scroll-top="{{scrollTop}}" style="height: 375px;">
+  <scroll-view scroll-y="true" scroll-top="{{scrollTop}}" style="height: 200px;">
     <view class="addr_body" wx:for="{{answers}}" wx:key="id" wx:for-index="i" wx:for-item="a">
       <view>
         {{a.content}}
