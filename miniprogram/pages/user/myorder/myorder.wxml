@@ -15,7 +15,7 @@
             <text class="chooseTime" wx:if="{{g.status == 0}}">准备中</text>
             <text class="chooseTime" wx:if="{{g.status == 1}}">可取货</text>
             <text class="chooseTime" wx:if="{{g.status == 2}}">已收货</text>
-            <text class="pprice" wx:if="{{g.status == 1}}" data-id="{{g.id}}" data-oid="{{p._id}}" data-sellers="{{g.promulgatorId}}"
+            <text class="pprice" wx:if="{{g.status == 1}}" data-id="{{g.id}}" data-oid="{{p._id}}" data-orderid='{{p.id}}' data-sellers="{{g.promulgatorId}}"
               catchtap="pay">确认收货</text>
           </view>
           <view class="remarks">
@@ -24,7 +24,7 @@
           </view>
         </view>
         <view>卖家：{{s.promulgator}} 
-          <text data-promulgatorid="{{s.promulgatorId}}" data-oid="{{p._id}}" data-index="{{pindex}}" catchtap="getAddr">
+          <text data-promulgatorid="{{s.promulgatorId}}" data-oid="{{p._id}}" data-orderid='{{p.id}}' data-index="{{pindex}}" catchtap="getAddr">
             <text wx:if="{{!s.addr}}">查看取货地址>></text><text wx:if="{{s.addr}}">取货地址：{{s.addr}}</text>
           </text>
         </view>
