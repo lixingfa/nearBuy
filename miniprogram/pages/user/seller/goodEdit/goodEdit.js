@@ -25,6 +25,7 @@ Page({
           good.workTimeStart = '10:00';
           good.workTimeEnd = '18:00';
           good.validTime = '23:00';
+          good.inAWord = '';
           good.lineOrder = 'true';
           good.takeOut = 'true';
           good.status = 'true';//商品有效

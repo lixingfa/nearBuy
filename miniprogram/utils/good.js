@@ -2,12 +2,12 @@ var db = require('db.js');
 var util = require('util.js');
 
 //获取最新添加的商品
-function getNewGoods(fn){
+function getNewGoods(index,fn){
   var where = {};
   //在有效期内
   where.validTimeTrue = wx.cloud.database().command.gte(util.formatTime(new Date()));
   where.status = 'true';//上架，拉黑某人时，将其商品全部下架，非关系型数据库的限制
-  db.where('goods', where, 'createTime', 'desc').then(fn);
+  db.where('goods', where, 'createTime', 'desc', index).then(fn);
 }
 
 //获取人发布的商品

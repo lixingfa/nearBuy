@@ -19,12 +19,15 @@ function doc(table,id){
   });
 }
 //条件查询,where是一个JSON，每次最多取20，需要根据API重写
-function where(table,where,orderBy,order){
+function where(table, where, orderBy, order, index){
   return new Promise(function (resolve, reject) {
     var db = wx.cloud.database();//默认环境的数据库引用
     var query = db.collection(table).where(where);
       if(orderBy != null){
         query = query.orderBy(orderBy, order);//注意
+      }
+      if(index != 0){
+        query = query.skip(index);
       }
       query.get({
         success(res) {
@@ -42,7 +45,7 @@ function where(table,where,orderBy,order){
   });
 }
 function whereOnly(table, whereData){
-  return where(table, whereData,null,null);
+  return where(table, whereData,null,null,0);
 }
 
 //只取一条数据
