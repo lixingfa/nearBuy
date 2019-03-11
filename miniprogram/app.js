@@ -1,17 +1,14 @@
 // 引入SDK核心类
 var QQMapWX = require('/libs/qqmap-wx-jssdk.js');
 var qqmapsdk;
-var util = require('/utils/util.js');
-var user = require('/utils/user.js');
-var db = require('/utils/db.js');
 App({
   https:'https://6e65-nearbuy-test-1258692926.tcb.qcloud.la/',
   distan: 3000,//与默认地址距离多少米就认为是新的地址
   openId : '',
   arrTime: ['选择时间', '6:00', '7:00', '8:00', '9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00'],
   location: {
-    latitude: 23.26093,//经度，中铁，电脑上获取的坐标
-    longitude: 113.8109,//维度
+    latitude: 0,//经度
+    longitude: 0,//维度
     address: null,//地址
   },
   version: {
@@ -32,6 +29,12 @@ App({
     wx.removeStorageSync(key);
   },
   onLaunch: function () {
+    //云开发初始化
+    wx.cloud.init({
+      env: 'nearbuy-test',
+      traceUser: true
+    });
+
     var updateManager = wx.getUpdateManager();
     updateManager.onUpdateReady(function () {
       wx.showModal({
@@ -47,32 +50,7 @@ App({
     });
 
     updateManager.onUpdateFailed(function () {
-      // 新版本下载失败
-    });
-
-    var _this = this;
-    //云开发初始化
-    wx.cloud.init({
-      env: 'nearbuy-test',
-      traceUser: true
-    });
-    
-    //获取openId、GPS坐标
-    Promise.all([util.getGPS(), util.getOpenId()])
-      .then(function (results) {
-        _this.location.latitude = results[0].latitude;
-        _this.location.longitude = results[0].longitude;
-        _this.openId = results[1];
-        user.getThisUser(results[1],function (user) {//再获取用户信息
-          if(user){//老用户
-            var where = {};
-            where.userId = user.id;
-            _this.distan = user.distan;//更新搜索范围
-            db.whereOnly('address', where).then(_this.updataLocation, _this.updataLocation);
-          }else{//新用户
-            
-          }
-        });
+      // 新版本下载失败，不用提示，下次会更新成功
     });
   },
   cart: {

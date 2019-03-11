@@ -56,11 +56,11 @@
       <textarea bindblur="input" bindinput="input" placeholder="您的咨询内容" data-param="answer.content" maxlength="200" class='remark'/>
       <button catchtap="quiz">提交</button>
     </view>
-  <scroll-view scroll-y="true" scroll-top="{{scrollTop}}" style="height: 200px;">
+  <scroll-view scroll-y="true" scroll-top="{{scrollTop}}" bindscrolltolower="answerShow" style="height: 200px;">
     <view class="addr_body" wx:for="{{answers}}" wx:key="id" wx:for-index="i" wx:for-item="a">
       <view>
         {{a.content}}
-        <button catchtap="chang" data-id='{{a.id}}' data-show='{{a.show}}' class='change_button' wx:if="{{a.ownerId == openId}}">
+        <button catchtap="chang" data-id='{{a._id}}' data-show='{{a.show}}' class='change_button' wx:if="{{a.ownerId == openId}}">
           <text wx:if="{{!a.show}}">公开</text>
           <text wx:if="{{a.show}}">隐藏</text>
         </button>

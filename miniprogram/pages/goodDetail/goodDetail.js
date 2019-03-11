@@ -9,9 +9,11 @@ Page({
         //dateStart: "",
         //dateEnd: "",
         openId: null,
+        change:false,
         answerShow:false,
         answers:[],//该商品的所有问答信息
-        answer:{}//本次提交的问答内容
+        answer:{},//本次提交的问答内容
+        answerIndex:0
     },
     onLoad: function (e) {
       var id = e && e.id ? e.id : 0;
@@ -101,9 +103,11 @@ Page({
     if (_this.data.good.promulgatorId == base.openId) {
       all = true;//商品所有者
     }
-    good.getGoodAnswers(_this.data.good.id, all, base.openId,
+    good.getGoodAnswers(_this.data.good.id, all, base.openId, _this.data.answerIndex,
       function (answers) {
-        _this.setData({ answers: answers, answerShow: true });
+        _this.setData({ answers: _this.data.answers.concat(answers),
+         answerShow: true,
+          answerIndex: _this.data.answers.length });
       });
   },
   quiz:function(){
@@ -121,15 +125,15 @@ Page({
       }else{
         answer.quizzer = '游客';//获取不到用户信息
       }
-      _this.setData({answer:answer});
+      _this.setData({ answer: answer, change:false});
       db.add('answers', answer).then(_this.updateAnswers, _this.updateAnswers);
     });
   },
   updateAnswers:function(_id){
     if(_id){
-      if (_id.indexOf('answer') != -1){//自己的id，更新
+      if (!this.data.change){//自己的id，更新
         for (var i in this.data.answers){
-          if (this.data.answers[i].id == _id){
+          if (this.data.answers[i]._id == _id){
             if(this.data.answers[i].show){
               this.data.answers[i].show = false;
             }else{
@@ -148,7 +152,6 @@ Page({
     var id = e.currentTarget.dataset.id;
     var show = e.currentTarget.dataset.show;
     var answer = {};
-    answer.id = id;
     if(show == 'true'){
       answer.shwo = false;
     }else{
