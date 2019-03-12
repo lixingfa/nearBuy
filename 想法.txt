@@ -13,3 +13,6 @@ https://blog.csdn.net/hangGe0111/article/details/81216208
 商品信息
 个人信息{微信唯一码、昵称、头像、手机号码}
 https://www.jianshu.com/p/6142a9cb04e9
+
+培养楼长、区长之类的辅助角色
+小商家可以获得免费的数据分析服务，指导销售策略。（营业额每月10万以下的）

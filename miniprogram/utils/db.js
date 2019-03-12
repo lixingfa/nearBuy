@@ -1,5 +1,5 @@
 var base = getApp();
-
+var util = require('util.js');
 //查询一条记录
 function doc(table,id){
   return new Promise(function (resolve, reject) {
@@ -19,12 +19,12 @@ function doc(table,id){
   });
 }
 //条件查询,where是一个JSON，每次最多取20，需要根据API重写
-function where(table, where, orderBy, order, index){
+function where(table, where, orderBy, index){
   return new Promise(function (resolve, reject) {
     var db = wx.cloud.database();//默认环境的数据库引用
     var query = db.collection(table).where(where);
-      if(orderBy != null){
-        query = query.orderBy(orderBy, order);//注意
+      for(var i = 0;i < orderBy.length;i= i + 2 ){
+        query = query.orderBy(orderBy[i], orderBy[i + 1]);//注意
       }
       if(index != 0){
         query = query.skip(index);
@@ -45,9 +45,8 @@ function where(table, where, orderBy, order, index){
   });
 }
 function whereOnly(table, whereData){
-  return where(table, whereData,null,null,0);
+  return where(table, whereData,[],0);
 }
-
 //只取一条数据
 function whereSingle(table, where) {
   return new Promise(function (resolve, reject) {
@@ -71,8 +70,14 @@ function whereSingle(table, where) {
   });
 }
 
+//获取总数
+function count(table, where) {
+  return wx.cloud.database().collection(table).where(where).count();
+}
+
 //新增一条记录
 function add(table,data){
+  data.createTime = util.formatTime(new Date());
   return new Promise(function (resolve, reject) {
     var db = wx.cloud.database();//默认环境的数据库引用
     db.collection(table).add({
@@ -94,6 +99,7 @@ function add(table,data){
 function update(table,_id,data){
   delete data._openid;//否则会更新失败
   delete data._id;//否则会更新失败
+  data.updateTime = util.formatTime(new Date());
   return new Promise(function (resolve, reject) {
     wx.cloud.callFunction({
       name: 'update',

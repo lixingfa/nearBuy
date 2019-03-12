@@ -29,8 +29,7 @@
 
 <view class="tool">
   <view class="tbtn add" catchtap="answerShow">
-    <text wx:if="{{good.promulgatorId == openId}}">咨询问答</text>
-    <text wx:if="{{good.promulgatorId != openId}}">向{{good.promulgator}}咨询</text>
+    <text wx:if="{{good.promulgatorId == openId}}">咨询问答</text><text wx:if="{{good.promulgatorId != openId}}">向{{good.promulgator}}咨询</text>{{answers.length == 0?'':'(' + answers.length + ')'}}
   </view>
   <view class="tbtn add">
     <navigator delta='1' open-type="navigateBack" hover-class="other-navigator-hover">
@@ -53,7 +52,7 @@
     <view class="addr_head_cancel" catchtap="answerCancel">关闭</view>
   </view>
     <view class="date tab" style="display: flex;">
-      <textarea bindblur="input" bindinput="input" placeholder="您的咨询内容" data-param="answer.content" maxlength="200" class='remark'/>
+      <textarea bindblur="input" bindinput="input" placeholder="您的咨询内容" data-param="answer.content" maxlength="200" class='remark'>{{answer.content}}</textarea>
       <button catchtap="quiz">提交</button>
     </view>
   <scroll-view scroll-y="true" scroll-top="{{scrollTop}}" bindscrolltolower="answerShow" style="height: 200px;">

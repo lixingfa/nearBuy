@@ -13,7 +13,8 @@ Page({
         answerShow:false,
         answers:[],//该商品的所有问答信息
         answer:{},//本次提交的问答内容
-        answerIndex:0
+        answerIndex:0,
+      answersTotal:0
     },
     onLoad: function (e) {
       var id = e && e.id ? e.id : 0;
@@ -23,6 +24,9 @@ Page({
         this.setData({good: g });
       } else {//初始化
         good.getGood(id, this.initGood);//从数据库拿
+      }
+      if (this.data.answersTotal == 0){
+        _this.answerShow(false);
       }
       _this.setData({ id: id,openId: base.openId })
     },
@@ -90,14 +94,14 @@ Page({
   input: function (e) {
     var param = e.currentTarget.dataset.param;
     this.setData({ [param]: e.detail.value });//变量key
-    if (param == 'deliveryTime') {
-      this.setData({ 'good.deliveryTime': this.data.good.arrTime[e.detail.value] });
-    }
   },
   answerCancel:function(){
     this.setData({ answerShow:false});
   },
-  answerShow:function(){
+  answerShow:function(show){
+    if (typeof (show) == 'undefined'){
+      show = true;
+    }
     var _this = this;
     var all = false;
     if (_this.data.good.promulgatorId == base.openId) {
@@ -106,14 +110,13 @@ Page({
     good.getGoodAnswers(_this.data.good.id, all, base.openId, _this.data.answerIndex,
       function (answers) {
         _this.setData({ answers: _this.data.answers.concat(answers),
-         answerShow: true,
-          answerIndex: _this.data.answers.length });
-      });
+          answerShow: show,
+          answerIndex: _this.data.answers.length + answers.length});
+    });
   },
   quiz:function(){
     var _this = this;
     var answer = this.data.answer;
-    answer.creatTime = util.formatTime(new Date());
     answer.goodId = this.data.good.id;
     answer.id = util.getUUID('answer');
     answer.ownerId = this.data.good.promulgatorId;//商品所有者
@@ -131,7 +134,7 @@ Page({
   },
   updateAnswers:function(_id){
     if(_id){
-      if (!this.data.change){//自己的id，更新
+      if (this.data.change){
         for (var i in this.data.answers){
           if (this.data.answers[i]._id == _id){
             if(this.data.answers[i].show){
@@ -142,10 +145,11 @@ Page({
             break;
           }
         }
+        this.setData({ answers: this.data.answers});
       }else{//添加
-        this.data.answers.push(this.data.answer);
+        this.setData({ 'answer.content': '' });
+        this.answerShow(true);
       }
-      this.setData({ answers: this.data.answers});
     }
   },
   chang:function(e){
@@ -157,6 +161,7 @@ Page({
     }else{
       answer.show = true;
     }
+    this.setData({change: true});
     db.update('answers', id, answer).then(this.updateAnswers, this.updateAnswers);
   }
 });
