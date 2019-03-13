@@ -8,6 +8,9 @@
       <view class="pro">
       {{n.content}}
       </view>
-      <button data-id="{{n._id}}" data-oid="{{n.oid}}" data-orderid='{{n.orderId}}' data-sellers='{{n.receiver}}' data-gid='{{n.goodId}}' data-how='{{n.how}}' catchtap='doit'>处理</button>
+      <button data-id="{{n._id}}" data-oid="{{n.oid}}" data-orderid='{{n.orderId}}' data-sellers='{{n.receiver}}' data-gid='{{n.goodId}}' data-how='{{n.how}}' catchtap='doit'>
+      <text wx:if="{{n.how == '0'}}">发货</text>
+      <text wx:if="{{n.how == '1'}}">备货</text>
+      </button>
     </view>
 </view>

@@ -137,14 +137,14 @@ Page({
       })
       return false;
     }
-    if (!_this.data.good.typeId) {
+    /*if (!_this.data.good.typeId) {//当前类别不全，不应该强制
       wx.showModal({
         showCancel: false,
         title: '',
         content: "请选择商品类别"
       })
       return false;
-    }
+    }*/
     return true;
   },
   typeShow:function(){

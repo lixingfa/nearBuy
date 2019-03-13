@@ -10,7 +10,7 @@ Page({
     where.receiver = base.openId;
     where.newsType = 'order';//订单
     where.status = 0;
-    db.where('news', where, "createTime", "asc").then(function (news) {
+    db.where('news', where, ["goodId","asc","createTime", "asc"],).then(function (news) {
       _this.setData({ news: news});
     });
   },

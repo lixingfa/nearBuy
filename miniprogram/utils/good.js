@@ -42,7 +42,7 @@ function getGoodAnswers(goodId, all,openId,index,fn){
     var _ = wx.cloud.database().command;
     where = _.or([{ show: true }, { quizzerId: openId }]).and({ goodId: goodId});
   }
-  db.where('answers', where, ['show','desc','createTime', 'asc'],index).then(fn, fn);
+  db.where('answers', where, ['createTime', 'asc'], index).then(fn, fn);//'show','desc',
 }
 
 //检查订单商品信息
