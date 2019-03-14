@@ -11,7 +11,9 @@
     "pages/user/userInfo/userInfo",
     "pages/user/seller/pendingOrder/pendingOrder",
     "pages/user/seller/goodEdit/goodEdit",
-    "pages/user/seller/goods/goods"
+    "pages/user/seller/goods/goods",
+    "pages/user/news/news",
+    "pages/user/seller/data/dataAnalysis"
   ],
   "window": {
     "backgroundColor": "#F6F6F6",
@@ -31,6 +33,12 @@
       {
         "pagePath": "pages/cart/cart",
         "text": "购物车",
+        "iconPath": "icon/cart-1.png",
+        "selectedIconPath": "icon/cart-2.png"
+      },
+      {
+        "pagePath": "pages/user/news/news",
+        "text": "消息",
         "iconPath": "icon/cart-1.png",
         "selectedIconPath": "icon/cart-2.png"
       },

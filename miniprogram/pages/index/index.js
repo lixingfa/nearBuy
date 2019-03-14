@@ -5,6 +5,7 @@ var good = require('../../utils/good.js');
 var user = require('../../utils/user.js');
 var util = require('../../utils/util.js');
 var db = require('../../utils/db.js');
+var news = require('../../utils/news.js');
 Page({
   data: {
     goods:[],
@@ -16,17 +17,20 @@ Page({
       url: '../goodDetail/goodDetail?id=' + id
     })
   },
-  onLoad: function () {
+  onLoad: function (b) {
     var _this = this;
     if (base.location.latitude == 0){//坐标没更新
       //获取openId、GPS坐标
       Promise.all([util.getGPS(), util.getOpenId()])
         .then(function (results) {
+          //坐标
           base.location.latitude = results[0].latitude;
           base.location.longitude = results[0].longitude;
-          base.openId = results[1];
-          _this.getNewGoods();
-
+          //用户
+          base.openId = results[1];//'oOlK15NZ7PUwXOshxdxmM0HEkI9U';//
+          //最近的商品
+          _this.getNewGoods(b);
+          //更新用户信息
           user.getThisUser(results[1], function (user) {//再获取用户信息
             if (user) {//老用户
               var where = {};
@@ -39,11 +43,10 @@ Page({
           });
         });
     }else{
-      _this.getNewGoods();
+      _this.getNewGoods(b);
     }
-
   },
-  getNewGoods:function(){
+  getNewGoods:function(b){
     wx.showLoading({
       title: '加载中，请稍后。',
     })
@@ -62,18 +65,28 @@ Page({
       // 隐藏加载框
       wx.hideLoading();
     });
+    if (b){
+      news.count().then(function (res) {
+        if (res.total != 0) {
+          //显示消息数量
+          wx.setTabBarBadge({ index: 2, text: res.total + "" });
+          //显示红点
+          wx.showTabBarRedDot({ index: 3 });
+        }
+      });
+    }
   },
   //上拉加载更多
   onReachBottom: function () {
     var that = this;
     // 页数+1
     this.setData({ index: this.data.goods.length});
-    this.onLoad();
+    this.onLoad(false);
   },
   //下拉更新
   onPullDownRefresh:function(){
     // 从头开始
     this.setData({ index: 0 });
-    this.onLoad();
+    this.onLoad(false);
   }
 })

@@ -26,6 +26,16 @@
 </view>
 <!--卖方菜单-->
 <view class="ub">
+  <navigator url="../user/seller/data/dataAnalysis" open-type="navigate" hover-class="navigator-hover">
+  <view class="item item-a">
+    <view class="icon">
+    </view>
+    <view class="tit" >
+      数据分析
+    </view>
+    <view class="con"></view>
+  </view>
+  </navigator>
   <navigator url="../user/seller/goodEdit/goodEdit" open-type="navigate" hover-class="navigator-hover">
   <view class="item item-a">
     <view class="icon">
