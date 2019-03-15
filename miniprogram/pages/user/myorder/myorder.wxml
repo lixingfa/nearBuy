@@ -1,6 +1,6 @@
 <view class="body">
     <view wx:if="{{myOrder.length==0}}" class="null">暂无订单</view>
-    <view class="item" data-poid="{{p.id}}" wx:for="{{myOrder}}" wx:key="id" wx:for-item="p" wx:for-index="pindex">
+    <scroll-view class="item" data-poid="{{p.id}}" wx:for="{{myOrder}}" wx:key="id" wx:for-item="p" wx:for-index="pindex">
       <view class='title'>
         <!--<text>订单编号：{{p.id}} </text>-->
         <text>下单时间：{{p.createTime}}</text>
@@ -16,7 +16,7 @@
             <text class="chooseTime" wx:if="{{g.status == 1}}">可取货</text>
             <text class="chooseTime" wx:if="{{g.status == 2}}">已收货</text>
             <text class="pprice" wx:if="{{g.status == 1}}" data-id="{{g.id}}" data-oid="{{p._id}}" data-orderid='{{p.id}}' data-sellers="{{g.promulgatorId}}"
-              catchtap="pay">确认收货</text>
+              catchtap="pay" style="color: red;">确认收货</text>
           </view>
           <view class="remarks">
             {{g.time}} 
@@ -38,8 +38,8 @@
             <text class="chooseTime" wx:if="{{g.status == 0}}">准备中</text>
             <text class="chooseTime" wx:if="{{g.status == 1}}">配送中</text>
             <text class="chooseTime" wx:if="{{g.status == 2}}">已收货</text>
-            <text class="pprice" wx:if="{{g.status == 1}}" data-id="{{g.id}}" data-oid="{{p._id}}" data-sellers="takeOut"
-              catchtap="pay">确认收货</text>
+            <text class="pprice" wx:if="{{g.status == 1}}" data-id="{{g.id}}" data-oid="{{p._id}}" data-orderid='{{p.id}}' data-sellers="takeOut"
+              catchtap="pay" style="color: red;">确认收货</text>
           </view>
           <view class="remarks">
             {{g.time}} 
@@ -48,7 +48,7 @@
         </view>
         <view wx:if="{{p.takeOut.user.addr}}">送到：{{p.takeOut.user.addr}}</view>
       </view>
-    </view>
+    </scroll-view>
     
 
     <view class="addr_box" wx:if="{{qrcodeShow}}">

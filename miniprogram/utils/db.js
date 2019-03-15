@@ -78,6 +78,7 @@ function count(table, where) {
 //新增一条记录
 function add(table,data){
   data.createTime = util.formatTime(new Date());
+  data.updateTime = data.createTime;//避免数据残缺
   return new Promise(function (resolve, reject) {
     var db = wx.cloud.database();//默认环境的数据库引用
     db.collection(table).add({

@@ -3,6 +3,7 @@ var util = require('../../utils/util.js');
 var db = require('../../utils/db.js');
 var user = require('../../utils/user.js');
 var good = require('../../utils/good.js');
+var newsUtil = require('../../utils/news.js');
 Page({
     data: {
       //下单数据
@@ -30,7 +31,7 @@ Page({
       if (_this.data.myAddress.length == 0){
         var where = {};
         where.user = base.openId;
-        db.where('address', where, 'createTime', 'desc').then(this.initAddress, this.initAddress);
+        db.where('address', where, ['createTime', 'desc'],0).then(this.initAddress, this.initAddress);
       }else{
         _this.setData({ addrShow: true });//选地址
       }
@@ -125,17 +126,29 @@ Page({
       });
     },
     creatOrder:function(){
+      wx.showLoading({
+        title: '下单中，请稍后。',
+      });
       var _this = this;
-      if (_this.data.selectedID == -1 && _this.data.hasTakeOut) {//不是从列表里选的地址，并且需要地址
-        var addr = {};
-        addr.addr = _this.data.addr;
-        addr.phone = _this.data.phone;
-        addr.longitude = _this.data.longitude;
-        addr.latitude = _this.data.latitude;
-        addr.id = util.getUUID('addr');
-        addr.createTime = util.formatTime(new Date());
-        addr.user = this.data.user.id;
-        db.add('address', addr);
+      if (_this.data.selectedID == -1) {//不是从列表里选的地址，并且需要地址
+        if (_this.data.hasTakeOut){
+          var addr = {};
+          addr.addr = _this.data.addr;
+          addr.phone = _this.data.phone;
+          addr.longitude = _this.data.longitude;
+          addr.latitude = _this.data.latitude;
+          addr.id = util.getUUID('addr');
+          addr.user = this.data.user.id;
+          db.add('address', addr);
+        }
+        if (_this.data.user.phone == null || _this.data.user.addr == null){
+          var u = {};
+          u.phone = _this.data.phone;
+          if (_this.data.hasTakeOut) {
+            u.addr = _this.data.addr;
+          }
+          db.update('user', base.openId,u);
+        }
       }
       var order = {};
       order.id = util.getUUID('order');
@@ -185,9 +198,9 @@ Page({
           }
           //构建消息通知卖家
           var n = {};
-          n.id = util.getUUID('news');
           n.receiver = g.promulgatorId;//卖家
           n.newsType = 'order';//下单
+          n.buyer = this.data.user.id;
           n.orderId = order.id;
           n.goodId = g.id;
           n.how = g.how;
@@ -203,8 +216,6 @@ Page({
           if (g.remarks && g.remarks != ''){
             n.content = n.content + '留言：' + g.remarks;
           }
-          n.status = 0;//未处理
-          n.createTime = util.formatTime(new Date());
           news.push(n);
           //构建消息通知买家
           //放入更新库存列表
@@ -240,18 +251,19 @@ Page({
         order.takeOut.user.phone = _this.data.phone;
       }
       order.totalPrice = _this.data.totalPrice;
-      order.createTime = util.formatTime(new Date());
       db.add('orders', order).then(function(d){
         //更新库存
+        var j = 0;
         for (var i in _this.data.plist){
           var good = {};
           good.surplus = _this.data.plist[i].surplus;
-          db.update('goods',_ids[i],good);
+          db.update('goods',_ids[j],good);
+          j++;
         }
         //增加消息
         for (var i in news){
           news[i].oid = d;//订单_id
-          db.add('news',news[i]);
+          newsUtil.add(news[i]);
         }
 
         wx.redirectTo({//不允许退回下单页

@@ -1,1 +1,14 @@
-<text>建设中……（如何让这个产品变得有意思？）卖家卖更多东西，买家买到想要的东西。对于闲逛的人如何留住？</text>
+<view>建设中……（如何让这个产品变得有意思？）卖家卖更多东西，买家买到想要的东西。对于闲逛的人如何留住？</view>
+<view class="body">
+    <view wx:if="{{news.length==0}}" class="null">暂无消息</view>
+    <scroll-view>
+    <view class="item" wx:for="{{news}}" wx:key="id" wx:for-item="n" data-id="{{n._id}}" data-newstype='{{n.newsType}}' catchtap='read'>
+      <view class="pro">
+      {{n.content}}
+      </view>
+      <view class='title'>
+        {{n.createTime}}
+      </view>
+    </view>
+    </scroll-view>
+</view>

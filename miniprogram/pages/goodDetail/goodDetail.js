@@ -94,6 +94,9 @@ Page({
   input: function (e) {
     var param = e.currentTarget.dataset.param;
     this.setData({ [param]: e.detail.value });//变量key
+    if (param == 'deliveryTime') {
+      this.setData({ 'good.deliveryTime': this.data.good.arrTime[e.detail.value] });
+    }
   },
   answerCancel:function(){
     this.setData({ answerShow:false});

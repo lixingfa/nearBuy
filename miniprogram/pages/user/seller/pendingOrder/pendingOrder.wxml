@@ -1,6 +1,7 @@
 <view class="body">
     <view wx:if="{{news.length==0}}" class="null">暂无订单</view>
-     <view class="item" wx:for="{{news}}" wx:key="id" wx:for-item="n">
+    <scroll-view>
+    <view class="item" wx:for="{{news}}" wx:key="id" wx:for-item="n">
       <view class='title'>
         <text>订单编号：{{n.orderId}} </text>
         <view>下单时间：{{n.createTime}}</view>
@@ -8,9 +9,10 @@
       <view class="pro">
       {{n.content}}
       </view>
-      <button data-id="{{n._id}}" data-oid="{{n.oid}}" data-orderid='{{n.orderId}}' data-sellers='{{n.receiver}}' data-gid='{{n.goodId}}' data-how='{{n.how}}' catchtap='doit'>
+      <button data-id="{{n._id}}" data-oid="{{n.oid}}" data-orderid='{{n.orderId}}' data-sellers='{{n.receiver}}' data-gid='{{n.goodId}}' data-how='{{n.how}}'  data-buyer='{{n.buyer}}' catchtap='doit'>
       <text wx:if="{{n.how == '0'}}">发货</text>
       <text wx:if="{{n.how == '1'}}">备货</text>
       </button>
     </view>
+    </scroll-view>
 </view>
