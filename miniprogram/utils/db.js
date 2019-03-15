@@ -119,6 +119,28 @@ function update(table,_id,data){
   });
 }
 
+function updateWhere(table, where, data) {
+  delete data._openid;//否则会更新失败
+  delete data._id;//否则会更新失败
+  data.updateTime = util.formatTime(new Date());
+  return new Promise(function (resolve, reject) {
+    wx.cloud.callFunction({
+      name: 'updateWhere',
+      data: { table: table, where: where, data: data },
+      success(res) {
+        resolve(res.total);//更新了多少
+      },
+      fail(res) {
+        console.log(res);
+        reject(false);
+      },
+      complete: res => {
+        //console.log('callFunction test result: ', res);
+      },
+    });
+  });
+}
+
 //复杂业务不应物理删，为后面积累数据和找回。提供历史商品、历史订单的功能
 function remove(table,_id){
   var db = wx.cloud.database();
@@ -133,6 +155,7 @@ module.exports = {
   where: where,
   add: add,
   update: update,
+  updateWhere: updateWhere,
   whereSingle: whereSingle,
   remove: remove,
   whereOnly: whereOnly

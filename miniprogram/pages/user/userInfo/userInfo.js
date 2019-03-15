@@ -64,7 +64,7 @@ Page({
     if(this.data.isNew){
       db.add("user", this.data.user).then(this.updateUser, this.updateUser);
     }else{
-      db.update("user", this.data.user.id, this.data.user)
+      db.update("user", this.data.user._id, this.data.user)
         .then(this.updateUser, this.updateUser);
     }
   }

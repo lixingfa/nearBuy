@@ -40,6 +40,9 @@ Page({
           goodutil.getGood(id,function(good){
             if(good){
               good.editTotal = false;
+              if (good.surplus == 0){
+                good.editTotal = true;
+              }
               _this.setData({ good: good, eidt: true});
             }
           });
@@ -165,11 +168,14 @@ Page({
       "good.promulgatorId": base.openId,
       "good.latitude": base.location.latitude,
       "good.longitude": base.location.longitude,
-      "good.surplus":this.data.good.total,
-      "good.createTime": util.formatTime(new Date),
       "good.validTimeTrue": this.data.good.indate + ' ' +this.data.good.validTime
       });
     if (this.data.eidt){
+      if (this.data.good.editTotal){
+        this.setData({
+          "good.surplus": this.data.good.total
+        });
+      }
       db.update('goods', this.data.good._id, this.data.good).then(this.addGoodNext, this.addGoodNext);
     }else{
       db.add('goods', this.data.good).then(this.addGoodNext, this.addGoodNext);

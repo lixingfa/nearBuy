@@ -24,7 +24,7 @@
 </view>
 <view class="date tab" wx:if="{{good.lineOrder == 'true' && good.promulgatorId != openId}}">
   <view class="tit">下单留言</view>
-  <textarea value='您的下单留言' bindblur="input" bindinput="input" placeholder="您的留言信息" value="{{good.remarks}}" maxlength="200" class='remark' data-param="good.remarks"/>
+  <textarea value='您的下单留言' bindblur="input" bindinput="input" value="{{good.remarks}}" maxlength="200" class='remark' data-param="good.remarks"/>
 </view>
 
 <view class="tool">

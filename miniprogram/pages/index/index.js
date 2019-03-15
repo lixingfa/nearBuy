@@ -52,10 +52,10 @@ Page({
               user.nickName = '用户';
               user.phone = null;
               user.addr = null;
-              user.workTimeStart = arrTime.arrTime[3];
-              user.workTimeEnd = arrTime.arrTime[13];
+              user.workTimeStart = base.arrTime[3];
+              user.workTimeEnd = base.arrTime[13];
               user.distan = 3000;
-              db.add("user", this.data.user);
+              db.add("user", user);
             }
             base.distan = user.distan;//更新搜索范围
           });

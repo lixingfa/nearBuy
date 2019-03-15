@@ -1,9 +1,9 @@
 <view>
   <view class='tab'>商品标题：<input value='{{good.title}}' bindblur="input" bindinput="input" data-param="good.title" maxlength='50' placeholder="好的商品标题容易吸引人"/></view>
-  <view class='tab'>商品简介：<textarea bindblur="input" bindinput="input" data-param="good.inAWord" maxlength='500' placeholder="简短准确的描述可增加下单">{{good.inAWord}}</textarea></view>
+  <view class='tab'>商品简介：<textarea bindblur="input" bindinput="input" data-param="good.inAWord" maxlength='500'>{{good.inAWord}}</textarea></view>
   <view class='tab'>商品类别：{{good.typeName}}<button catchtap="typeShow">选择</button></view>
   <view class='tab'>商品图片：
-    <image src="{{good.pic}}" mode="scaleToFill"></image>
+    <image src="{{good.pic}}" mode="aspectFill"></image>
     <button catchtap="chooseGoodPic">选择图片</button>
   </view>
   <view class='tab'>价格：<input value='{{good.price}}' bindblur="input" bindinput="input" data-param="good.price" placeholder="免费活动可以写0" maxlength='7' type='digit'/></view>

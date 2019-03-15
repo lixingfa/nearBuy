@@ -142,12 +142,13 @@ Page({
           db.add('address', addr);
         }
         if (_this.data.user.phone == null || _this.data.user.addr == null){
-          var u = {};
-          u.phone = _this.data.phone;
-          if (_this.data.hasTakeOut) {
-            u.addr = _this.data.addr;
-          }
-          db.update('user', base.openId,u);
+          user.getUser(base.openId, function(u){
+            u.phone = _this.data.phone;
+            if (_this.data.hasTakeOut) {
+              u.addr = _this.data.addr;
+            }
+            db.update('user', u._id, u);
+          });
         }
       }
       var order = {};
