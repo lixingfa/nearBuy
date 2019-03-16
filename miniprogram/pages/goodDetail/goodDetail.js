@@ -6,62 +6,72 @@ var base = getApp();
 Page({
     data: {
         good:null,
-        //dateStart: "",
-        //dateEnd: "",
         openId: null,
         change:false,
         answerShow:false,
         answers:[],//该商品的所有问答信息
         answer:{},//本次提交的问答内容
         answerIndex:0,
-      answersTotal:0
+        answersTotal:0,
+        newUser: false,
+        all:false
     },
     onLoad: function (e) {
       var id = e && e.id ? e.id : 0;
-      var _this = this;
       var g = base.cart.getGood(id);
       if (g != null) {//购物车里存在，则拿购物车的，可以简化很多操作
-        this.setData({good: g });
+        var all = false;
+        if (g.promulgatorId == base.openId) {
+          all = true;//商品所有者
+        }
+        good.getGoodAnswersCount(g.id, all, base.openId, function(res){
+          this.setData({ good: g, answersTotal: res.total, all: all});
+        });
       } else {//初始化
         good.getGood(id, this.initGood);//从数据库拿
-      }
-      if (this.data.answersTotal == 0){
-        _this.answerShow(false);
-      }
-      _this.setData({ id: id,openId: base.openId })
+      }      
+      this.setData({ id: id, openId: base.openId, newUser: base.newUser})
     },
-  initGood:function(good){
-      if (good){//购物车里存在，则拿购物车的，可以简化很多操作
+  initGood:function(g){
+    var _this = this;
+      if (g){//购物车里存在，则拿购物车的，可以简化很多操作
         var arrTimeT = new Array();
-        if (good.chooseTime == 'true'){//允许选择送货/取货时间
+        if (g.chooseTime == 'true'){//允许选择送货/取货时间
           var date = new Date();
-          var start = good.workTimeStart;//可选择的时间，是根据店铺的营业时间，或者个人提供服务的时间确定的
+          var start = g.workTimeStart;//可选择的时间，是根据店铺的营业时间，或者个人提供服务的时间确定的
           start = start.substring(0,start.indexOf(":"));
-          var end = good.workTimeEnd;
+          var end = g.workTimeEnd;
           end = end.substring(0,end.indexOf(":"));
           for (var t = parseInt(start); t < parseInt(end); t++){//每次增加1小时
             arrTimeT.push(t + ":00-" + (t + 1) + ":00");
           }
-          good.arrTime = arrTimeT;
-          good.arrTimeIndex = 0;
+          g.arrTime = arrTimeT;
+          g.arrTimeIndex = 0;
           var nextHour = date.getHours();
           if (nextHour + 1 > end){//大于工作时间，选后一天，不选时间
             date = new Date(new Date().getTime() + 24 * 60 * 60 * 1000); //后一天
-            good.deliveryTime = '';
+            g.deliveryTime = '';
           }else{
             if (nextHour < start){
-              good.deliveryTime = arrTimeT[0];
+              g.deliveryTime = arrTimeT[0];
             }else{
-              good.deliveryTime = nextHour + ":00-" + (nextHour + 1) + ":00";
+              g.deliveryTime = nextHour + ":00-" + (nextHour + 1) + ":00";
             }
           }
-          good.deliveryDate = util.formatTime(date);
-          good.deliveryDate = good.deliveryDate.substring(0, good.deliveryDate.indexOf(' '));
+          g.deliveryDate = util.formatTime(date);
+          g.deliveryDate = g.deliveryDate.substring(0, g.deliveryDate.indexOf(' '));
         }else{
-          good.deliveryTime = '';
+          g.deliveryTime = '';
         }
-        good.num = 0;
-        this.setData({good: good});
+        g.num = 0;
+        
+        var all = false;
+        if (g.promulgatorId == base.openId) {
+          all = true;//商品所有者
+        }
+        good.getGoodAnswersCount(g.id, all, base.openId, function (res) {
+          _this.setData({ good: g, answersTotal: res.total, all: all });
+        });
       }else{//没找到这个商品
 
       }
@@ -82,14 +92,25 @@ Page({
     goCart: function (e) {
       if (this.data.good.price > 0) {
         this.setData({ "good.status": 0 });
-      }
-      else {
+      }else {
         this.setData({ "good.status": 2 });//直接收货，没有价格就没有确认契约
       }
       base.cart.updateGood(this.data.good);//加入购物车按钮会消失，或者是留言后就去购物车。
-      wx.switchTab({//wx.navigateTo和wx.redirectTo,不能跳转tabBar里的页面
-        url: '../cart/cart'
-      })
+      if (this.data.newUser) {
+        user.addNewUser(function(user){
+          if(user){
+            wx.switchTab({url: '../cart/cart'});
+          }else{
+            wx.showLoading({
+              title: '创建用户失败，无法进行商品咨询，可到“我的-个人信息”中完善信息后再试。',
+            });
+          }
+        });
+      }else{
+        wx.switchTab({//wx.navigateTo和wx.redirectTo,不能跳转tabBar里的页面
+          url: '../cart/cart'
+        });
+      }
     },
   input: function (e) {
     var param = e.currentTarget.dataset.param;
@@ -101,39 +122,45 @@ Page({
   answerCancel:function(){
     this.setData({ answerShow:false});
   },
-  answerShow:function(show){
-    if (typeof (show) == 'undefined'){
-      show = true;
-    }
+  answerShow:function(){
     var _this = this;
-    var all = false;
-    if (_this.data.good.promulgatorId == base.openId) {
-      all = true;//商品所有者
-    }
-    good.getGoodAnswers(_this.data.good.id, all, base.openId, _this.data.answerIndex,
+    good.getGoodAnswers(_this.data.good.id, _this.data.all, base.openId, _this.data.answerIndex,
       function (answers) {
         _this.setData({ answers: _this.data.answers.concat(answers),
-          answerShow: show,
+          answerShow: true,
           answerIndex: _this.data.answers.length + answers.length});
     });
   },
   quiz:function(){
+    if (!this.data.answer.content){
+      return;
+    }
+    if (this.data.newUser) {
+      user.addNewUser(this.sumbit);
+    }else{
+      this.sumbit(true);
+    }
+  },
+  sumbit:function(id){
     var _this = this;
-    var answer = this.data.answer;
-    answer.goodId = this.data.good.id;
-    answer.id = util.getUUID('answer');
-    answer.ownerId = this.data.good.promulgatorId;//商品所有者
-    answer.quizzerId = base.openId;
-    answer.show = false;
-    user.getThisUser(base.openId,function(data){
-      if(data){
-        answer.quizzer = data.nickName;//当前用户的昵称
-      }else{
-        answer.quizzer = '游客';//获取不到用户信息
-      }
-      _this.setData({ answer: answer, change:false});
-      db.add('answers', answer).then(_this.updateAnswers, _this.updateAnswers);
-    });
+    if(id){
+      var answer = this.data.answer;
+      answer.goodId = this.data.good.id;
+      answer.id = util.getUUID('answer');
+      answer.ownerId = this.data.good.promulgatorId;//商品所有者
+      answer.quizzerId = base.openId;
+      answer.show = false;
+      user.getUser(base.openId,function(u){
+        answer.quizzer = u.nickName;//当前用户的昵称
+        _this.setData({ answer: answer, change:false,newUser:false});
+        base.newUser = false;
+        db.add('answers', answer).then(_this.updateAnswers, _this.updateAnswers);
+      });
+    }else{
+      wx.showModal({
+        content: '创建用户失败，无法进行商品咨询，可到“我的-个人信息”中完善信息后再试。',
+      });
+    }
   },
   updateAnswers:function(_id){
     if(_id){
@@ -151,7 +178,11 @@ Page({
         this.setData({ answers: this.data.answers});
       }else{//添加
         this.setData({ 'answer.content': '' });
-        this.answerShow(true);
+        this.answerShow();
+        wx.showModal({
+          showCancel: false,
+          content: '添加成功。',
+        });
       }
     }
   },
@@ -166,5 +197,10 @@ Page({
     }
     this.setData({change: true});
     db.update('answers', id, answer).then(this.updateAnswers, this.updateAnswers);
+  },
+  goBack:function(){
+    wx.navigateBack({
+      delta: 1
+    })
   }
 });

@@ -28,21 +28,26 @@
 </view>
 
 <view class="tool">
-  <view class="tbtn add" catchtap="answerShow">
-    <text wx:if="{{good.promulgatorId == openId}}">咨询问答</text><text wx:if="{{good.promulgatorId != openId}}">向{{good.promulgator}}咨询</text>{{answers.length == 0?'':'(' + answers.length + ')'}}
-  </view>
-  <view class="tbtn add">
-    <navigator delta='1' open-type="navigateBack" hover-class="other-navigator-hover">
-      <text wx:if="{{good.promulgatorId == openId}}">返回</text>
-      <text wx:if="{{good.promulgatorId != openId}}">继续购物</text>
-    </navigator>
-  </view>
+  <button wx:if="{{newUser}}" class="tbtn add" catchtap="answerShow" open-type="getUserInfo"><!--新用户触发授权-->
+    <text>向{{good.promulgator}}咨询</text>{{answersTotal == 0?'':'(' + answersTotal + ')'}}
+  </button>
+  <button wx:if="{{!newUser}}" class="tbtn add" catchtap="answerShow">
+      <text wx:if="{{good.promulgatorId == openId}}">咨询问答</text>
+      <text wx:if="{{good.promulgatorId != openId}}">向{{good.promulgator}}咨询</text>{{answersTotal == 0?'':'(' + answersTotal + ')'}}
+  </button>
+  <button class="tbtn add" catchtap="goBack">
+    <text wx:if="{{good.promulgatorId == openId}}">返回</text>
+    <text wx:if="{{good.promulgatorId != openId}}">继续购物</text>
+  </button>
 </view>
 <view class="tool" wx:if="{{good.promulgatorId != openId}}"><!--还有库存，允许在线下单，不是自己-->
-  <view class="tbtn add" catchtap="goCart" wx:if="{{good.lineOrder == 'true'}}">前往购物车</view>
-  <view wx:if="{{good.surplus > 0 && good.lineOrder == 'true'}}" class="tbtn add" catchtap="addCart">
+  <button class="tbtn add" catchtap="goCart" wx:if="{{good.lineOrder == 'true'}}">前往购物车</button>
+  <button wx:if="{{newUser && good.surplus > 0 && good.lineOrder == 'true'}}" class="tbtn add" catchtap="addCart" open-type="getUserInfo">
     加入购物车(<text class="cart-num">{{good.num}}</text>)
-  </view>
+  </button>
+  <button wx:if="{{!newUser && good.surplus > 0 && good.lineOrder == 'true'}}" class="tbtn add" catchtap="addCart">
+    加入购物车(<text class="cart-num">{{good.num}}</text>)
+  </button>
 </view>
 
 <!--咨询-->
@@ -52,7 +57,7 @@
     <view class="addr_head_cancel" catchtap="answerCancel">关闭</view>
   </view>
     <view class="date tab" style="display: flex;">
-      <textarea bindblur="input" bindinput="input" placeholder="您的咨询内容" data-param="answer.content" maxlength="200" class='remark'>{{answer.content}}</textarea>
+      <textarea bindblur="input" bindinput="input" data-param="answer.content" maxlength="200" class='remark'></textarea>
       <button catchtap="quiz">提交</button>
     </view>
   <scroll-view scroll-y="true" scroll-top="{{scrollTop}}" bindscrolltolower="answerShow" style="height: 200px;">
@@ -64,7 +69,7 @@
           <text wx:if="{{a.show}}">隐藏</text>
         </button>
       </view>
-      <view class="sub_type">{{a.quizzer}} {{a.creatTime}}</view>
+      <view class="sub_type">{{a.quizzer}} {{a.createTime}}</view>
     </view>
   </scroll-view>
 </view>

@@ -51,6 +51,7 @@ Page({
       if (this.data.plist[id].surplus >= 0) {
         this.changeTotal();
         this.setData({plist: this.data.plist});
+        base.cart.updateGood(this.data.plist[id]);
       }
     },
     select:function(e){
@@ -60,6 +61,7 @@ Page({
       }else{
         this.data.plist[id].select = true;
       }
+      base.cart.updateGood(this.data.plist[id]);
       this.setData({ plist: this.data.plist });
       this.changeTotal();
     },

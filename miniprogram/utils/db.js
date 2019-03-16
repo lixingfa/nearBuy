@@ -32,10 +32,6 @@ function where(table, where, orderBy, index){
       query.get({
         success(res) {
           resolve(res.data);// res.data 是包含以上定义的两条记录的数组
-          for (var i in res.data){
-            var d = res.data[i];
-            base.setCache(table + d.id, d);
-          }
         },
         fail(res) {
           console.log(res);
@@ -158,7 +154,8 @@ module.exports = {
   updateWhere: updateWhere,
   whereSingle: whereSingle,
   remove: remove,
-  whereOnly: whereOnly
+  whereOnly: whereOnly,
+  count: count
 }
 /*Node应用由模块组成，采用CommonJS模块规范。
 根据这个规范，每个文件就是一个模块，有自己的作用域。在一个文件里面定义的变量、函数、类，都是私有的，对其他文件不可见。所以需要加上exports*/

@@ -20,6 +20,9 @@ Page({
   onLoad: function () {
     var _this = this;
     if (base.location.latitude == 0){//坐标没更新
+      wx.showLoading({
+        title: '正在准备数据',
+      });
       //获取openId、GPS坐标
       Promise.all([util.getGPS(), util.getOpenId()])
         .then(function (results) {
@@ -28,51 +31,51 @@ Page({
           base.location.longitude = results[0].longitude;
           //用户
           base.openId = results[1];//'oOlK15NZ7PUwXOshxdxmM0HEkI9U';//
-          //消息
-          news.count().then(function (res) {
-            if (res.total != 0) {
-              //显示消息数量
-              wx.setTabBarBadge({ index: 2, text: res.total + "" });
-              //显示红点
-              wx.showTabBarRedDot({ index: 3 });
-            }
-          });
-          //最近的商品
-          _this.getNewGoods();
+          news.setTabBarBadge();
           //更新用户信息
-          user.getThisUser(results[1], function (user) {//再获取用户信息
+          user.getUser(results[1], function (user) {//再获取用户信息
             if (user) {//老用户
+              base.distan = user.distan;//更新搜索范围
+              //最近的商品
+              _this.getNewGoods();
+              //更新地址
               var where = {};
               where.userId = user.id;
               db.whereOnly('address', where).then(base.updataLocation, base.updataLocation);
-            } else {//新用户注册一个，避免后续数据麻烦
-              user = {};
-              user.id = base.openId;
-              user.status = '1';
-              user.nickName = '用户';
-              user.phone = null;
-              user.addr = null;
-              user.workTimeStart = base.arrTime[3];
-              user.workTimeEnd = base.arrTime[13];
-              user.distan = 3000;
-              db.add("user", user);
+            } else {
+              base.newUser = true;//新用户
+              //最近的商品
+              _this.getNewGoods();
             }
-            base.distan = user.distan;//更新搜索范围
+          },function(){//获取用户失败
+            wx.hideLoading();
+            wx.showModal({
+              showCancel: false,
+              content: '网络不佳，获取用户信息失败，请退出小程序后重新进入。',
+            });
+          });
+        },function(){
+          wx.hideLoading();
+          wx.showModal({
+            showCancel: false,
+            content: '网络不佳，请退出小程序后重新进入。',
           });
         });
     }else{
       _this.getNewGoods();
+      news.setTabBarBadge();
     }
   },
   getNewGoods:function(){
     wx.showLoading({
-      title: '加载中，请稍后。',
-    })
+      title: '加载商品信息',
+    });
     var _this = this;
     //获取最新商品信息
     good.getNewGoods(_this.data.index,function(goods){
       for(var i in goods){
         var distance = base.getDistance(base.location.latitude, base.location.longitude, goods[i].latitude, goods[i].longitude);
+       // if (distance <= base.distan){}
         goods[i].distance = distance;
       }
       if (_this.data.index > 0){
@@ -89,13 +92,15 @@ Page({
     var that = this;
     // 页数+1
     this.setData({ index: this.data.goods.length});
-    this.onLoad();
+    this.getNewGoods();
   },
   //下拉更新
   onPullDownRefresh:function(){
+    //消息，每次刷新首页就刷新？
+    news.setTabBarBadge();
     // 从头开始
     this.setData({ index: 0 });
-    this.onLoad();
+    this.getNewGoods();
   },
   /**
    * 生命周期函数--监听页面初次渲染完成

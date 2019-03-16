@@ -17,7 +17,19 @@ function add(n){
   db.add('news', n);
 }
 
+function setTabBarBadge(){
+  count().then(function (res) {
+    if (res.total != 0) {
+      //显示消息数量
+      wx.setTabBarBadge({ index: 2, text: res.total + "" });
+      //显示红点
+      wx.showTabBarRedDot({ index: 3 });
+    }
+  });
+}
+
 module.exports = {
   count: count,
-  add:add
+  add:add,
+  setTabBarBadge: setTabBarBadge
 }

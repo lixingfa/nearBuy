@@ -1,2 +1,4 @@
 textarea{height: 70px;border:1px solid #ccc;}
 input{font-size: 14px;border-bottom: 1px solid #bbb;}
+view{font-size: 12px;}
+text{font-size: 12px;}

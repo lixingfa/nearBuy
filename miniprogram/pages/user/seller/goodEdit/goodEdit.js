@@ -34,7 +34,7 @@ Page({
           //初始化数值
           this.setData({ good: good, hasAdd: false});
           //获取用户
-          user.getThisUser(base.openId,this.getUser);
+          user.getUser(base.openId,this.getUser);
         }else{
           var _this = this;
           goodutil.getGood(id,function(good){

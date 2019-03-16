@@ -21,7 +21,7 @@ Page({
     },
     onLoad: function (e) {
       var _this = this;
-      user.getThisUser(base.openId,function(u){
+      user.getUser(base.openId,function(u){
         var totalPrice = e && e.totalPrice ? e.totalPrice : 0;
         _this.setData({ plist: base.cart.getList(), totalPrice: totalPrice, user: u, phone: u.phone, hasTakeOut: base.cart.hasTakeOut});
       });

@@ -7,7 +7,7 @@ function getNewGoods(index,fn){
   //在有效期内
   var _ = wx.cloud.database().command;
   where.validTimeTrue = _.gte(util.formatTime(new Date()));
-  where.surplus = _.gt(0);//有库存的
+  //where.surplus = _.gt(0);//有库存的
   where.status = 'true';//上架，拉黑某人时，将其商品全部下架，非关系型数据库的限制
   db.where('goods', where, ['createTime', 'desc'], index).then(fn);
 }
@@ -45,6 +45,18 @@ function getGoodAnswers(goodId, all,openId,index,fn){
     where = _.or([{ show: true }, { quizzerId: openId }]).and({ goodId: goodId});
   }
   db.where('answers', where, ['createTime', 'asc'], index).then(fn, fn);//'show','desc',
+}
+//获取商品问答总数
+function getGoodAnswersCount(goodId, all, openId, fn) {
+  var where = {};
+  //对于非所有者，只能看到公开的和自己的
+  if (all) {
+    where.goodId = goodId;
+  } else {
+    var _ = wx.cloud.database().command;
+    where = _.or([{ show: true }, { quizzerId: openId }]).and({ goodId: goodId });
+  }
+  db.count('answers', where).then(fn);
 }
 
 //检查订单商品信息
@@ -88,6 +100,7 @@ module.exports = {
   getNewGoods: getNewGoods,
   getGood: getGood,
   getGoodAnswers: getGoodAnswers,
+  getGoodAnswersCount: getGoodAnswersCount,
   getGoodsByUser: getGoodsByUser,
   checkOrderGoods: checkOrderGoods
 }

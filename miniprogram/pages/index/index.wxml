@@ -22,11 +22,11 @@
     <view class='good-body'>
       <block wx:for="{{goods}}" wx:key="id" wx:for-item="good">
         <view class='good-item' catchtap="goDetail" data-id="{{good.id}}"><!--catchtap 会阻止冒泡事件，父容器的不执行-->
-          <view class='good-title'>{{good.title}}</view>
             <view class='good-pic'>
               <image src="{{good.pic}}" mode="aspectFill"></image>
             </view>
             <view class='good-desc'>
+          <view class='good-title'>{{good.title}}</view>
               <view class='good-inAWord'>{{good.inAWord}}</view>
               <text class='good-price'>{{good.price}}</text><text>元/{{good.unit}}</text>
               <text wx:if="{{good.lineOrder == 'true'}}"> 在线下单</text>

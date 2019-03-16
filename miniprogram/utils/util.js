@@ -52,8 +52,12 @@ function getGPS(){
         console.log(res);
         wx.showModal({
           showCancel: false,
-          title: '',
-          content: "获取当前位置失败，将无法展示周边信息，请退出小程序后重新进入，并同意获取位置信息。"
+          content: "获取当前位置失败，将无法展示周边信息，请退出小程序后重新进入，并同意获取位置信息。",
+          success: function (res) {
+            if (res.confirm) {
+              wx.clearStorageSync();//清除缓存
+            }
+          }
         });
         reject(false);
       }

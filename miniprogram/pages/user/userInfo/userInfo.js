@@ -9,7 +9,7 @@ Page({
     arrTime: base.arrTime
   },
   onLoad:function(){
-    user.getThisUser(base.openId,this.setUser);
+    user.getUser(base.openId,this.setUser);
   },
   setUser:function(user){
     if(user){
