@@ -66,6 +66,7 @@ Page({
       _this.getNewGoods();
       news.setTabBarBadge();
     }
+    this.startReportHeart();//定时消息任务
   },
   getNewGoods:function(){
     wx.showLoading({
@@ -97,8 +98,6 @@ Page({
   },
   //下拉更新
   onPullDownRefresh:function(){
-    //消息，每次刷新首页就刷新？
-    news.setTabBarBadge();
     // 从头开始
     this.setData({ index: 0 });
     this.getNewGoods();
@@ -108,5 +107,16 @@ Page({
    */
   onReady: function () {
     
-  }
+  },
+  startReportHeart() {
+    var _this = this;
+    var timerTem = setTimeout(function () {
+      news.setTabBarBadge();//刷新消息
+      _this.startReportHeart();//调用自身，规定时间后又执行一次
+    }, 60000);//1分钟执行一次
+    // 保存定时器name,取消的时候需要用这个名字，clearTimeOut(timerName)
+    /*that.setData({
+      timer: timerTem
+    });*/
+  },
 })
