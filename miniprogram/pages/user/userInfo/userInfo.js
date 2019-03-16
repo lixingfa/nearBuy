@@ -22,6 +22,9 @@ Page({
       user.workTimeStart = this.data.arrTime[3];
       user.workTimeEnd = this.data.arrTime[13];
       user.distan = 3000;
+      user.addr = base.location.address;
+      user.nickName = '';
+      user.phone = '';
       this.setData({ user: user,isNew:true });
     }
   },
@@ -61,6 +64,24 @@ Page({
     }
   },
   submit:function(){
+    if (this.data.user.nickName == ''){
+      wx.showModal({
+        showCancel: false,
+        title: '',
+        content: "请获取昵称和头像。"
+      });
+      //wx.vibrateShort({});//短震动
+      return;
+    }
+    if (this.data.user.phone == '') {
+      wx.showModal({
+        showCancel: false,
+        title: '',
+        content: "请填写联系电话，只有在下单后对方才能看到。"
+      });
+      //wx.vibrateShort({});//短震动
+      return;
+    }
     if(this.data.isNew){
       db.add("user", this.data.user).then(this.updateUser, this.updateUser);
     }else{

@@ -23,7 +23,7 @@ Page({
       var _this = this;
       user.getUser(base.openId,function(u){
         var totalPrice = e && e.totalPrice ? e.totalPrice : 0;
-        _this.setData({ plist: base.cart.getList(), totalPrice: totalPrice, user: u, phone: u.phone, hasTakeOut: base.cart.hasTakeOut});
+        _this.setData({ plist: base.cart.getList(), totalPrice: totalPrice, user: u, phone: u.phone,addr:u.addr, hasTakeOut: base.cart.hasTakeOut});
       });
     },
     addrSelect: function () {//选择地址
@@ -131,7 +131,7 @@ Page({
       });
       var _this = this;
       if (_this.data.selectedID == -1) {//不是从列表里选的地址，并且需要地址
-        if (_this.data.hasTakeOut){
+        if (_this.data.hasTakeOut && _this.data.addr != _this.data.user.addr){
           var addr = {};
           addr.addr = _this.data.addr;
           addr.phone = _this.data.phone;
@@ -142,13 +142,12 @@ Page({
           db.add('address', addr);
         }
         if (_this.data.user.phone == null || _this.data.user.addr == null){
-          user.getUser(base.openId, function(u){
+            var u = {};
             u.phone = _this.data.phone;
             if (_this.data.hasTakeOut) {
               u.addr = _this.data.addr;
             }
-            db.update('user', u._id, u);
-          });
+            db.update('user', _this.data.user._id, u);
         }
       }
       var order = {};

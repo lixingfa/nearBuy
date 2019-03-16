@@ -25,7 +25,7 @@ function addNewUser(fn){
             user.nickName = userInfo.nickName;
             user.avatarUrl = userInfo.avatarUrl;
             user.phone = null;
-            user.addr = null;
+            user.addr = base.location.address;
             db.add("user", user).then(fn,fn);
           },
           fail(res){

@@ -77,5 +77,9 @@ Page({
     // 从头开始
     this.setData({ index: 0 });
     this.onLoad();
+  },
+  callPhone: function (e) {
+    var phoneNumber = e.currentTarget.dataset.phone;
+    wx.makePhoneCall({ phoneNumber: phoneNumber });
   }
 })

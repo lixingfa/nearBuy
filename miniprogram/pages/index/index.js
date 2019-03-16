@@ -46,6 +46,7 @@ Page({
               base.newUser = true;//新用户
               //最近的商品
               _this.getNewGoods();
+              base.updataLocation(false);
             }
           },function(){//获取用户失败
             wx.hideLoading();

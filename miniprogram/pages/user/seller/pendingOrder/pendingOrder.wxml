@@ -7,7 +7,7 @@
         <view>下单时间：{{n.createTime}}</view>
       </view>
       <view class="pro">
-      {{n.content}}
+      {{n.content}} <text catchtap="callPhone" data-phone='{{n.phone}}'>点击联系买家</text>
       </view>
       <button data-id="{{n._id}}" data-oid="{{n.oid}}" data-orderid='{{n.orderId}}' data-sellers='{{n.receiver}}' data-gid='{{n.goodId}}' data-how='{{n.how}}'  data-buyer='{{n.buyer}}' catchtap='doit'>
       <text wx:if="{{n.how == '0'}}">发货</text>

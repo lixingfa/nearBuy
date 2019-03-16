@@ -76,7 +76,8 @@ Page({
     var index = e.currentTarget.dataset.index;
     user.getUser(promulgatorId,function(u){
       if(u){
-        _this.data.myOrder[index].sellers[promulgatorId].addr = u.addr + ' ' + u.phone;
+        _this.data.myOrder[index].sellers[promulgatorId].addr = u.addr;
+        _this.data.myOrder[index].sellers[promulgatorId].phone = u.phone;
         _this.setData({ myOrder: _this.data.myOrder});
       }
     });
@@ -93,5 +94,9 @@ Page({
     // 从头开始
     this.setData({ index: 0 });
     this.onLoad();
+  },
+  callPhone:function(e){
+    var phoneNumber = e.currentTarget.dataset.phone;
+    wx.makePhoneCall({ phoneNumber: phoneNumber});
   }
 })

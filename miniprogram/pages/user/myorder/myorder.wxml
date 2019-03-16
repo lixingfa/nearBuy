@@ -27,6 +27,8 @@
           <text data-promulgatorid="{{s.promulgatorId}}" data-oid="{{p._id}}" data-orderid='{{p.id}}' data-index="{{pindex}}" catchtap="getAddr">
             <text wx:if="{{!s.addr}}">查看取货地址>></text><text wx:if="{{s.addr}}">取货地址：{{s.addr}}</text>
           </text>
+          <!--事件不能放if里-->
+          <text catchtap="callPhone" data-phone='{{s.phone}}'> {{s.phone}}</text>
         </view>
       </view>
       <view class="pro">

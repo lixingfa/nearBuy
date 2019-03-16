@@ -1,5 +1,5 @@
 <view class="body">
-  <image src="{{user.avatarUrl}}" mode="scaleToFill"></image>
+  <image src="{{user.avatarUrl}}" mode="aspectFill"></image>
   <view>{{user.nickName}}</view>
   <button class="sub" open-type="getUserInfo" catchtap="getUserInfo">获取昵称和头像</button>
   <view>电话：<input value='{{user.phone}}' bindblur="input" bindinput="input" data-param="user.phone"  placeholder="您的联系电话(下单后对方才可以看到）" maxlength='15' type='number'/></view>

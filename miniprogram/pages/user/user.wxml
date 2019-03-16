@@ -1,4 +1,4 @@
-<view class="u" wx:if="{{loaded}}" >
+<!--<view class="u" >
   <view class="logo" bindtap="changeimg">
     <image src="{{base.user.avatarUrl}}"></image>
   </view>
@@ -23,7 +23,7 @@
       <text>{{exp}}</text>元</view>
     <view class="nm">累计收入</view>
   </view>
-</view>
+</view>-->
 <!--卖方菜单-->
 <view class="ub">
   <navigator url="../user/seller/data/dataAnalysis" open-type="navigate" hover-class="navigator-hover">
