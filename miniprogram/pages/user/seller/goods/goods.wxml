@@ -8,18 +8,20 @@
     </view>-->
     <view class='good-body'>
       <scroll-view wx:for="{{goods}}" wx:key="id" wx:for-item="good">
-        <view class='good-item' catchtap="goDetail" data-id="{{good.id}}"><!--catchtap 会阻止冒泡事件，父容器的不执行-->
-          <view class='good-title'>{{good.title}}</view>
+        <view class='good-item' catchtap="goDetail" data-id="{{good.id}}">
             <view class='good-pic'>
               <image src="{{good.pic}}" mode="aspectFill"></image>
             </view>
             <view class='good-desc'>
-              <view class='good-inAWord'>{{good.inAWord}}</view>
+          <view class='good-title'>{{good.title}}</view>
               <text class='good-price'>{{good.price}}</text><text>元/{{good.unit}}</text>
               <text wx:if="{{good.lineOrder == 'true'}}"> 在线下单</text>
               <text wx:if="{{good.takeOut == 'true'}}"> 可送货</text>
-              <view class='other-info'>共{{good.total}}{{good.unit}}，剩余{{good.surplus}}{{good.unit}}，
-              {{good.promulgator}}发布
+              <view class='other-info'>共{{good.total}}{{good.unit}}，
+              剩余<text class='good-price'>{{good.surplus}}</text>{{good.unit}}
+              <text wx:if="{{good.pass > 0}}">，还有<text class='good-price'>{{good.pass}}</text>天过期</text>
+              <text wx:if="{{good.pass <= 0}}" class='good-price'>，已过期</text>
+              <text wx:if="{{good.status == 'false'}}" class='good-price'>，下架</text>
               </view>
             </view>
         </view>

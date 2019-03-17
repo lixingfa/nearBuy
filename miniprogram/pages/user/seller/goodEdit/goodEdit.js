@@ -173,7 +173,7 @@ Page({
     if (this.data.eidt){
       if (this.data.good.editTotal){
         this.setData({
-          "good.surplus": this.data.good.total
+          "good.surplus": parseInt(this.data.good.total)
         });
       }
       db.update('goods', this.data.good._id, this.data.good).then(this.addGoodNext, this.addGoodNext);

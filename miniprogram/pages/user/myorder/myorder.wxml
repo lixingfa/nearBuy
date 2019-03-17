@@ -5,6 +5,7 @@
         <!--<text>订单编号：{{p.id}} </text>-->
         <text>下单时间：{{p.createTime}}</text>
         <text>总金额：￥<text class="ptprice">{{p.totalPrice}}</text></text>
+        <text wx:if='{{p.status == 1}}' class='green'> 已完成</text>
       </view>
       <view class="pro" wx:for="{{p.sellers}}" wx:for-item="s" wx:key="id">
         <view wx:for="{{s.goods}}" wx:for-item="g" wx:key="id">

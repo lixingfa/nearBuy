@@ -72,7 +72,7 @@ App({
           dic[p.id] = p;
           dic[p.id].num = 1;//初始化，否则会出问题
         }
-        dic[p.id].surplus = dic[p.id].surplus - 1;//剩余数量-1
+        dic[p.id].surplus = parseInt(dic[p.id].surplus) - 1;//剩余数量-1
         wx.setStorageSync(this.key, dic);
       }
     },
@@ -113,7 +113,7 @@ App({
         var num = dic[id].num;//原来的数量
         num = n - num;//差值
         dic[id].num = n;
-        dic[id].surplus = dic[id].surplus - num;//剩余相应地变化
+        dic[id].surplus = parseInt(dic[id].surplus) - num;//剩余相应地变化
         //delete dic[id];//n=0就删掉是不合适的，因为可能在购物车减到0了，又想加回来
         wx.setStorageSync(this.key, dic);
       }

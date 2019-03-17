@@ -1,10 +1,14 @@
 page{background-color: #f0f0f0;}
-.u{display: flex;padding:15px 0; flex-direction:row; background-color:#576b95}
+.u{display: flex;padding-bottom:5px; flex-direction:row; background-color:#576b95}
 .u .logo{padding:0 20px;}
 .u .logo image{width: 60px; height: 60px; border-radius: 50%; border:2px solid #fff;}
 
 .des .uname{ color: #fff;font-weight:bold;font-size:15pt; padding: 2px 0;}
-.des .phone{ color: #fff;font-size:13pt;}
+.des .phone{ color: #fff;font-size:13pt;overflow:hidden;
+  text-overflow:ellipsis;
+  display:-webkit-box;
+  -webkit-line-clamp:1;
+  -webkit-box-orient:vertical;}
 
 
 .ua{display: flex;flex-direction:row; background-color: #fff; }

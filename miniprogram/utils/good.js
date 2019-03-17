@@ -7,7 +7,7 @@ function getNewGoods(index,fn){
   //在有效期内
   var _ = wx.cloud.database().command;
   where.validTimeTrue = _.gte(util.formatTime(new Date()));
-  //where.surplus = _.gt(0);//有库存的
+  where.surplus = _.gt(0);//有库存的
   where.status = 'true';//上架，拉黑某人时，将其商品全部下架，非关系型数据库的限制
   db.where('goods', where, ['createTime', 'desc'], index).then(fn);
 }
@@ -16,7 +16,7 @@ function getNewGoods(index,fn){
 function getGoodsByUser(openId,index,fn){
   var where = {};
   where.promulgatorId = openId;
-  db.where('goods', where, ['createTime', 'desc'],index).then(fn);
+  db.where('goods', where, ['validTimeTrue', 'asc','surplus', 'asc','status','asc','createTime', 'desc'],index).then(fn);
 }
 
 //获取单个商品信息

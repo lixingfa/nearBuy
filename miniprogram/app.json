@@ -13,7 +13,8 @@
     "pages/user/seller/goodEdit/goodEdit",
     "pages/user/seller/goods/goods",
     "pages/user/news/news",
-    "pages/user/seller/data/dataAnalysis"
+    "pages/user/seller/data/dataAnalysis",
+    "pages/user/complaints/complaints"
   ],
   "window": {
     "backgroundColor": "#F6F6F6",

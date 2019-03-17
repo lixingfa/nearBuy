@@ -1,29 +1,34 @@
-<!--<view class="u" >
+<view class="u" >
   <view class="logo" bindtap="changeimg">
-    <image src="{{base.user.avatarUrl}}"></image>
+    <image src="{{user.avatarUrl}}"></image>
   </view>
   <view class="des">
-    <view class="uname">{{base.user.nickName}}</view>
-    <view class="phone">{{base.location.phone}}</view>
+    <view class="uname">{{user.nickName}}</view>
+    <view class="phone">{{user.phone}}</view>
+    <view class="phone">{{user.addr}}</view>
   </view>
 </view>
 <view class="ua">
   <view class="jzb tab">
+  <navigator url="../user/seller/pendingOrder/pendingOrder" open-type="navigate" hover-class="navigator-hover">
     <view class="amount">
-      <text>{{jzb}}</text>个订单</view>
+      <text>{{pendingOrderTotal}}</text>个订单</view>
     <view class="nm">待处理</view>
+  </navigator>
   </view>
   <view class="cpn tab">
+    <navigator url="../user/seller/goods/goods" open-type="navigate" hover-class="navigator-hover">
     <view class="amount">
-      <text>2</text>个商品</view>
-    <view class="nm">在售</view>
+      <text>{{pastDateGood}}</text>个商品</view>
+    <view class="nm">过期</view>
+    </navigator>
   </view>
   <view class="exp tab">
     <view class="amount">
       <text>{{exp}}</text>元</view>
     <view class="nm">累计收入</view>
   </view>
-</view>-->
+</view>
 <!--卖方菜单-->
 <view class="ub">
   <navigator url="../user/seller/data/dataAnalysis" open-type="navigate" hover-class="navigator-hover">
@@ -52,6 +57,8 @@
     </view>
     <view class="tit" >
       商品管理
+      <text wx:if='{{sellAll}}'> {{sellAll}}售罄 </text>
+      <text wx:if='{{pastDateGood}}'> {{pastDateGood}}过期 </text>
     </view>
     <view class="con"></view>
   </view>
@@ -62,6 +69,7 @@
     </view>
     <view class="tit" >
       待处理订单
+      <text wx:if='{{pendingOrderTotal}}'>({{pendingOrderTotal}})</text>
     </view>
     <view class="con"></view>
   </view>
@@ -92,7 +100,7 @@
 </view>
 
 <view class="ub">
-  <navigator url="../user/mycoupons/mycoupons" open-type="navigate" hover-class="navigator-hover">
+  <navigator url="../user/complaints/complaints" open-type="navigate" hover-class="navigator-hover">
     <view class="item item-a">
     <view class="icon">
     </view>

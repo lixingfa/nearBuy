@@ -16,7 +16,16 @@ Page({
   onLoad: function () {
     var _this = this;
     good.getGoodsByUser(base.openId,this.data.index,function (goods) {
-      _this.setData({ goods: _this.data.goods.concat(goods) });
+      var date = new Date();
+      for(var i in goods){
+        var t = new Date(goods[i].validTimeTrue);
+        goods[i].pass = parseInt((t - date) / (3600000 * 24));
+      }
+      if(_this.data.index == 0){
+        _this.setData({ goods: goods });
+      }else{
+        _this.setData({ goods: _this.data.goods.concat(goods) });
+      }
     });
   },
   //上拉加载更多

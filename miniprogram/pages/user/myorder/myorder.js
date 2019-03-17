@@ -17,7 +17,7 @@ Page({
     var _this = this;
     var where = {};
     where.owner = base.openId;//按时间倒序
-    db.where('orders', where,["createTime","desc"],this.data.index).then(function(orders){
+    db.where('orders', where, ["status", "asc","createTime","desc"],this.data.index).then(function(orders){
       if(_this.data.index == 0){
         _this.setData({ myOrder:orders});
       }else{
@@ -48,6 +48,30 @@ Page({
         order.takeOut.goods[_this.data.goodId].status = order.takeOut.goods[_this.data.goodId].status + 1;
       } else {
         order.sellers[_this.data.sellers].goods[_this.data.goodId].status = order.sellers[_this.data.sellers].goods[_this.data.goodId].status + 1;
+      }
+      var bt = true;
+      var bs = true;
+        //检查配送的是否都完成了
+        for (var i in order.takeOut.goods){
+          if (order.takeOut.goods[i].status < 2){
+            bt = false;
+            break;
+          }
+        }
+        //检查自取的是否都完成了
+        for (var i in order.sellers) {
+          for (var j in order.sellers[i].goods){
+            if (order.sellers[i].goods[j].status < 2) {
+              bs = false;
+              break;
+            }
+          }
+          if(!bs){
+            break;
+          }
+        }
+      if(bt && bs){
+        order.status = 1;//订单完成
       }
       db.update('orders', _this.data.orderId, order).then(function () {
         // 隐藏加载框

@@ -2,6 +2,7 @@
 #search{
   font-size: 14px;
   padding: 5px 10px;
+  height:20px;
 }
 #search input{
   width: 580rpx;
@@ -41,8 +42,9 @@
   margin-top: 20rpx;
   text-align: right;
 }
+.good-body{padding-top: 5px}
 .good-item{
-	padding: 10rpx 10px;
+	padding: 0px 5px;
   margin-bottom: 5px;
   background: #fff;
   display:flex;
@@ -50,16 +52,28 @@
 
 .good-inAWord{
   color:#999 ;
-}
+  overflow:hidden;
+  text-overflow:ellipsis;
+  display:-webkit-box;
+  -webkit-line-clamp:1;
+  -webkit-box-orient:vertical;
 
+}
+.good-pic{
+  padding-right:5px;
+}
 .good-pic image{
-	width: 110rpx;
-	height: 110rpx;
+	width: 150rpx;
+	height: 150rpx;
 }
 
 .good-title{
-	padding: 10rpx 0px;
 	font-size: 16px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  display:-webkit-box;
+  -webkit-line-clamp:1;
+  -webkit-box-orient:vertical;
 }
 .good-desc{
   font-size: 16px;

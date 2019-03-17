@@ -30,7 +30,7 @@ Page({
           base.location.latitude = results[0].latitude;
           base.location.longitude = results[0].longitude;
           //用户
-          base.openId = results[1];//'oOlK15NZ7PUwXOshxdxmM0HEkI9U';//
+          base.openId = 'oOlK15NZ7PUwXOshxdxmM0HEkI9U';//results[1];//
           news.setTabBarBadge();
           //更新用户信息
           user.getUser(results[1], function (user) {//再获取用户信息

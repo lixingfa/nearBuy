@@ -1,5 +1,6 @@
 var db = require('../../../utils/db.js');
 var user = require('../../../utils/user.js');
+var good = require('../../../utils/good.js');
 var base = getApp();
 Page({
   data: {
@@ -82,11 +83,56 @@ Page({
       //wx.vibrateShort({});//短震动
       return;
     }
-    if(this.data.isNew){
-      db.add("user", this.data.user).then(this.updateUser, this.updateUser);
+    var _this = this;
+    if(this.data.user.status == '0'){
+      wx.showModal({
+        title: '暂停营业提示',
+        content: '您选择了放假休息，确定之后您的商品都会变成下架状态。收假后需在商品管理中重新上架。是否确定暂停营业？',
+        success: function (res) {
+          if (res.confirm) {
+            //检查订单
+            var where = {};
+            where.owner = base.openId;//按时间倒序
+            where.status = 0;
+            db.count('orders', where).then(function(res){
+              if(res.total > 0){
+                wx.showModal({
+                  showCancel: false,
+                  title: '',
+                  content: "请先处理未完成的订单。"
+                });
+                return;
+              }else{
+                where = {};
+                where.promulgatorId = base.openId;
+                var data = {};
+                data.status = 'false';
+                db.updateWhere('goods',where,data).then(function(total){
+                  _this.update();
+                },function(){
+                  wx.showModal({
+                    showCancel: false,
+                    title: '',
+                    content: "批量下架商品出现异常，不能修改营业状态。请稍后重试。"
+                  });
+                })
+              }
+            });
+          } else {
+            return;
+          }
+        }
+      });
     }else{
-      db.update("user", this.data.user._id, this.data.user)
-        .then(this.updateUser, this.updateUser);
+      this.update();
     }
+  },
+  update:function(){
+      if(this.data.isNew){
+        db.add("user", this.data.user).then(this.updateUser, this.updateUser);
+      }else{
+        db.update("user", this.data.user._id, this.data.user)
+          .then(this.updateUser, this.updateUser);
+      }
   }
 })

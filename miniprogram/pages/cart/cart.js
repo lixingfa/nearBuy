@@ -46,8 +46,8 @@ Page({
       var id = e.currentTarget.dataset.id;
       var t = e.currentTarget.dataset.type;//这次的数值
       t = parseInt(t);
-      this.data.plist[id].num = this.data.plist[id].num + t;
-      this.data.plist[id].surplus = this.data.plist[id].surplus - t;
+      this.data.plist[id].num = parseInt(this.data.plist[id].num) + t;
+      this.data.plist[id].surplus = parseInt(this.data.plist[id].surplus) - t;
       if (this.data.plist[id].surplus >= 0) {
         this.changeTotal();
         this.setData({plist: this.data.plist});
