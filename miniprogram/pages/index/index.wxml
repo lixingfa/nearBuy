@@ -21,7 +21,7 @@
     </view>-->
     <view class='good-body'>
       <block wx:for="{{goods}}" wx:key="id" wx:for-item="good">
-        <view class='good-item' catchtap="goDetail" data-id="{{good.id}}"><!--catchtap 会阻止冒泡事件，父容器的不执行-->
+        <view class='good-item' catchtap="goDetail" data-distance='{{good.distance}}' data-id="{{good.id}}"><!--catchtap 会阻止冒泡事件，父容器的不执行-->
             <view class='good-pic'>
               <image src="{{good.pic}}" mode="aspectFill"></image>
             </view>

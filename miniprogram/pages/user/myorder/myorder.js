@@ -122,5 +122,25 @@ Page({
   callPhone:function(e){
     var phoneNumber = e.currentTarget.dataset.phone;
     wx.makePhoneCall({ phoneNumber: phoneNumber});
-  }
+  },
+  mapShow: function () {
+    /*var _this = this;
+    var latitude = _this.data.good.latitude;
+    var longitude = _this.data.good.longitude;
+    wx.openLocation({
+      latitude,
+      longitude,
+      scale: 18
+    });*/
+    wx.showModal({
+      showCancel: false,
+      content: "请点击商品标题进入详情页查看商品位置。"
+    });
+  },
+  goDetail: function (e) {
+    var id = e.currentTarget.dataset.id;
+    wx.navigateTo({
+      url: '../../goodDetail/goodDetail?id=' + id
+    })
+  },
 })

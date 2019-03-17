@@ -14,7 +14,8 @@ Page({
         answerIndex:0,
         answersTotal:0,
         newUser: false,
-        all:false
+        all:false,
+        distance:0
     },
     onLoad: function (e) {
       var id = e && e.id ? e.id : 0;
@@ -28,9 +29,12 @@ Page({
           this.setData({ good: g, answersTotal: res.total, all: all});
         });
       } else {//初始化
+        wx.showLoading({
+          title: '商品信息加载中，请稍后',
+        });
         good.getGood(id, this.initGood);//从数据库拿
-      }      
-      this.setData({ id: id, openId: base.openId, newUser: base.newUser})
+      }
+      this.setData({ id: id, openId: base.openId, newUser: base.newUser, distance: e.distance ? e.distance:null});      
     },
   initGood:function(g){
     var _this = this;
@@ -75,6 +79,8 @@ Page({
       }else{//没找到这个商品
 
       }
+      // 隐藏加载框
+      wx.hideLoading();
   },
     onShow: function () {
     },
@@ -202,5 +208,15 @@ Page({
     wx.navigateBack({
       delta: 1
     })
+  },
+  mapShow:function(){
+    var _this = this;
+    var latitude = _this.data.good.latitude;
+    var longitude = _this.data.good.longitude;
+    wx.openLocation({
+      latitude,
+      longitude,
+      scale: 18
+    });
   }
 });

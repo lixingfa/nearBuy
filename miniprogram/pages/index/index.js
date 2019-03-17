@@ -13,8 +13,9 @@ Page({
   },
   goDetail: function (e) {
     var id = e.currentTarget.dataset.id;
+    var distance = e.currentTarget.dataset.distance;
     wx.navigateTo({
-      url: '../goodDetail/goodDetail?id=' + id
+      url: '../goodDetail/goodDetail?id=' + id + '&distance=' + distance
     })
   },
   onLoad: function () {

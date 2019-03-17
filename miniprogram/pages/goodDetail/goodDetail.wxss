@@ -1,6 +1,7 @@
 view{padding: 0 5px;font-size: 16px;}
 .good-title{font-size: 20px;text-align: center;}
 .good-pic{text-align: center;}
+.good-pic image{height: 200px;}
 .good-inAWord{color: #555;}
 .good-price{color: #f00}
 
