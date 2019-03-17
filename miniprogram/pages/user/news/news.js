@@ -9,17 +9,6 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    var _this = this;
-    var where = {};
-    where.receiver = base.openId;
-    where.status = 0;
-    db.where('news', where, ["createTime", "desc"], this.data.index).then(function (news) {
-      if (_this.data.index == 0) {
-        _this.setData({ news: news });
-      } else {
-        _this.setData({ news: _this.data.news.concat(news) });
-      }
-    });
   },
   /**
    * 生命周期函数--监听页面初次渲染完成
@@ -30,6 +19,17 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
+    var _this = this;
+    var where = {};
+    where.receiver = base.openId;
+    where.status = 0;//未读消息
+    db.where('news', where, ["createTime", "desc"], this.data.index).then(function (news) {
+      if (_this.data.index == 0) {
+        _this.setData({ news: news });
+      } else {
+        _this.setData({ news: _this.data.news.concat(news) });
+      }
+    });
     //显示导航
     wx.showTabBar();
   },
@@ -73,6 +73,9 @@ Page({
     wx.removeTabBarBadge(item);
   },
   read:function(e){
+    wx.showLoading({
+      title: '已读，数据更新中',
+    });
     var _this = this;
     var _id = e.currentTarget.dataset.id;
     var newsType = e.currentTarget.dataset.newstype;
@@ -88,6 +91,8 @@ Page({
         url: '../myorder/myorder'
       });
     } else if (newsType == 'getGood') {//收货
+      // 隐藏加载框
+      wx.hideLoading();
       _this.onPullDownRefresh();//刷新
     }
   }

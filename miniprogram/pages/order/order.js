@@ -23,7 +23,14 @@ Page({
       var _this = this;
       user.getUser(base.openId,function(u){
         var totalPrice = e && e.totalPrice ? e.totalPrice : 0;
-        _this.setData({ plist: base.cart.getList(), totalPrice: totalPrice, user: u, phone: u.phone,addr:u.addr, hasTakeOut: base.cart.hasTakeOut});
+        _this.setData({ plist: base.cart.getList(), 
+        totalPrice: totalPrice, 
+        user: u, 
+        phone: u.phone,
+        addr:u.addr, 
+        longitude: u.longitude,
+        latitude: u.latitude,
+        hasTakeOut: base.cart.hasTakeOut});
       });
     },
     addrSelect: function () {//选择地址
@@ -204,12 +211,15 @@ Page({
           n.orderId = order.id;
           n.goodId = g.id;
           n.how = g.how;
+          n.phone = this.data.phone;
           n.content = this.data.user.nickName + ' 购买了 ' + g.title + ' ，数量' + g.num + '。';
           if (g.time != ''){
             n.content = n.content + '希望' + g.time + (g.how == '0'?'配送':'取货') + '。';
           }
           if (g.how == '0'){//配送
             n.content = n.content + '送到：' + this.data.addr + ' ' + this.data.phone + '。';
+            n.longitude = _this.data.longitude;
+            n.latitude = _this.data.latitude;
           } else if (g.time == ''){
             n.content = n.content + '自取，电话：' + this.data.phone;
           }

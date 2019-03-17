@@ -25,7 +25,9 @@ function addNewUser(fn){
             user.nickName = userInfo.nickName;
             user.avatarUrl = userInfo.avatarUrl;
             user.phone = null;
-            user.addr = base.location.address;
+            user.addr = base.location.address;//人没有坐标，但这个地址需要坐标
+            user.latitude = base.location.latitude;
+            user.longitude = base.location.longitude;
             db.add("user", user).then(fn,fn);
           },
           fail(res){

@@ -11,8 +11,8 @@ Page({
     var where = {};
     where.receiver = base.openId;
     where.newsType = 'order';//订单
-    where.status = 0;
-    db.where('news', where, ["goodId","asc","createTime", "asc"],this.data.index).then(function (news) {
+    //where.status = 0;
+    db.where('news', where, ['status','asc',"createTime", "asc","goodId","asc"],this.data.index).then(function (news) {
       if(_this.data.index == 0){
         _this.setData({ news: news});      
       }else{
@@ -33,7 +33,7 @@ Page({
     var sellers = e.currentTarget.dataset.sellers;
     var buyer = e.currentTarget.dataset.buyer;
     var where = {};
-    where.status = 1;
+    where.status = 2;//0未读、1已读、2已处理
     db.update('news',id,where).then(
       function(){//更改订单状态
         where = {};
@@ -81,5 +81,15 @@ Page({
   callPhone: function (e) {
     var phoneNumber = e.currentTarget.dataset.phone;
     wx.makePhoneCall({ phoneNumber: phoneNumber });
+  },
+  mapShow: function (e) {
+    var _this = this;
+    var latitude = parseFloat(e.currentTarget.dataset.latitude);
+    var longitude = parseFloat(e.currentTarget.dataset.longitude);
+    wx.openLocation({
+      latitude,
+      longitude,
+      scale: 18
+    });
   }
 })

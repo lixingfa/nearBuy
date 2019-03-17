@@ -7,12 +7,16 @@
         <view>下单时间：{{n.createTime}}</view>
       </view>
       <view class="pro">
-      {{n.content}} <text catchtap="callPhone" data-phone='{{n.phone}}'>点击联系买家</text>
+      {{n.content}}
       </view>
-      <button data-id="{{n._id}}" data-oid="{{n.oid}}" data-orderid='{{n.orderId}}' data-sellers='{{n.receiver}}' data-gid='{{n.goodId}}' data-how='{{n.how}}'  data-buyer='{{n.buyer}}' catchtap='doit'>
-      <text wx:if="{{n.how == '0'}}">发货</text>
-      <text wx:if="{{n.how == '1'}}">备货</text>
-      </button>
+      <view class="tool">
+        <button class="tbtn add" catchtap="callPhone" data-phone='{{n.phone}}' wx:if='{{n.status != 2}}'>呼叫买家</button>
+        <button class="tbtn add" wx:if='{{n.status != 2}}' data-id="{{n._id}}" data-oid="{{n.oid}}" data-orderid='{{n.orderId}}' data-sellers='{{n.receiver}}' data-gid='{{n.goodId}}' data-how='{{n.how}}'  data-buyer='{{n.buyer}}' catchtap='doit'>
+        <text wx:if="{{n.how == '0'}}">发货</text>
+        <text wx:if="{{n.how == '1'}}">备货</text>
+        </button>
+        <button class="tbtn add" catchtap="mapShow" data-longitude='{{n.longitude}}' data-latitude='{{n.latitude}}' wx:if='{{n.latitude}}'>导航</button>
+      </view>
     </view>
     </scroll-view>
 </view>

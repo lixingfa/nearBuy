@@ -68,7 +68,7 @@
     <view class="icon">
     </view>
     <view class="tit" >
-      待处理订单
+      销售订单
       <text wx:if='{{pendingOrderTotal}}'>({{pendingOrderTotal}})</text>
     </view>
     <view class="con"></view>
@@ -92,7 +92,7 @@
     <view class="icon">
     </view>
     <view class="tit" >
-      我的订单
+      购物订单
     </view>
     <view class="con"></view>
   </view>
