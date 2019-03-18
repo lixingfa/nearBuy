@@ -170,14 +170,15 @@ Page({
       "good.longitude": base.location.longitude,
       "good.validTimeTrue": this.data.good.indate + ' ' +this.data.good.validTime
       });
-    if (this.data.eidt){
-      if (this.data.good.editTotal){
+    if (this.data.eidt){//编辑状态下
+      if (this.data.good.editTotal){//允许修改库存
         this.setData({
           "good.surplus": parseInt(this.data.good.total)
         });
       }
       db.update('goods', this.data.good._id, this.data.good).then(this.addGoodNext, this.addGoodNext);
-    }else{
+    }else{//新增状态下
+      this.setData({"good.surplus": parseInt(this.data.good.total)});//字符串与Int结果相差很大
       db.add('goods', this.data.good).then(this.addGoodNext, this.addGoodNext);
     }
   },
