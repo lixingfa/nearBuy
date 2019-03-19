@@ -107,7 +107,8 @@ Page({
           if(user){
             wx.switchTab({url: '../cart/cart'});
           }else{
-            wx.showLoading({
+            wx.showModal({
+              showCancel: false,
               title: '创建用户失败，无法进行商品咨询，可到“我的-个人信息”中完善信息后再试。',
             });
           }
@@ -164,6 +165,7 @@ Page({
       });
     }else{
       wx.showModal({
+        showCancel: false,
         content: '创建用户失败，无法进行商品咨询，可到“我的-个人信息”中完善信息后再试。',
       });
     }

@@ -24,6 +24,6 @@ page{background-color: #f0f0f0;}
 .ub{margin-top: 10px; border-top:1rpx solid #ccc;border-bottom:1rpx solid #ccc; background-color: #fff;}
 .ub .item{height:45px;line-height: 45px; display: flex;flex-direction:row;}
 .ub .item .icon{width: 50px;height: 30px;}
-.ub .item .tit{width: 300rpx; font-size: 13pt;}
+.ub .item .tit{width: 400rpx; font-size: 13pt;}
 .ub .item .con{flex: 1; font-size: 12pt}
 .item-a .tit,.item-a .con{border-bottom: 1rpx solid #ddd;}

@@ -1,2 +1,13 @@
-<!--miniprogram/pages/user/manage/complaints/complaints.wxml-->
-<text>miniprogram/pages/user/manage/complaints/complaints.wxml</text>
+<view class="body">
+    <view wx:if="{{news.length==0}}" class="null">暂无投诉咨询</view>
+    <scroll-view>
+    <view class="item" wx:for="{{news}}" wx:key="id" wx:for-item="n" data-id="{{n._id}}" data-newstype='{{n.newsType}}' catchtap='read'>
+      <view class="pro">
+      {{n.content}}
+      </view>
+      <view class='title'>
+        {{n.createTime}}
+      </view>
+    </view>
+    </scroll-view>
+</view>

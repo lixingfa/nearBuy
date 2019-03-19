@@ -1,66 +1,22 @@
-// miniprogram/pages/user/complaints/complaints.js
+var base = getApp();
+var news = require('../../../utils/news.js');
 Page({
-
-  /**
-   * 页面的初始数据
-   */
   data: {
-
+    content:null
   },
-
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad: function (options) {
-
+  input: function (e) {
+    var param = e.currentTarget.dataset.param;
+    this.setData({ [param]: e.detail.value });//变量key
   },
-
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-
+  submit:function(){
+    var n = {};
+    n.newsType = 'complaints';//审核不通过
+    n.quizzer = base.openId;
+    n.content = this.data.content;
+    news.add(n);
+    wx.showModal({
+      showCancel: false,
+      content: '我们已收到您的信息，将会尽快处理。',
+    });
   }
 })
