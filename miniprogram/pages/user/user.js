@@ -7,7 +7,8 @@ Page({
       user:null,
       pendingOrderTotal:0,
       pastDateGood:0,
-      sellAll:0
+      sellAll:0,
+      isAdmin:false//是否管理人员
     },
     onLoad: function () {
       var _this = this;
@@ -37,6 +38,8 @@ Page({
       db.count('goods', where).then(function (res) {
         _this.setData({ pastDateGood: res.total });
       });
+      //是否管理员
+      
     },
     onTabItemTap(item) {
       wx.hideTabBarRedDot({ index: 3 });

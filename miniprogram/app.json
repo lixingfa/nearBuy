@@ -14,7 +14,9 @@
     "pages/user/seller/goods/goods",
     "pages/user/news/news",
     "pages/user/seller/data/dataAnalysis",
-    "pages/user/complaints/complaints"
+    "pages/user/complaints/complaints",
+    "pages/user/manage/goodAudit/goodAudit",
+    "pages/user/manage/complaints/complaints"
   ],
   "window": {
     "backgroundColor": "#F6F6F6",

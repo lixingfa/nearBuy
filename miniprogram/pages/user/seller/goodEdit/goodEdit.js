@@ -11,7 +11,7 @@ Page({
       typeName:'',
       typeShow:false,
       arrTime: base.arrTime,
-      items: [{ name: '是', value: 'true' }, { name: '否', value: 'false'}],//数据变更函数取值是字符串，需要对应
+      items: [{ name: '是', value: 'true' }, { name: '否', value: 'false'}],
       goodTypes:base.goodTypes
     },
     onLoad: function (e) {
@@ -28,9 +28,10 @@ Page({
           good.inAWord = '';
           good.lineOrder = 'true';
           good.takeOut = 'true';
-          good.status = 'true';//商品有效
+          good.status = '1';//商品有效
           good.editTotal = true;
-          var time = util.formatTime(new Date());//返回当前日期和时间，使日期默认显示在今天
+          var time = new Date();
+          good.indate = time.setMonth(time.getMonth + 3);//默认三个月有效期
           //初始化数值
           this.setData({ good: good, hasAdd: false});
           //获取用户
@@ -42,6 +43,9 @@ Page({
               good.editTotal = false;
               if (good.surplus == 0){
                 good.editTotal = true;
+              }
+              if(good.status != '0'){//在线或提交审核状态
+                good.status = '1';
               }
               _this.setData({ good: good, eidt: true});
             }
@@ -169,7 +173,7 @@ Page({
       "good.latitude": base.location.latitude,
       "good.longitude": base.location.longitude,
       "good.validTimeTrue": this.data.good.indate + ' ' +this.data.good.validTime
-      });
+    });
     if (this.data.eidt){//编辑状态下
       if (this.data.good.editTotal){//允许修改库存
         this.setData({
@@ -183,11 +187,14 @@ Page({
     }
   },
   addGoodNext:function(_id){
+    var c = "商品编辑成功。";
+    if(this.data.good.status == '1'){
+      c = c + "管理员会尽快审核。";
+    }
     if(_id){
       wx.showModal({
         showCancel: false,
-        title: '',
-        content: "商品编辑成功。"
+        content: c
       });
       this.setData({ hasAdd:true});
     }

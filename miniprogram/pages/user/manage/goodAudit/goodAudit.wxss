@@ -1,0 +1,47 @@
+.good-body{padding-top: 5px}
+.good-item{
+	padding: 0px 5px;
+  margin-bottom: 5px;
+  background: #fff;
+  display:flex;
+}
+
+.good-inAWord{
+  color:#999 ;
+}
+.good-pic{
+  padding-right:5px;
+}
+.good-pic image{
+	width: 150rpx;
+	height: 150rpx;
+}
+
+.good-title{
+	font-size: 16px;
+}
+.good-desc{
+  font-size: 16px;
+}
+
+.tool {
+  position: fixed;
+  left: 0;
+  bottom: 6px;
+  z-index: 3;
+  display: flex;
+  width: 750rpx;
+  align-items: center;
+}
+
+.tool .gobuy {
+  flex: 1;
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  border-radius: 3px;
+  background-color: #576b95;
+  border: 1rpx solid #576b95;
+  color: #fff;
+  margin: 0 20rpx 0 10rpx;
+}

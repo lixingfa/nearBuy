@@ -57,9 +57,11 @@
   </view>
 <view class='tab'>商品上架：
   <radio-group class="radio-group" bindchange="input" data-param="good.status">
-    <label class="radio" wx:for="{{items}}" wx:key="value">
-      <radio value="{{item.value}}" checked="{{good.status == item.value}}" />
-      {{item.name}}
+    <label class="radio">
+      <radio value="1" checked="{{good.status == '1'}}" />
+      是
+      <radio value="0" checked="{{good.status == '0'}}" />
+      否
     </label>
   </radio-group>
 </view>

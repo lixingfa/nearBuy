@@ -6,7 +6,7 @@
 
 <view class="pro" animation="{{p._ani}}" wx:if="{{!p.del}}" wx:for="{{plist}}" wx:for-item="p" wx:key="id"><!--animation动画相关的属性-->
   <view class="pro-con" animation="{{p.ani}}" bindtouchstart="ptouchsatrt" data-id="{{p.id}}" bindtouchend="ptouchend"><!--bindtouchs触控事件-->
-    <checkbox catchtap='select' data-id='{{p.id}}' data-id="{{p.id}}" checked='{{p.select?true:false}}'></checkbox>
+    <checkbox catchtap='select' data-id='{{p.id}}' checked='{{p.select?true:false}}'></checkbox>
     <view class="pimg" data-id="{{p.id}}" data-name="{{p.title}}" data-brand="{{p.brand}}">
       <image src="{{p.pic}}" mode="aspectFill"></image>
     </view>

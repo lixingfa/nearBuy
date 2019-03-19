@@ -1,11 +1,3 @@
-<!--早餐、蔬菜、土特产，前面是最热卖的类型，后面三个是最新出现的类型-->
-<!--内容区
-<block wx:for="{{typeList}}" wx:key="id">
-  <view class='goodlist'>
-    <view class='good-head'>
-      <text>{{item.name}}</text>
-      <text class='right more' bindtap="navigateToShop" data-id="{{item.id}}">更多>></text>
-    </view>-->
     <view class='good-body'>
       <scroll-view wx:for="{{goods}}" wx:key="id" wx:for-item="good">
         <view class='good-item' catchtap="goDetail" data-id="{{good.id}}">
@@ -17,15 +9,16 @@
               <text class='good-price'>{{good.price}}</text><text>元/{{good.unit}}</text>
               <text wx:if="{{good.lineOrder == 'true'}}"> 在线下单</text>
               <text wx:if="{{good.takeOut == 'true'}}"> 可送货</text>
-              <view class='other-info'>共{{good.total}}{{good.unit}}，
-              剩余<text class='good-price'>{{good.surplus}}</text>{{good.unit}}
+              <view class='other-info'>共{{good.total}}{{good.unit}}
+              <text wx:if="{{good.surplus > 0}}">，剩余<text class='good-price'>{{good.surplus}}</text>{{good.unit}}</text>
               <text wx:if="{{good.pass > 0}}">，还有<text class='good-price'>{{good.pass}}</text>天过期</text>
-              <text wx:if="{{good.pass <= 0}}" class='good-price'>，已过期</text>
-              <text wx:if="{{good.status == 'false'}}" class='good-price'>，下架</text>
+              <text wx:if="{{good.pass <= 0}}" class='good-price'>，已过期</text><!--异常状况都集中到后面来-->
+              <text wx:if="{{good.status == '0'}}" class='good-price'>，下架</text>
+              <text wx:if="{{good.status == '1'}}" class='good-price'>，审核中</text>
+              <text class='good-price' wx:if="{{good.surplus == 0}}"> 售罄 </text>
+
               </view>
             </view>
         </view>
       </scroll-view>
     </view>
-  <!--</view>
-</block>-->

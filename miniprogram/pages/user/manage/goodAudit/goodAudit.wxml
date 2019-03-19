@@ -1,0 +1,18 @@
+<view class='good-body'>
+      <scroll-view wx:for="{{goods}}" wx:key="id" wx:for-item="good">
+        <view class='good-item' catchtap="goDetail" data-id="{{good.id}}">
+          <checkbox catchtap='select' data-id='{{good.id}}' checked='{{good.select?true:false}}'></checkbox>
+          <view class='good-pic'>
+            <image src="{{good.pic}}" mode="aspectFill"></image>
+          </view>
+          <view class='good-desc'>
+            <view class='good-title'>{{good.title}}</view>
+            <view class='good-inAWord'>{{good.inAWord}}</view>
+          </view>
+        </view>
+      </scroll-view>
+  <view class="tool">
+    <button class="gobuy" data-status='0' catchtap="check">不通过</button>
+    <button class="gobuy" data-status='2' catchtap="check">通过</button>
+  </view>
+</view>

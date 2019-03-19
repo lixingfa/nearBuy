@@ -1,5 +1,3 @@
-//index.js
-//获取应用实例
 var base = getApp();
 var good = require('../../../../utils/good.js');
 Page({

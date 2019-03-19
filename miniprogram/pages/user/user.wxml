@@ -8,6 +8,7 @@
     <view class="phone">{{user.addr}}</view>
   </view>
 </view>
+<!--
 <view class="ua">
   <view class="jzb tab">
   <navigator url="../user/seller/pendingOrder/pendingOrder" open-type="navigate" hover-class="navigator-hover">
@@ -28,7 +29,7 @@
       <text>{{exp}}</text>元</view>
     <view class="nm">累计收入</view>
   </view>
-</view>
+</view>-->
 <!--卖方菜单-->
 <view class="ub">
   <navigator url="../user/seller/data/dataAnalysis" open-type="navigate" hover-class="navigator-hover">
@@ -98,7 +99,7 @@
   </view>
   </navigator>
 </view>
-
+<!--纠纷处理-->
 <view class="ub">
   <navigator url="../user/complaints/complaints" open-type="navigate" hover-class="navigator-hover">
     <view class="item item-a">
@@ -106,6 +107,29 @@
     </view>
     <view class="tit" >
       咨询投诉
+    </view>
+    <view class="con"></view>
+  </view>
+  </navigator>
+</view>
+<!--管理菜单-->
+<view class="ub">
+  <navigator url="../user/manage/goodAudit/goodAudit" open-type="navigate" hover-class="navigator-hover">
+    <view class="item item-a">
+    <view class="icon">
+    </view>
+    <view class="tit" >
+      商品审核
+    </view>
+    <view class="con"></view>
+  </view>
+  </navigator>
+  <navigator url="../user/manage/complaints/complaints" open-type="navigate" hover-class="navigator-hover">
+    <view class="item item-a">
+    <view class="icon">
+    </view>
+    <view class="tit" >
+      投诉处理
     </view>
     <view class="con"></view>
   </view>

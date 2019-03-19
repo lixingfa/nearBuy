@@ -8,15 +8,22 @@ function getNewGoods(index,fn){
   var _ = wx.cloud.database().command;
   where.validTimeTrue = _.gte(util.formatTime(new Date()));
   where.surplus = _.gt(0);//有库存的
-  where.status = 'true';//上架，拉黑某人时，将其商品全部下架，非关系型数据库的限制
-  db.where('goods', where, ['createTime', 'desc'], index).then(fn);
+  where.status = '2';//上架，拉黑某人时，将其商品全部下架，非关系型数据库的限制 0待审核，1审核中，2上架
+  db.where('goods', where, ['updateTime', 'desc'], index).then(fn);
 }
 
 //获取人发布的商品
 function getGoodsByUser(openId,index,fn){
   var where = {};
   where.promulgatorId = openId;
-  db.where('goods', where, ['validTimeTrue', 'asc','surplus', 'asc','status','asc','createTime', 'desc'],index).then(fn);
+  db.where('goods', where, ['validTimeTrue', 'asc', 'surplus', 'asc', 'status', 'asc','updateTime', 'desc'],index).then(fn);
+}
+
+//获取要审核的商品
+function getGoodsAudit(index, fn) {
+  var where = {};
+  where.status = '1';//提交审核，所有的
+  db.where('goods', where, ['status','asc','updateTime', 'asc'], index).then(fn);
 }
 
 //获取单个商品信息
@@ -73,7 +80,7 @@ function checkOrderGoods(goods){
       for(var i in data){
         var now = data[i];
         var o = goods[now.id];
-        if (now.status == 'false') {
+        if (now.status != '2') {
           wx.showModal({
             showCancel: false,
             title: '',
@@ -102,5 +109,6 @@ module.exports = {
   getGoodAnswers: getGoodAnswers,
   getGoodAnswersCount: getGoodAnswersCount,
   getGoodsByUser: getGoodsByUser,
-  checkOrderGoods: checkOrderGoods
+  checkOrderGoods: checkOrderGoods,
+  getGoodsAudit: getGoodsAudit
 }
