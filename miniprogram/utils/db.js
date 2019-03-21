@@ -146,6 +146,25 @@ function remove(table,_id){
   });
 }
 
+function getAll(table, where, field){
+  return new Promise(function (resolve, reject) {
+    wx.cloud.callFunction({
+      name: 'getAll',
+      data: { table: table, where: where, field: field },
+      success(res) {
+        resolve(res.result.data);//更新了多少
+      },
+      fail(res) {
+        console.log(res);
+        reject(false);
+      },
+      complete: res => {
+        //console.log('callFunction test result: ', res);
+      },
+    });
+  });
+}
+
 module.exports = {
   doc: doc,
   where: where,
@@ -155,7 +174,8 @@ module.exports = {
   whereSingle: whereSingle,
   remove: remove,
   whereOnly: whereOnly,
-  count: count
+  count: count,
+  getAll: getAll
 }
 /*Node应用由模块组成，采用CommonJS模块规范。
 根据这个规范，每个文件就是一个模块，有自己的作用域。在一个文件里面定义的变量、函数、类，都是私有的，对其他文件不可见。所以需要加上exports*/
