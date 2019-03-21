@@ -2,7 +2,7 @@ var db = require('db.js');
 var util = require('util.js');
 
 //获取最新添加的商品
-function getNewGoods(index,keyword,fn){
+function getNewGoods(index, keyword, typeName,fn){
   var where = {};
   //在有效期内
   var _ = wx.cloud.database().command;
@@ -18,6 +18,9 @@ function getNewGoods(index,keyword,fn){
       regexp: keyword,
       options: 'i',
     });*/
+  }
+  if (typeName){
+    where.typeName = typeName;
   }
   db.where('goods', where, ['updateTime', 'desc'], index).then(fn);
 }

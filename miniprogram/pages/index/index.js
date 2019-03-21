@@ -6,10 +6,15 @@ var user = require('../../utils/user.js');
 var util = require('../../utils/util.js');
 var db = require('../../utils/db.js');
 var news = require('../../utils/news.js');
+var colors = ['#FFFAFA', '#FFF68F', '#F7F7F7', '#E0EEE0', '#B4EEB4', '#A4D3EE','#63B8FF'];
 Page({
   data: {
     goods:[],
     index:0,
+    goodTypes: base.goodTypes,
+    typeId:-1,
+    typeName:null,
+    typeShow:false,
     keyword:null
   },
   goDetail: function (e) {
@@ -76,7 +81,8 @@ Page({
     });
     var _this = this;
     //获取最新商品信息
-    good.getNewGoods(_this.data.index, _this.data.keyword,function(goods){
+    good.getNewGoods(_this.data.index, _this.data.keyword, _this.data.typeName,
+    function(goods){
       for(var i in goods){
         var distance = base.getDistance(base.location.latitude, base.location.longitude, goods[i].latitude, goods[i].longitude);
        // if (distance <= base.distan){}
@@ -85,8 +91,10 @@ Page({
         }else{
           goods[i].distance = distance + '米';
         }
+        goods[i].color = colors[i % colors.length];
         //查询的
-        if (_this.data.keyword && goods[i].promulgatorId != base.openId) {
+        if ((_this.data.keyword || _this.data.typeName)
+        && goods[i].promulgatorId != base.openId) {
           var vestige = {};
           vestige.goodId = goods[i].id;
           vestige.promulgatorId = goods[i].promulgatorId;
@@ -100,6 +108,7 @@ Page({
       }else{
         _this.setData({ goods: goods});
       }
+      _this.setData({ typeName: null,typeId:-1 });
     });
     // 隐藏加载框
     wx.hideLoading();
@@ -125,7 +134,7 @@ Page({
   },
   input: function (e) {
     var param = e.currentTarget.dataset.param;
-    this.setData({ [param]: e.detail.value });//变量key
+    this.setData({ [param]: e.detail.value, typeShow:true});//变量key
   },
   startReportHeart() {
     var _this = this;
@@ -139,7 +148,12 @@ Page({
     });*/
   },
   search:function(){
-    this.setData({ index: 0 });
+    this.setData({ index: 0, typeShow:false });
     this.getNewGoods();
-  }
+  },
+  select: function (e) {
+    var typeId = e.currentTarget.dataset.id;
+    var typeName = e.currentTarget.dataset.name;
+    this.setData({ typeId: typeId, typeName: typeName});
+  },
 })

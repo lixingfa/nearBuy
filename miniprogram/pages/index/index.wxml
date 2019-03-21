@@ -1,6 +1,14 @@
+<view class='types' wx:if="{{typeShow}}">
+  <view class="addr_body" wx:for="{{goodTypes}}" wx:key="id" wx:for-index="i" wx:for-item="t">
+      <view>{{t.name}}：</view>
+      <view class="sub_type" wx:for="{{t.sub}}" wx:key="id" wx:for-item="s" style="{{s.id==typeId?'background: #fea;':''}}" catchtap="select" data-id='{{s.id}}' data-name='{{s.name}}'>
+        {{s.name}}
+      </view>
+    </view>
+</view>
 <view id='search'>
-    <input placeholder="输入商品标题信息" type="text" maxlength="50" bindblur="input" bindinput="input" data-param="keyword"/>
-    <button catchtap="search" size="mini" >搜索</button>
+    <input placeholder="输入商品标题信息" type="text" maxlength="50" bindfocus='input' bindblur="input" bindinput="input" data-param="keyword"/>
+    <button catchtap="search" size="mini" confirm-type='search'>搜索</button>
 </view>
 <swiper id="banner" interval="5000" duration="2000" autoplay circular indicator-dots>
   <swiper-item>
@@ -31,6 +39,7 @@
               <text class='good-price'>{{good.price}}</text><text>元/{{good.unit}}</text>
               <text wx:if="{{good.lineOrder == 'true'}}"> 在线下单</text>
               <text wx:if="{{good.takeOut == 'true'}}"> 可送货</text>
+              <text class='typeName' style="background:{{good.color}};">{{good.typeName}}</text>
               <view class='other-info'>共{{good.total}}{{good.unit}}，剩余{{good.surplus}}{{good.unit}}，
               {{good.promulgator}}发布，距您{{good.distance}}
               </view>
