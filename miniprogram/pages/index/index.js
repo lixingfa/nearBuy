@@ -9,7 +9,8 @@ var news = require('../../utils/news.js');
 Page({
   data: {
     goods:[],
-    index:0
+    index:0,
+    keyword:null
   },
   goDetail: function (e) {
     var id = e.currentTarget.dataset.id;
@@ -75,7 +76,7 @@ Page({
     });
     var _this = this;
     //获取最新商品信息
-    good.getNewGoods(_this.data.index,function(goods){
+    good.getNewGoods(_this.data.index, _this.data.keyword,function(goods){
       for(var i in goods){
         var distance = base.getDistance(base.location.latitude, base.location.longitude, goods[i].latitude, goods[i].longitude);
        // if (distance <= base.distan){}
@@ -84,15 +85,24 @@ Page({
         }else{
           goods[i].distance = distance + '米';
         }
+        //查询的
+        if (_this.data.keyword && goods[i].promulgatorId != base.openId) {
+          var vestige = {};
+          vestige.goodId = goods[i].id;
+          vestige.promulgatorId = goods[i].promulgatorId;
+          vestige.visiter = base.openId;
+          vestige.type = 'search';
+          db.add('vestige', vestige);
+        }
       }
       if (_this.data.index > 0){
         _this.setData({ goods: _this.data.goods.concat(goods)});
       }else{
         _this.setData({ goods: goods});
       }
-      // 隐藏加载框
-      wx.hideLoading();
     });
+    // 隐藏加载框
+    wx.hideLoading();
   },
   //上拉加载更多
   onReachBottom: function () {
@@ -113,6 +123,10 @@ Page({
   onReady: function () {
     
   },
+  input: function (e) {
+    var param = e.currentTarget.dataset.param;
+    this.setData({ [param]: e.detail.value });//变量key
+  },
   startReportHeart() {
     var _this = this;
     var timerTem = setTimeout(function () {
@@ -124,4 +138,8 @@ Page({
       timer: timerTem
     });*/
   },
+  search:function(){
+    this.setData({ index: 0 });
+    this.getNewGoods();
+  }
 })

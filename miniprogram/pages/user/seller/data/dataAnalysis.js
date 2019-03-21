@@ -80,6 +80,13 @@ Page({
           case 'orderCancel': _this.categoriesPush(index, orderCancel.data); break;
         }
       }
+      //避免都没有的情况，会导致点击显示出错
+      _this.categoriesPush(index, search.data);
+      _this.categoriesPush(index, goodDetail.data);
+      _this.categoriesPush(index, addCart.data);
+      _this.categoriesPush(index, order.data); 
+      _this.categoriesPush(index, orderCancel.data);
+
       series.push(search);
       series.push(goodDetail);
       series.push(addCart);

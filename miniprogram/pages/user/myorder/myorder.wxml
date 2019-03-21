@@ -16,8 +16,10 @@
             <text class="chooseTime" wx:if="{{g.status == 0}}">准备中</text>
             <text class="chooseTime" wx:if="{{g.status == 1}}">可取货</text>
             <text class="chooseTime" wx:if="{{g.status == 2}}">已收货</text>
-            <text class="pprice" wx:if="{{g.status == 1}}" data-id="{{g.id}}" data-oid="{{p._id}}" data-orderid='{{p.id}}' data-sellers="{{g.promulgatorId}}"
-              catchtap="pay" style="color: red;">确认收货</text>
+            <text class="chooseTime" wx:if="{{g.status == 3}}">已退单</text>
+            <text class="pprice" wx:if="{{g.status == 1}}" data-id="{{g.id}}" data-oid="{{p._id}}" data-orderid='{{p.id}}' data-sellers="{{g.promulgatorId}}" data-cancel="false" catchtap="pay" style="color: red;">确认收货</text>
+            <text class="pprice" wx:if="{{g.status < 2}}" data-id="{{g.id}}" data-oid="{{p._id}}" data-orderid='{{p.id}}' data-sellers="{{g.promulgatorId}}" data-cancel="true"
+              catchtap="pay" style="color: red;">退单</text>
           </view>
           <view class="remarks">
             {{g.time}} 自取
@@ -36,14 +38,17 @@
       <view class="pro">
         <view wx:for="{{p.takeOut.goods}}" wx:for-item="g" wx:key="id">
           <view class="info">
-            <text class="pname">{{g.title}}</text>
+            <text class="pname" catchtap="goDetail" data-id="{{g.id}}">{{g.title}}</text>
             <text class="pprice">{{g.price}} x {{g.num}}</text>
             <text class="ptprice">{{g.price*g.num}}</text>
             <text class="chooseTime" wx:if="{{g.status == 0}}">准备中</text>
             <text class="chooseTime" wx:if="{{g.status == 1}}">配送中</text>
             <text class="chooseTime" wx:if="{{g.status == 2}}">已收货</text>
-            <text class="pprice" wx:if="{{g.status == 1}}" data-id="{{g.id}}" data-oid="{{p._id}}" data-orderid='{{p.id}}' data-sellers="takeOut"
+            <text class="chooseTime" wx:if="{{g.status == 3}}">已退单</text>
+            <text class="pprice" wx:if="{{g.status == 1}}" data-id="{{g.id}}" data-oid="{{p._id}}" data-orderid='{{p.id}}' data-sellers="takeOut" data-cancel="false"
               catchtap="pay" style="color: red;">确认收货</text>
+            <text class="pprice" wx:if="{{g.status < 2}}" data-id="{{g.id}}" data-oid="{{p._id}}" data-orderid='{{p.id}}' data-sellers="takeOut" data-cancel="true"
+              catchtap="pay" style="color: red;">退单</text>
           </view>
           <view class="remarks">
             {{g.time}} 配送
@@ -56,8 +61,15 @@
     
 
     <view class="addr_box" wx:if="{{qrcodeShow}}">
-      <!--<image src="{{qrcode}}" class="pimg"></image>-->
-      <view>确定收到货后才标志已收货哦。</view>
-      <view class='tool'><view class="tbtn add" catchtap="cancel">取消</view><view class="tbtn add" catchtap="hasPay">确认收货</view></view>
+      <view>
+        <text wx:if="{{!orderCancle}}">确定收到货后才标志已收货哦。</text>
+        <text wx:if="{{orderCancle}}">确定退单？系统会发消息通知卖家，但对方可能太忙没留意这个信息，必要时您最好打个招呼哦。</text>
+      </view>
+      <view class='tool'><view class="tbtn add" catchtap="cancel">取消</view>
+      <view class="tbtn add" catchtap="hasPay">
+        <text wx:if="{{!orderCancle}}">确认收货</text>
+        <text wx:if="{{orderCancle}}">确定退单</text>
+      </view>
+      </view>
     </view>
 </view>

@@ -2,13 +2,23 @@ var db = require('db.js');
 var util = require('util.js');
 
 //获取最新添加的商品
-function getNewGoods(index,fn){
+function getNewGoods(index,keyword,fn){
   var where = {};
   //在有效期内
   var _ = wx.cloud.database().command;
   where.validTimeTrue = _.gte(util.formatTime(new Date()));
   where.surplus = _.gt(0);//有库存的
   where.status = '2';//上架，拉黑某人时，将其商品全部下架，非关系型数据库的限制 0待审核，1审核中，2上架
+  if(keyword){
+    where.title = wx.cloud.database().RegExp({
+      regexp: keyword,
+      options: 'i',
+    });
+    /*where.inAWord = wx.cloud.database().RegExp({
+      regexp: keyword,
+      options: 'i',
+    });*/
+  }
   db.where('goods', where, ['updateTime', 'desc'], index).then(fn);
 }
 
@@ -103,6 +113,16 @@ function checkOrderGoods(goods){
   });
 }
 
+//更改库存，主要是恢复，用于退单的场景
+function updateGoodSurplus(id,num){
+  var where = {};
+  where.id = id;
+  db.whereSingle('goods', where).then(function(good){
+    good.surplus = good.surplus + num;
+    db.update('goods', good._id, good);
+  }, function(){});
+}
+
 module.exports = {
   getNewGoods: getNewGoods,
   getGood: getGood,
@@ -110,5 +130,6 @@ module.exports = {
   getGoodAnswersCount: getGoodAnswersCount,
   getGoodsByUser: getGoodsByUser,
   checkOrderGoods: checkOrderGoods,
-  getGoodsAudit: getGoodsAudit
+  getGoodsAudit: getGoodsAudit,
+  updateGoodSurplus: updateGoodSurplus
 }

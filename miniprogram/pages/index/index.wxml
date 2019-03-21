@@ -1,6 +1,5 @@
 <view id='search'>
-    <!--<image src="" mode="scaleToFill" class=''></image><!--消息图标-->
-    <input name='keyword' placeholder="输入商品信息" type="text" maxlength="50"/>
+    <input placeholder="输入商品标题信息" type="text" maxlength="50" bindblur="input" bindinput="input" data-param="keyword"/>
     <button catchtap="search" size="mini" >搜索</button>
 </view>
 <swiper id="banner" interval="5000" duration="2000" autoplay circular indicator-dots>
@@ -20,6 +19,7 @@
       <text class='right more' bindtap="navigateToShop" data-id="{{item.id}}">更多>></text>
     </view>-->
     <view class='good-body'>
+      <view wx:if="{{goods.length==0 && keyword}}">没有查询到商品，请换个关键字试试。</view>
       <block wx:for="{{goods}}" wx:key="id" wx:for-item="good">
         <view class='good-item' catchtap="goDetail" data-distance='{{good.distance}}' data-id="{{good.id}}"><!--catchtap 会阻止冒泡事件，父容器的不执行-->
             <view class='good-pic'>

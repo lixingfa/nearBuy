@@ -1,6 +1,7 @@
 var db = require('../../../utils/db.js');
 var user = require('../../../utils/user.js');
 var news = require('../../../utils/news.js');
+var goodUtil = require('../../../utils/good.js');
 var base = getApp();
 Page({
   data: {
@@ -11,9 +12,13 @@ Page({
     oid:-1,
     qrcodeShow:false,
     sellers:'',
-    index: 0
+    index: 0,
+    orderCancle:false
   },
   onShow: function () {//加载过又不关闭的话，onLoad不会再执行
+    wx.showLoading({
+      title: '订单加载中，请稍后。',
+    });
     var _this = this;
     var where = {};
     where.owner = base.openId;//按时间倒序
@@ -23,6 +28,8 @@ Page({
       }else{
         _this.setData({ myOrder: _this.data.myOrder.concat(orders)});
       }
+      // 隐藏加载框
+      wx.hideLoading();
     });
   },
   pay:function(e){
@@ -30,7 +37,9 @@ Page({
     var id = e.currentTarget.dataset.id;
     var orderid = e.currentTarget.dataset.orderid;
     var sellers = e.currentTarget.dataset.sellers;
-    this.setData({ qrcodeShow: true, goodId: id, orderId: oid, oid: orderid, sellers: sellers});
+    var orderCancle = e.currentTarget.dataset.cancel;
+    orderCancle = orderCancle == 'true'?true:false;
+    this.setData({ qrcodeShow: true, goodId: id, orderId: oid, oid: orderid, sellers: sellers, orderCancle: orderCancle});
   },
   cancel:function(){
     this.setData({ qrcodeShow: false});
@@ -44,10 +53,23 @@ Page({
     where.id = this.data.oid;
     //自增什么的太坑了，直接拿整个订单下来更新
     db.whereSingle('orders', where).then(function (order) {
-      if (_this.data.sellers == 'takeOut') {//配送
-        order.takeOut.goods[_this.data.goodId].status = order.takeOut.goods[_this.data.goodId].status + 1;
-      } else {
-        order.sellers[_this.data.sellers].goods[_this.data.goodId].status = order.sellers[_this.data.sellers].goods[_this.data.goodId].status + 1;
+      if (_this.data.orderCancle){//退单
+        var num = 0;
+        if (_this.data.sellers == 'takeOut') {//配送
+          order.takeOut.goods[_this.data.goodId].status = 3;
+          num = order.takeOut.goods[_this.data.goodId].num;
+        } else {
+          order.sellers[_this.data.sellers].goods[_this.data.goodId].status = 3;
+          num = order.sellers[_this.data.sellers].goods[_this.data.goodId].num;
+        }
+        //库存恢复
+        goodUtil.updateGoodSurplus(_this.data.goodId,num);
+      }else{//正常购买
+        if (_this.data.sellers == 'takeOut') {//配送
+          order.takeOut.goods[_this.data.goodId].status = order.takeOut.goods[_this.data.goodId].status + 1;
+        } else {
+          order.sellers[_this.data.sellers].goods[_this.data.goodId].status = order.sellers[_this.data.sellers].goods[_this.data.goodId].status + 1;
+        }
       }
       var bt = true;
       var bs = true;
@@ -88,8 +110,20 @@ Page({
           n.receiver = _this.data.sellers;//卖家
           goodName = order.sellers[_this.data.sellers].goods[_this.data.goodId].title;
         }
-        n.newsType = 'getGood';//收货
-        n.content = goodName + "(订单" + _this.data.oid + ")买家确认收货。";
+        if (_this.data.orderCancle) {//退单
+          n.newsType = 'orderCancel';
+          n.content = goodName + "(订单" + _this.data.oid + ")买家退单。";
+          //增加退单日志
+          var vestige = {};
+          vestige.goodId = _this.data.goodId;
+          vestige.promulgatorId = n.receiver;
+          vestige.visiter = base.openId;
+          vestige.type = 'orderCancel';
+          db.add('vestige', vestige);
+        }else{
+          n.newsType = 'getGood';//收货
+          n.content = goodName + "(订单" + _this.data.oid + ")买家确认收货。";
+        }
         news.add(n);
       }, function () { });
     });
