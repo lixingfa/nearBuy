@@ -78,12 +78,15 @@ Page({
         good.getGoodAnswersCount(g.id, all, base.openId, function (res) {
           _this.setData({ good: g, answersTotal: res.total, all: all });
         });
-        //痕迹记录，从购物车回来的就不算了
-        var vestige = {};
-        vestige.goodId = g.id;
-        vestige.promulgatorId = g.promulgatorId;
-        vestige.type = 'goodDetail';
-        db.add('vestige', vestige);
+        //痕迹记录，从购物车回来的就不算了，自己看自己的也不算
+        if (g.promulgatorId != base.openId){
+          var vestige = {};
+          vestige.goodId = g.id;
+          vestige.promulgatorId = g.promulgatorId;
+          vestige.visiter = base.openId;
+          vestige.type = 'goodDetail';
+          db.add('vestige', vestige);
+        }
       }else{//没找到这个商品
 
       }
@@ -106,6 +109,7 @@ Page({
           var vestige = {};
           vestige.goodId = this.data.good.id;
           vestige.promulgatorId = this.data.good.promulgatorId;
+          vestige.visiter = base.openId;
           vestige.type = 'addCart';
           db.add('vestige', vestige);
         }

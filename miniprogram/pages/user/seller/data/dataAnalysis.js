@@ -30,24 +30,23 @@ Page({
     var id = e && e.id ? e.id : 0;
     var whereData = {};
     if(id == 0){
-      whereData.promulgatorId = 'oOlK15P50dFSm7QbZb_hrMTIplGI';
+      whereData.promulgatorId = base.openId;
     }else{
       var name = e.name;
       this.setData({ name: name});
       whereData.goodId = id;
     }
-    var date = new Date();
+    var date = null;
     if(this.data.how != 0){
+      date = new Date();
       date.setDate(date.getDate() - this.data.how);
-      var _ = wx.cloud.database().command;
-      where.createTime = _.gte(util.formatTime(date));
+      date = util.formatTime(date);
     }
 
     var orderBy = ['createTime','asc'];
-    var field = { createTime: true, type:true};
     var categories = [];
     var series = [];
-    db.getAll('vestige', whereData, field).then(function (vestiges){
+    db.getAll('vestige', whereData, date).then(function (vestiges){
       wx.showLoading({
         title: '努力分析数据中……',
       });

@@ -111,6 +111,16 @@
     <view class="con"></view>
   </view>
   </navigator>
+  <navigator url="../user/hopeAdd/hopeAdd" open-type="navigate" hover-class="navigator-hover">
+    <view class="item item-a">
+    <view class="icon">
+    </view>
+    <view class="tit" >
+      希望增加的功能
+    </view>
+    <view class="con"></view>
+  </view>
+  </navigator>
 </view>
 <!--管理菜单-->
 <view class="ub">

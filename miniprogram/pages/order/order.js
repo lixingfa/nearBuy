@@ -236,6 +236,7 @@ Page({
           var vestige = {};
           vestige.goodId = g.id;
           vestige.promulgatorId = g.promulgatorId;
+          vestige.visiter = base.openId;
           vestige.type = 'order';
           db.add('vestige', vestige);
         }

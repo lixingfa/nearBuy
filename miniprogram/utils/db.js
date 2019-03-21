@@ -146,11 +146,11 @@ function remove(table,_id){
   });
 }
 
-function getAll(table, where, field){
+function getAll(table, where, beginTime){
   return new Promise(function (resolve, reject) {
     wx.cloud.callFunction({
       name: 'getAll',
-      data: { table: table, where: where, field: field },
+      data: { table: table, where: where, beginTime: beginTime},
       success(res) {
         resolve(res.result.data);//更新了多少
       },
