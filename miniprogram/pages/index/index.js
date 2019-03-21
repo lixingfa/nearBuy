@@ -79,7 +79,11 @@ Page({
       for(var i in goods){
         var distance = base.getDistance(base.location.latitude, base.location.longitude, goods[i].latitude, goods[i].longitude);
        // if (distance <= base.distan){}
-        goods[i].distance = distance;
+        if (distance >= 1000){
+          goods[i].distance = (distance / 1000).toFixed(1) + '公里';
+        }else{
+          goods[i].distance = distance + '米';
+        }
       }
       if (_this.data.index > 0){
         _this.setData({ goods: _this.data.goods.concat(goods)});

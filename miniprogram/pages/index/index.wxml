@@ -32,7 +32,7 @@
               <text wx:if="{{good.lineOrder == 'true'}}"> 在线下单</text>
               <text wx:if="{{good.takeOut == 'true'}}"> 可送货</text>
               <view class='other-info'>共{{good.total}}{{good.unit}}，剩余{{good.surplus}}{{good.unit}}，
-              {{good.promulgator}}发布，距您{{good.distance}}米
+              {{good.promulgator}}发布，距您{{good.distance}}
               </view>
             </view>
         </view>

@@ -15,9 +15,11 @@ Page({
         answersTotal:0,
         newUser: false,
         all:false,
-        distance:0
+        distance:0,
+        notAddCart:true
     },
     onLoad: function (e) {
+      var _this = this;
       var id = e && e.id ? e.id : 0;
       var g = base.cart.getGood(id);
       if (g != null) {//购物车里存在，则拿购物车的，可以简化很多操作
@@ -26,7 +28,7 @@ Page({
           all = true;//商品所有者
         }
         good.getGoodAnswersCount(g.id, all, base.openId, function(res){
-          this.setData({ good: g, answersTotal: res.total, all: all});
+          _this.setData({ good: g, answersTotal: res.total, all: all});
         });
       } else {//初始化
         wx.showLoading({
@@ -34,7 +36,7 @@ Page({
         });
         good.getGood(id, this.initGood);//从数据库拿
       }
-      this.setData({ id: id, openId: base.openId, newUser: base.newUser, distance: e.distance ? e.distance:null});      
+      this.setData({ id: id, openId: base.openId, newUser: base.newUser, distance: e.distance ? e.distance:null});
     },
   initGood:function(g){
     var _this = this;
@@ -76,6 +78,12 @@ Page({
         good.getGoodAnswersCount(g.id, all, base.openId, function (res) {
           _this.setData({ good: g, answersTotal: res.total, all: all });
         });
+        //痕迹记录，从购物车回来的就不算了
+        var vestige = {};
+        vestige.goodId = g.id;
+        vestige.promulgatorId = g.promulgatorId;
+        vestige.type = 'goodDetail';
+        db.add('vestige', vestige);
       }else{//没找到这个商品
 
       }
@@ -93,7 +101,15 @@ Page({
         }
         base.cart.add(this.data.good);//直接整个对象放进去，并做一些操作
         var good = base.cart.getGood(this.data.id);        
-        this.setData({good: good });//更新数据
+        if(this.data.notAddCart){
+          //加入购物车
+          var vestige = {};
+          vestige.goodId = this.data.good.id;
+          vestige.promulgatorId = this.data.good.promulgatorId;
+          vestige.type = 'addCart';
+          db.add('vestige', vestige);
+        }
+        this.setData({ good: good, notAddCart:false });//更新数据
     },
     goCart: function (e) {
       if (this.data.good.price > 0) {

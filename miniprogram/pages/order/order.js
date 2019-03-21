@@ -232,6 +232,12 @@ Page({
           _ids.push(_this.data.plist[i]._id);
           //从购物车中删除成功下单的
           base.cart.remove(_this.data.plist[i].id);
+          //痕迹记录
+          var vestige = {};
+          vestige.goodId = g.id;
+          vestige.promulgatorId = g.promulgatorId;
+          vestige.type = 'order';
+          db.add('vestige', vestige);
         }
         /*delete _this.data.plist[i]._id;
         delete _this.data.plist[i]._openid;//关键字
@@ -275,7 +281,6 @@ Page({
           news[i].oid = d;//订单_id
           newsUtil.add(news[i]);
         }
-
         wx.redirectTo({//不允许退回下单页
           url: "../success/success"
         });

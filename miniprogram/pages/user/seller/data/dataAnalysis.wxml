@@ -1,24 +1,22 @@
-<!--miniprogram/pages/user/seller/data/dataAnalysis.wxml-->
-<view>建设中……</view>
-<view>
-利用大数据、人工智能等方式，对行业进行分析，为您提供简单明了的销售策略指导
+<view class='title'>{{name}}数据展示</view>
+<view class="container">
+    <canvas canvas-id="lineCanvas" disable-scroll="false" class="canvas" style='width:100%; height:150px'  bindtouchstart="touchHandler"></canvas>
 </view>
 <view>
-例如：
+  <radio-group class="radio-group" bindchange="input" data-param="how">
+    <label class="radio">
+      <radio value="10" checked="{{how == 10}}" />
+      近10天
+      <radio value="30" checked="{{how == 30}}" />
+      近一个月
+      <radio value="182" checked="{{how == 182}}" />
+      近半年
+      <radio value="365" checked="{{how == 365}}" />
+      近一年
+      <radio value="0" checked="{{how == 0}}" />
+      全部
+    </label>
+  </radio-group>
+  <button type="primary" bindtap="updateData">更新数据</button>
 </view>
-<view>
-建议：3.16-3.17增加榴莲披萨、奥尔良鸡翅、韩式意面、花式冰激凌的存量
-</view>
-<view>
- 
-</view>
-<view>
-原因：1、每年3月中旬的两个周末，以农工商学院为中心三公里范围内的餐饮、食品销售同比上涨78%。您以上三种商品的增长则会达到83%，其他商品增福不大。建议备货量为：榴莲披萨132份，奥尔良鸡翅267份，韩式意面305份。
-</view>
-<view>
-2、今年的这个时间段会比较热，平均温度28°，已达到冰激凌销售的适合温度。
-</view>
-<view>
-3、“粒粒瓜子”的商品销量与花式冰激凌销量有带动关系，近期他们的销量已逐步增长。
-</view>
-（以上建议由系统经过智能分析得出，不代表本平台的观点，请结合自身情况合理采纳。更多信息请点击这里。）
+<view>商品的标题、简介、图片都是影响浏览和购买行为的因素。</view>

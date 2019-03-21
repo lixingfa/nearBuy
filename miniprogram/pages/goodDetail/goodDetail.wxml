@@ -7,7 +7,7 @@
     <text class='good-price'>{{good.price}}</text><text>元/{{good.unit}}</text>
     <view class='good-inAWord'>
       共{{good.total}}{{good.unit}}，剩余{{good.surplus}}{{good.unit}}，
-      {{good.promulgator}}发布<text wx:if='{{distance}}'>，距您约{{distance}}米</text>
+      {{good.promulgator}}发布<text wx:if='{{distance}}'>，距您约{{distance}}</text>
     </view>
     <view catchtap="mapShow" class='good-inAWord'><text>查看商品发布时的位置</text></view>
     <view class='good-inAWord' wx:if="{{good.lineOrder == 'true' && good.takeOut != 'true'}}">该商品只支持自取。</view>
