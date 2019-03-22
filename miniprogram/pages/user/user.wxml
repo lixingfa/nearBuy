@@ -111,7 +111,7 @@
     <view class="con"></view>
   </view>
   </navigator>
-  <navigator url="../user/hopeAdd/hopeAdd" open-type="navigate" hover-class="navigator-hover">
+  <!--<navigator url="../user/hopeAdd/hopeAdd" open-type="navigate" hover-class="navigator-hover">
     <view class="item item-a">
     <view class="icon">
     </view>
@@ -120,10 +120,10 @@
     </view>
     <view class="con"></view>
   </view>
-  </navigator>
+  </navigator>-->
 </view>
 <!--管理菜单-->
-<view class="ub">
+<view class="ub" wx:if="{{user.admin}}">
   <navigator url="../user/manage/goodAudit/goodAudit" open-type="navigate" hover-class="navigator-hover">
     <view class="item item-a">
     <view class="icon">

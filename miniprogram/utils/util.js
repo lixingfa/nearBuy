@@ -1,3 +1,6 @@
+// 引入SDK核心类
+var QQMapWX = require('../libs/qqmap-wx-jssdk.js');
+var qqmapsdk;
 //返回时间
 function formatTime(date) {
   var year = date.getFullYear();
@@ -82,10 +85,38 @@ function getOpenId(){
   });
 }
 
+//获取地址
+function getAddressByGPS(latitude, longitude) {
+  return new Promise(function (resolve) {
+    // 实例化API核心类
+    qqmapsdk = new QQMapWX({
+      key: 'YCWBZ-64T6K-TJAJU-AM4GX-LZSMQ-GFF4N'
+    });
+    //根据坐标获取当前位置名称，显示在顶部: 腾讯地图逆地址解析
+    qqmapsdk.reverseGeocoder({
+      location: {
+        latitude: latitude,
+        longitude:longitude
+      },
+      success: function (addressRes) {
+        var address = addressRes.result.formatted_addresses.recommend;
+        resolve(address);
+      },
+      fail() {
+        wx.showModal({
+          showCancel: false,
+          content: "根据GPS坐标获取地址名称失败，请稍后重试。"
+        });
+      }
+    });
+  });
+}
+
 module.exports = {
   formatTime: formatTime,
   getUUID: getUUID,
   getDatePath: getDatePath,
   getGPS: getGPS,
-  getOpenId: getOpenId
+  getOpenId: getOpenId,
+  getAddressByGPS: getAddressByGPS
 }

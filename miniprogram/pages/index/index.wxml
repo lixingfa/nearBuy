@@ -1,21 +1,18 @@
-<view class='types' wx:if="{{typeShow}}">
-  <view class="addr_body" wx:for="{{goodTypes}}" wx:key="id" wx:for-index="i" wx:for-item="t">
-      <view>{{t.name}}：</view>
-      <view class="sub_type" wx:for="{{t.sub}}" wx:key="id" wx:for-item="s" style="{{s.id==typeId?'background: #fea;':''}}" catchtap="select" data-id='{{s.id}}' data-name='{{s.name}}'>
+<scroll-view class='types' wx:if="{{typeShow}}">
+  <view class="type" wx:for="{{goodTypes}}" wx:key="id" wx:for-index="i" wx:for-item="t">
+      <text class="sub_type" style="background: none;">{{t.name}}：</text>
+      <text class="sub_type" wx:for="{{t.sub}}" wx:key="id" wx:for-item="s" style="{{s.id==typeId?'background: #fea;':''}}" catchtap="select" data-id='{{s.id}}' data-name='{{s.name}}'>
         {{s.name}}
-      </view>
+      </text>
     </view>
-</view>
+</scroll-view>
 <view id='search'>
     <input placeholder="输入商品标题信息" type="text" maxlength="50" bindfocus='input' bindblur="input" bindinput="input" data-param="keyword"/>
     <button catchtap="search" size="mini" confirm-type='search'>搜索</button>
 </view>
-<swiper id="banner" interval="5000" duration="2000" autoplay circular indicator-dots>
-  <swiper-item>
-    <image src="../../image/swiper/zhuniankuaile.png" mode="scaleToFill"></image>
-  </swiper-item>
-  <swiper-item>
-    <image src="../../image/swiper/jinzhu.jpg" mode="scaleToFill"></image>
+<swiper id="banner" interval="5000" duration="2000" autoplay circular indicator-dots wx:if="{{swiper.length > 0}}">
+  <swiper-item wx:for="{{swiper}}" wx:key="id" wx:for-index="i" wx:for-item="s">
+    <image src="{{s.pic}}" mode="scaleToFill" data-merchant='{{s.merchant}}' catchtap='merchant'></image>
   </swiper-item>
 </swiper>
 <!--早餐、蔬菜、土特产，前面是最热卖的类型，后面三个是最新出现的类型-->

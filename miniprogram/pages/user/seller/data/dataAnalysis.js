@@ -18,12 +18,7 @@ Page({
     });
   },
   updateData: function () {
-    var categories = [];
-    var series = [];
-    lineChart.updateData({
-      categories: categories,
-      series: series
-    });
+    this.onLoad();
   },
   onLoad: function (e) {
     var _this = this;

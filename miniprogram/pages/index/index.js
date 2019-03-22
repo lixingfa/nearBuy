@@ -6,16 +6,18 @@ var user = require('../../utils/user.js');
 var util = require('../../utils/util.js');
 var db = require('../../utils/db.js');
 var news = require('../../utils/news.js');
-var colors = ['#FFFAFA', '#FFF68F', '#F7F7F7', '#E0EEE0', '#B4EEB4', '#A4D3EE','#63B8FF'];
+var colors = ['#EFCEE8', '#F3D7B5', '#FDFFDF', '#DAF9CA', '#C7B3E5', '#4CB4E7','#FFC09F','#FFEE93','#9DD3FA'];
 Page({
   data: {
     goods:[],
     index:0,
-    goodTypes: base.goodTypes,
-    typeId:-1,
+    goodTypes: null,
+    typeId:null,
     typeName:null,
     typeShow:false,
-    keyword:null
+    keyword:null,
+    swiper:[],
+    merchant:null
   },
   goDetail: function (e) {
     var id = e.currentTarget.dataset.id;
@@ -81,7 +83,7 @@ Page({
     });
     var _this = this;
     //获取最新商品信息
-    good.getNewGoods(_this.data.index, _this.data.keyword, _this.data.typeName,
+    good.getNewGoods(_this.data.index, _this.data.keyword, _this.data.typeId, _this.data.merchant,
     function(goods){
       for(var i in goods){
         var distance = base.getDistance(base.location.latitude, base.location.longitude, goods[i].latitude, goods[i].longitude);
@@ -108,7 +110,6 @@ Page({
       }else{
         _this.setData({ goods: goods});
       }
-      _this.setData({ typeName: null,typeId:-1 });
     });
     // 隐藏加载框
     wx.hideLoading();
@@ -123,14 +124,20 @@ Page({
   //下拉更新
   onPullDownRefresh:function(){
     // 从头开始
-    this.setData({ index: 0 });
+    this.setData({ index: 0, typeName: null, typeId: null});
     this.getNewGoods();
   },
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
-    
+    var _this = this;
+    db.where('goodType', {}, ['order', 'desc'], 0).then(function (goodTypes){
+      _this.setData({ goodTypes: goodTypes});
+    });
+    db.where('ad', {}, [], 0).then(function (swiper) {
+      _this.setData({ swiper: swiper });
+    });
   },
   input: function (e) {
     var param = e.currentTarget.dataset.param;
@@ -156,4 +163,9 @@ Page({
     var typeName = e.currentTarget.dataset.name;
     this.setData({ typeId: typeId, typeName: typeName});
   },
+  merchant:function(e){
+    var merchant = e.currentTarget.dataset.merchant;
+    this.setData({ merchant: merchant});
+    this.getNewGoods();
+  }
 })

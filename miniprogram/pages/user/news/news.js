@@ -79,9 +79,13 @@ Page({
     var _this = this;
     var _id = e.currentTarget.dataset.id;
     var newsType = e.currentTarget.dataset.newstype;
+    var gid = e.currentTarget.dataset.gid;
     var data = {};
     data.status = 1;//已读
-    db.update('news', _id, data);
+    db.update('news', _id, data).then(function () {
+      // 隐藏加载框
+      wx.hideLoading();
+    });
     if (newsType == 'order'){//下单
       wx.navigateTo({
         url: '../seller/pendingOrder/pendingOrder'
@@ -90,9 +94,11 @@ Page({
       wx.navigateTo({
         url: '../myorder/myorder'
       });
-    } else if (newsType == 'getGood') {//收货
-      // 隐藏加载框
-      wx.hideLoading();
+    } else if (newsType == 'goodCheckFail') {//商品审核不通过
+      wx.navigateTo({
+        url: '../seller/goodEdit/goodEdit?id=' + gid
+      });
+    } else {//收货/退单
       _this.onPullDownRefresh();//刷新
     }
   }

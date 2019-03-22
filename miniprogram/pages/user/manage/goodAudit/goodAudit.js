@@ -9,7 +9,7 @@ Page({
   goDetail: function (e) {
     var id = e.currentTarget.dataset.id;
     wx.navigateTo({
-      url: '../goodEdit/goodEdit?id=' + id
+      url: '../../../goodDetail/goodDetail?id=' + id
     })
   },
   onLoad: function () {
@@ -60,13 +60,16 @@ Page({
                   n.newsType = 'goodCheckFail';//审核不通过
                   n.receiver = _this.data.goods[i].promulgatorId;//卖家
                   n.content = '您的商品 ' + _this.data.goods[i].title + ' 审核不通过，请在商品管理中重新编辑。';
+                  n.goodId = _this.data.goods[i].id;
                   news.add(n);
                 }
               });
             }
           }
-          _this.setData({ index: _this.data.goods.length });
-          _this.onLoad();
+          wx.showModal({
+            showCancel: false,
+            content: "处理结果已提交，请手动下拉更新。"
+          });
         }
       }
     });

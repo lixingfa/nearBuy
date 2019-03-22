@@ -1,6 +1,3 @@
-// 引入SDK核心类
-var QQMapWX = require('/libs/qqmap-wx-jssdk.js');
-var qqmapsdk;
 App({
   https:'https://6e65-nearbuy-test-1258692926.tcb.qcloud.la/',
   distan: 3000,//与默认地址距离多少米就认为是新的地址
@@ -179,33 +176,6 @@ App({
     }
     return addr;
   },
-  //获取新地址
-  getNewAddressByGPS: function (latitude, longitude) {
-    var _this = this;
-    // 实例化API核心类
-    qqmapsdk = new QQMapWX({
-      key: 'YCWBZ-64T6K-TJAJU-AM4GX-LZSMQ-GFF4N'
-    });
-    //根据坐标获取当前位置名称，显示在顶部: 腾讯地图逆地址解析
-    qqmapsdk.reverseGeocoder({
-      location: {
-        latitude: _this.location.latitude,
-        longitude: _this.location.longitude
-      },
-      success: function (addressRes) {
-        var address = addressRes.result.formatted_addresses.recommend;
-        _this.location.address = address;
-        //地址放入缓存，补刀，否则地址都没更新，外面就已经放入缓存了
-        wx.setStorageSync("location", _this.location);
-      },
-      fail() {
-        wx.showModal({
-          title: '',
-          content: "获取你的位置失败，将无法准确展示您周边的信息。可以退出小程序，重新进入获取位置信息。"
-        });
-      }
-    });
-  },
   //更新位置信息
   updataLocation: function (address) {
     var _this = this;
@@ -229,7 +199,7 @@ App({
             }
           });
         } else {//没有距离当前最近的地址
-          _this.getNewAddressByGPS(_this.location.latitude, _this.location.longitude);
+          //_this.getNewAddressByGPS(_this.location.latitude, _this.location.longitude);
         }
       } else {//与上次的距离在设定的距离之内
         _this.location = locationTEMP;
@@ -239,21 +209,10 @@ App({
       if (nowAddress != null) {
         _this.location = nowAddress;//以距离当前最近的地址为准
       } else {//没有距离当前最近的地址
-        _this.getNewAddressByGPS(_this.location.latitude, _this.location.longitude);
+        //_this.getNewAddressByGPS(_this.location.latitude, _this.location.longitude);
       }
     }
     //地址放入缓存
     wx.setStorageSync("location", _this.location);
-  },
-  goodTypes:[{//分类，每个商品必须只能属于一个分类，最多两层？可以有三个标签
-    id: '0', name: '房屋租售', sub: [{ id: '00', name: '出租' }, { id: '01', name: '出售' }]
-  },{
-    id: '1', name: '食品生鲜', sub: [{ id: '10', name: '蔬菜蛋品' }, { id: '11', name: '水果' }, { id: '12', name: '特产' }, { id: '13', name: '冷饮冻食' }, { id: '14', name: '肉类' }, { id: '15', name: '海鲜水产' }, { id: '16', name: '粮油调味' }, { id: '17', name: '零食' }]
-  }, {
-      id: '2', name: '生活服务', sub: [{ id: '20', name: '家政' }, { id: '21', name: '家教' }, { id: '21', name: '活动公益' }]
-    }, {
-      id: '3', name: '二手闲置', sub: [{ id: '30', name: '数码家电' }, { id: '31', name: '儿童玩具' }, { id: '32', name: '书籍杂物' }, { id: '33', name: '其他' }]
-    }, {
-      id: '4', name: '餐饮预订', sub: [{ id: '40', name: '早餐' }, { id: '41', name: '午餐晚宴' }, { id: '42', name: '茶点' }, { id: '43', name: '随意小食' }]
-    }]
+  }
 });

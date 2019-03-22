@@ -12,9 +12,11 @@ Page({
       typeShow:false,
       arrTime: base.arrTime,
       items: [{ name: '是', value: 'true' }, { name: '否', value: 'false'}],
-      goodTypes:base.goodTypes
+      goodTypes:null,
+      addr:''
     },
-    onLoad: function (e) {
+    onLoad: function (e) {      
+      var _this = this;
         var id = e && e.id ? e.id : 0;
         if(id == 0){
           var good = {};
@@ -36,8 +38,10 @@ Page({
           this.setData({ good: good, hasAdd: false});
           //获取用户
           user.getUser(base.openId,this.getUser);
+          util.getAddressByGPS(base.location.latitude, base.location.longitude).then(function (addr) {
+            _this.setData({ addr: addr });
+          });
         }else{
-          var _this = this;
           goodutil.getGood(id,function(good){
             if(good){
               good.editTotal = false;
@@ -48,6 +52,9 @@ Page({
                 good.status = '1';
               }
               _this.setData({ good: good, eidt: true});
+              util.getAddressByGPS(good.latitude, good.longitude).then(function(addr){
+                _this.setData({addr:addr});
+              });
             }
           });
         }
@@ -169,9 +176,6 @@ Page({
       return;
     }
     this.setData({
-      "good.promulgatorId": base.openId,
-      "good.latitude": base.location.latitude,
-      "good.longitude": base.location.longitude,
       "good.validTimeTrue": this.data.good.indate + ' ' +this.data.good.validTime
     });
     if (this.data.eidt){//编辑状态下
@@ -182,7 +186,12 @@ Page({
       }
       db.update('goods', this.data.good._id, this.data.good).then(this.addGoodNext, this.addGoodNext);
     }else{//新增状态下
-      this.setData({"good.surplus": parseInt(this.data.good.total)});//字符串与Int结果相差很大
+      this.setData({
+        "good.promulgatorId": base.openId,
+        "good.latitude": base.location.latitude,//商品跟着人走，避免到处乱发，后续发布地址也不能变更
+        "good.longitude": base.location.longitude,
+        "good.surplus": parseInt(this.data.good.total)
+      });
       db.add('goods', this.data.good).then(this.addGoodNext, this.addGoodNext);
     }
   },
@@ -198,5 +207,14 @@ Page({
       });
       this.setData({ hasAdd:true});
     }
-  }
+  },
+  /**
+   * 生命周期函数--监听页面初次渲染完成
+   */
+  onReady: function () {
+    var _this = this;
+    db.where('goodType', {}, ['order', 'desc'], 0).then(function (goodTypes) {
+      _this.setData({ goodTypes: goodTypes });
+    });
+  },
 });

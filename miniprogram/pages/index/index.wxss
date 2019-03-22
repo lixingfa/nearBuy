@@ -88,8 +88,6 @@
 .typeName{
   margin-left:10px;
 }
-.types{
-  width:100%;background:#fff;position:fixed;top:30px; z-index:10;
-}
-.addr_body{display: flex;border-bottom:1px dashed #ccc;margin:10px;opacity: 0.9}
-.sub_type{font-size:16px;background:#F0F8FF;margin:0 5px;}
+.types{width:100%;background:#fff;position:fixed;top:30px; z-index:10;height:250px;padding-bottom:200px;}
+.type{border-bottom:1px dashed #ccc;margin:10px;}
+.sub_type{background:#F0F8FF;margin:0 5px;display:inline-block;}

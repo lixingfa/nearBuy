@@ -5,11 +5,14 @@
   <view class='good-inAWord'>{{good.inAWord}}</view>
   <view class='good-desc'>
     <text class='good-price'>{{good.price}}</text><text>元/{{good.unit}}</text>
+      <navigator wx:if="{{good.promulgatorId == openId}}" url="../user/seller/data/dataAnalysis?id={{good.id}}&name={{good.title}}" open-type="navigate" hover-class="navigator-hover" style="display: inline-block;margin-left: 10px;">
+    <text>销售数据</text>
+      </navigator>
     <view class='good-inAWord'>
       共{{good.total}}{{good.unit}}，剩余{{good.surplus}}{{good.unit}}，
       {{good.promulgator}}发布<text wx:if='{{distance}}'>，距您约{{distance}}</text>
     </view>
-    <view catchtap="mapShow" class='good-inAWord'><text>查看商品发布时的位置</text></view>
+    <view class='good-inAWord'><text catchtap="mapShow">查看商品发布时的位置</text></view>
     <view class='good-inAWord' wx:if="{{good.lineOrder == 'true' && good.takeOut != 'true'}}">该商品只支持自取。</view>
     </view>
 
