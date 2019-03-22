@@ -25,7 +25,16 @@ function getNewGoods(index, keyword, typeId,merchant,fn){
 // _.gt(50).and(_.lt(100)) _.and(_.gt(50), _.lt(100))
   where.latitude = _.gte(base.location.latitude - base.dLatitude).and(_.lte(base.location.latitude + base.dLatitude));
   //where.longitude = _.gte(base.location.longitude - base.dLongitude).and(_.lte(base.location.longitude + base.dLongitude));
-  db.where('goods', where, ['updateTime', 'desc'], index).then(fn);
+  db.where('goods', where, ['updateTime', 'desc'], index).then(function(goods){
+    where = {};
+    where.longitude = _.gte(base.location.longitude - base.dLongitude).and(_.lte(base.location.longitude + base.dLongitude));
+    var ids = [];
+    for(var i in goods){
+      ids.push(goods[i].id);
+    }
+    where.id = _.in(ids);
+    db.where('goods', where, ['updateTime', 'desc'], index).then(fn);
+  });
 }
 
 //获取人发布的商品
