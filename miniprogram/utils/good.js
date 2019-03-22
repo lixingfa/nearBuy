@@ -1,5 +1,6 @@
 var db = require('db.js');
 var util = require('util.js');
+var base = getApp();
 
 //获取最新添加的商品
 function getNewGoods(index, keyword, typeId,merchant,fn){
@@ -14,10 +15,6 @@ function getNewGoods(index, keyword, typeId,merchant,fn){
       regexp: keyword,
       options: 'i',
     });
-    /*where.inAWord = wx.cloud.database().RegExp({
-      regexp: keyword,
-      options: 'i',
-    });*/
   }
   if (typeId){
     where.typeId = typeId;
@@ -25,6 +22,9 @@ function getNewGoods(index, keyword, typeId,merchant,fn){
   if (merchant){
     where.promulgatorId = merchant;
   }
+// _.gt(50).and(_.lt(100)) _.and(_.gt(50), _.lt(100))
+  where.latitude = _.gte(base.location.latitude - base.dLatitude).and(_.lte(base.location.latitude + base.dLatitude));
+  //where.longitude = _.gte(base.location.longitude - base.dLongitude).and(_.lte(base.location.longitude + base.dLongitude));
   db.where('goods', where, ['updateTime', 'desc'], index).then(fn);
 }
 

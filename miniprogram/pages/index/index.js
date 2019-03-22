@@ -37,7 +37,7 @@ Page({
         .then(function (results) {
           //坐标
           base.location.latitude = results[0].latitude;
-          base.location.longitude = results[0].longitude;
+          base.location.longitude = results[0].longitude;          
           //用户
           base.openId = results[1];//'oOlK15NZ7PUwXOshxdxmM0HEkI9U';//
           news.setTabBarBadge();
@@ -45,6 +45,8 @@ Page({
           user.getUser(results[1], function (user) {//再获取用户信息
             if (user) {//老用户
               base.distan = user.distan;//更新搜索范围
+              //获取经纬变化范围
+              base.getDistanceArea(results[0].latitude, base.distan);
               //最近的商品
               _this.getNewGoods();
               //更新地址
@@ -53,6 +55,8 @@ Page({
               db.whereOnly('address', where).then(base.updataLocation, base.updataLocation);
             } else {
               base.newUser = true;//新用户
+              //获取经纬变化范围
+              base.getDistanceArea(results[0].latitude, base.distan);
               //最近的商品
               _this.getNewGoods();
               base.updataLocation(false);
@@ -87,7 +91,7 @@ Page({
     function(goods){
       for(var i in goods){
         var distance = base.getDistance(base.location.latitude, base.location.longitude, goods[i].latitude, goods[i].longitude);
-       // if (distance <= base.distan){}
+       // if (distance <= base.distan){}//转成如何计算正方形四个点经纬度，然后直接查数据库
         if (distance >= 1000){
           goods[i].distance = (distance / 1000).toFixed(1) + '公里';
         }else{

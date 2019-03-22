@@ -134,5 +134,8 @@ Page({
         db.update("user", this.data.user._id, this.data.user)
           .then(this.updateUser, this.updateUser);
       }
+      base.distan = this.data.user.distan;
+    //获取经纬变化范围
+      base.getDistanceArea(base.location.latitude, base.distan);
   }
 })
