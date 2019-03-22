@@ -5,7 +5,7 @@
   <view class="des">
     <view class="uname">{{user.nickName}}</view>
     <view class="phone">{{user.phone}}</view>
-    <view class="phone">{{user.addr}}</view>
+    <view class="phone">取货地址：{{user.addr}}</view>
   </view>
 </view>
 <!--
