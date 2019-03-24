@@ -3,7 +3,7 @@
   <view class='tab'>商品简介：<textarea bindblur="input" bindinput="input" data-param="good.inAWord" maxlength='500'>{{good.inAWord}}</textarea></view>
   <view class='tab'>商品类别：{{good.typeName}}
     <button catchtap="typeShow">选择</button>
-    <navigator url="../../../goodDetail/goodDetail?id={{good.id}}" open-type="navigate" hover-class="navigator-hover" style="display: inline-block;margin-left: 10px;">
+    <navigator url="../../../goodDetail/goodDetail?id={{good.id}}" open-type="navigate" hover-class="navigator-hover" style="display: inline-block;margin-left: 10px;" wx:if="{{eidt || hasAdd}}">
     <button>商品预览</button>
       </navigator>
   </view>

@@ -33,7 +33,8 @@ Page({
           good.status = '1';//商品有效
           good.editTotal = true;
           var time = new Date();
-          good.indate = time.setMonth(time.getMonth + 3);//默认三个月有效期
+          time.setMonth(time.getMonth() + 3);//默认三个月有效期
+          good.indate = util.formatDate(time);
           //初始化数值
           this.setData({ good: good, hasAdd: false});
           //获取用户

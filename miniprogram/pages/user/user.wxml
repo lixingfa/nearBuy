@@ -34,8 +34,7 @@
 <view class="ub">
   <navigator url="../user/seller/data/dataAnalysis" open-type="navigate" hover-class="navigator-hover">
   <view class="item item-a">
-    <view class="icon">
-    </view>
+    <view class="icon"><image src='../../icon/data.png'></image></view>
     <view class="tit" >
       数据分析
     </view>
@@ -44,8 +43,7 @@
   </navigator>
   <navigator url="../user/seller/goodEdit/goodEdit" open-type="navigate" hover-class="navigator-hover">
   <view class="item item-a">
-    <view class="icon">
-    </view>
+    <view class="icon"><image src='../../icon/add.png'></image></view>
     <view class="tit" >
       新增商品
     </view>
@@ -54,8 +52,7 @@
   </navigator>
   <navigator url="../user/seller/goods/goods" open-type="navigate" hover-class="navigator-hover">
     <view class="item item-a">
-    <view class="icon">
-    </view>
+    <view class="icon"><image src='../../icon/goods.png'></image></view>
     <view class="tit" >
       商品管理
       <text wx:if='{{sellAll}}'> {{sellAll}}售罄 </text>
@@ -66,8 +63,7 @@
   </navigator>
   <navigator url="../user/seller/pendingOrder/pendingOrder" open-type="navigate" hover-class="navigator-hover">
   <view class="item item-a" >
-    <view class="icon">
-    </view>
+    <view class="icon"><image src='../../icon/pendingOrder.png'></image></view>
     <view class="tit" >
       销售订单
       <text wx:if='{{pendingOrderTotal}}'>({{pendingOrderTotal}})</text>
@@ -80,8 +76,7 @@
 <view class="ub">
   <navigator url="../user/userInfo/userInfo" open-type="navigate" hover-class="navigator-hover">
   <view class="item item-a">
-    <view class="icon">
-    </view>
+    <view class="icon"><image src='../../icon/userInfo.png'></image></view>
     <view class="tit" >
       个人信息
     </view>
@@ -90,8 +85,7 @@
   </navigator>
   <navigator url="../user/myorder/myorder" open-type="navigate" hover-class="navigator-hover">
   <view class="item item-a" >
-    <view class="icon">
-    </view>
+    <view class="icon"><image src='../../icon/myorder.png'></image></view>
     <view class="tit" >
       购物订单
     </view>
@@ -103,8 +97,7 @@
 <view class="ub">
   <navigator url="../user/complaints/complaints" open-type="navigate" hover-class="navigator-hover">
     <view class="item item-a">
-    <view class="icon">
-    </view>
+    <view class="icon"><image src='../../icon/complaints.png'></image></view>
     <view class="tit" >
       使用指南、咨询投诉
     </view>

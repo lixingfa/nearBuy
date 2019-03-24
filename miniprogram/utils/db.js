@@ -14,6 +14,10 @@ function doc(table,id){
       fail(res) {
         console.log(res);
         reject(id);//then函数的第二个参数执行
+        wx.showModal({
+          showCancel: false,
+          content: "查询超时，请稍后重试。"
+        });
       }
     });
   });
@@ -36,6 +40,10 @@ function where(table, where, orderBy, index){
         fail(res) {
           console.log(res);
           reject(false);
+          wx.showModal({
+            showCancel: false,
+            content: "查询超时，请稍后重试。"
+          });
         }
       })
   });
@@ -60,6 +68,10 @@ function whereSingle(table, where) {
         fail(res) {
           console.log(res);
           reject(false);
+          wx.showModal({
+            showCancel: false,
+            content: "查询超时，请稍后重试。"
+          });
         }
       })
 
@@ -157,6 +169,10 @@ function getAll(table, where, beginTime){
       fail(res) {
         console.log(res);
         reject(false);
+        wx.showModal({
+          showCancel: false,
+          content: "查询超时，请稍后重试。"
+        });
       },
       complete: res => {
         //console.log('callFunction test result: ', res);

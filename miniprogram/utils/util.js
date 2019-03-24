@@ -14,6 +14,14 @@ function formatTime(date) {
   return [year, month, day].map(formatNumber).join('-') + ' ' + [hour, minute, second].map(formatNumber).join(':')
 }
 
+function formatDate(date) {
+  var year = date.getFullYear();
+  var month = date.getMonth() + 1;
+  var day = date.getDate();
+
+  return [year, month, day].map(formatNumber).join('-');
+}
+
 //返回前缀+时间+毫秒+随机数组成的UUID
 function getUUID(prefix){
   var date = new Date();
@@ -114,6 +122,7 @@ function getAddressByGPS(latitude, longitude) {
 
 module.exports = {
   formatTime: formatTime,
+  formatDate: formatDate,
   getUUID: getUUID,
   getDatePath: getDatePath,
   getGPS: getGPS,
